@@ -6,7 +6,6 @@ import MainBanner from "../components/organisms/MainBanner";
 import { testCreators } from "../data";
 import { theme } from "../themes/theme";
 
-
 export default function Index() {
   return (
     <>
