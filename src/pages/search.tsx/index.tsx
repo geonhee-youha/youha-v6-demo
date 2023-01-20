@@ -10,11 +10,11 @@ export default function Page() {
   const { first, secondary, value } = router.query;
   const secondaries = categories.flatMap((el) => el.secondaries);
   const firstTitle =
-    typeof value === "string"
+    typeof value === "string" || typeof first !== "string"
       ? ""
       : categories[_.findIndex(categories, (el) => el.value === first)].title;
   const secondTitle =
-    typeof value === "string"
+    typeof value === "string" || typeof secondary !== "string"
       ? ""
       : secondaries[_.findIndex(secondaries, (el) => el.value === secondary)]
           .title;
