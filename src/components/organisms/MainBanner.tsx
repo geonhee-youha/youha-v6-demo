@@ -8,6 +8,7 @@ import { theme } from "../../themes/theme";
 import { splitBold } from "../../utils";
 import youhaBlue from "../../constants/youhaBlue";
 import Button from "../atoms/Button";
+import { useRouter } from "next/router";
 
 const banners = [
   {
@@ -26,6 +27,7 @@ const banners = [
 ];
 
 export default function MainBanner() {
+  const router = useRouter();
   const [categorySwiper, setCategorySwiper] = useState<any>(null);
   const [titleSwiper, setTitleSwiper] = useState<any>(null);
   const [imgSwiper, setImgSwiper] = useState<any>(null);
@@ -71,6 +73,12 @@ export default function MainBanner() {
     categorySwiper?.slideTo(swiperIndex + 1);
     titleSwiper?.slideTo(swiperIndex + 1);
     imgSwiper?.slideTo(swiperIndex + 1);
+  };
+  const onYoutuberClick = () => {
+    router.push(`/youtuber/1`);
+  };
+  const onSendProposalClick = () => {
+    router.push(`/proposal/send`);
   };
   return (
     <Box
@@ -173,10 +181,18 @@ export default function MainBanner() {
             </Swiper>
           </Box>
           <Stack direction="row" spacing={1} sx={{ mt: 4 }}>
-            <Button backgroundColor="#ffffff" color={backgroundColor}>
+            <Button
+              backgroundColor="#ffffff"
+              color={backgroundColor}
+              onClick={onYoutuberClick}
+            >
               채널 정보 보러가기
             </Button>
-            <Button type="outlined" backgroundColor="#ffffff">
+            <Button
+              type="outlined"
+              backgroundColor="#ffffff"
+              onClick={onSendProposalClick}
+            >
               바로 광고 제안하기
             </Button>
           </Stack>

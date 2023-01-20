@@ -1,11 +1,10 @@
-import { alpha, Box, Stack, Typography } from "@mui/material";
+import { alpha, Box, ButtonBase, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import youhaBlue from "../../constants/youhaBlue";
 import { theme } from "../../themes/theme";
 import { comma } from "../../utils";
 import Typo from "../atoms/Typo";
 
- 
 export default function YoutuberRow({
   index,
   item,
@@ -16,21 +15,21 @@ export default function YoutuberRow({
   const { thumbnail, title } = item;
   const ranking = index !== undefined ? index + 1 : null;
   return (
-    <Stack
-      direction="row"
-      alignItems="center"
-      spacing={2}
+    <ButtonBase
       sx={{
         display: "flex",
-        // p: theme.spacing(2, 0),
-        // backgroundColor: grey[100],
-        // borderRadius: 1,
-        // overflow: "hidden",
+        alignItems: "center",
         borderRadius: 1,
         overflow: "hidden",
         border: `1px solid ${grey[300]}`,
+        backgroundColor: "#ffffff",
         boxShadow: `rgb(0 0 0 / 4%) 0px 2px 8px`,
         p: theme.spacing(2),
+        transition: `all 0.35s ease`,
+        "&:hover": {
+          transform: `translateY(-16px)`,
+          boxShadow: `rgb(0 0 0 / 24%) 0px 10px 16px`,
+        },
       }}
     >
       {ranking ? (
@@ -68,6 +67,7 @@ export default function YoutuberRow({
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              p: theme.spacing(0, 1),
             }}
           >
             <Typography
@@ -83,6 +83,28 @@ export default function YoutuberRow({
           </Box>
         )
       ) : null}
+      {ranking && (
+        <Box
+          sx={{
+            minWidth: 24,
+            height: 24,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            m: theme.spacing(0, 1, 0, 0),
+            p: theme.spacing(0, 1),
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: 14,
+              color: grey[400],
+            }}
+          >
+            -
+          </Typography>
+        </Box>
+      )}
       <Box
         sx={{
           position: "relative",
@@ -101,49 +123,15 @@ export default function YoutuberRow({
       >
         <img src={thumbnail} />
       </Box>
-      {/* <Box
-        sx={{
-          position: "relative",
-          width: 104,
-          height: 104,
-        //   overflow: "hidden",
-        //   borderRadius: 1,
-          transition: `all 0.35s ease`,
-          "& img": {
-            objectFit: "cover",
-            width: "100%",
-            height: "100%",
-          },
-          "&:after": {
-            position: "absolute",
-            content: "''",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: alpha("#000000", 0.02),
-          },
-        }}
-      >
-        <img src={thumbnail} />
-      </Box> */}
       <Box
         sx={{
           flex: 1,
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
+          p: theme.spacing(0, 2),
         }}
       >
-        {/* <Typography
-          sx={{
-            fontSize: 12,
-            lineHeight: "16px",
-            fontWeight: "700",
-          }}
-        >
-          뷰티/패션
-        </Typography> */}
         <Typo
           lines={1}
           sx={{
@@ -164,45 +152,7 @@ export default function YoutuberRow({
         >
           구독자 {comma(item.subscriberCount)}명
         </Typography>
-        {/* <Stack
-          direction="row"
-          spacing={1}
-          sx={{
-            alignItems: "center",
-            m: theme.spacing(1, 0, 0, 0),
-          }}
-        >
-          <img src="/logos/star.png" style={{ width: "auto", height: 14 }} />
-          <Typography
-            sx={{
-              fontSize: 14,
-              lineHeight: "20px",
-              color: youhaBlue[700],
-              fontWeight: "700",
-            }}
-          >
-            8.6
-          </Typography>
-        </Stack> */}
       </Box>
-      {/* <Box
-        sx={{
-          position: "relative",
-          width: 72,
-          height: 72,
-          borderRadius: "50%",
-          overflow: "hidden",
-          transition: `all 0.35s ease`,
-          border: `1px solid ${grey[300]}`,
-          "& img": {
-            objectFit: "cover",
-            width: "100%",
-            height: "100%",
-          },
-        }}
-      >
-        <img src={thumbnail} />
-      </Box> */}
       <Stack
         direction="row"
         spacing={1}
@@ -224,6 +174,6 @@ export default function YoutuberRow({
           {(8 + 0.12 * (10 - ((ranking ?? 0) + 1))).toFixed(1)}
         </Typography>
       </Stack>
-    </Stack>
+    </ButtonBase>
   );
 }

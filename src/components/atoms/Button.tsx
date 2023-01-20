@@ -10,12 +10,14 @@ export default function Button({
   backgroundColor = youhaBlue[700],
   color = "#ffffff",
   children,
+  onClick,
 }: {
   type?: string;
   name?: IconName;
   backgroundColor?: string;
   color?: string;
   children?: React.ReactNode;
+  onClick?: () => void;
 }) {
   return (
     <ButtonBase
@@ -27,11 +29,14 @@ export default function Button({
         overflow: "hidden",
         p: theme.spacing(0, 2, 0, 2),
         backgroundColor: type === "outlined" ? "transparent" : backgroundColor,
-        boxShadow: `${backgroundColor} 0px 0px 0px ${type === "outlined" ? 1 : 0}px inset`,
+        boxShadow: `${backgroundColor} 0px 0px 0px ${
+          type === "outlined" ? 1 : 0
+        }px inset`,
         "&:hover .ripple": {
           opacity: 1,
         },
       }}
+      onClick={onClick}
     >
       <Box
         sx={{
@@ -43,7 +48,7 @@ export default function Button({
           backgroundColor: alpha("#000000", 0.3),
           transition: `all 0.35s ease`,
           opacity: 0,
-          zIndex: type === 'outlined' ? 2 : 0,
+          zIndex: type === "outlined" ? 2 : 0,
         }}
         className="ripple"
       />
