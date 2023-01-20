@@ -74,7 +74,7 @@ function MyApp(props: MyAppProps) {
     <CacheProvider value={emotionCache}>
       <Head>
         <meta charSet="utf-8" />
-        <title>Jellysmack X youha 크리에이터 지원 프로젝트</title>
+        <title>YOUHA V6 DEMO</title>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -83,38 +83,29 @@ function MyApp(props: MyAppProps) {
           name="keywords"
           content="jellysmack, 젤리스맥, youha, 유하, 펀딩, 크리에이터, 한도조회"
         />
-        <meta
-          name="description"
-          content="글로벌 크리에이터 지원 플랫폼 Jellysmack과 유튜버 데이터 분석 플랫폼 youha가 만나 크리에이터의 미래를 지원합니다."
-        />
+        <meta name="description" content="YOUHA V6 DEMO" />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Jellysmack X youha" />
-        <meta
-          property="og:title"
-          content="Jellysmack X youha 크리에이터 지원 프로젝트"
-        />
-        <meta
-          property="og:description"
-          content="글로벌 크리에이터 지원 플랫폼 Jellysmack과 유튜버 데이터 분석 플랫폼 youha가 만나 크리에이터의 미래를 지원합니다."
-        />
-        <meta property="og:image" content="/images/favicon/share.png" />
+        <meta property="og:site_name" content="YOUHA V6 DEMO" />
+        <meta property="og:title" content="YOUHA V6 DEMO" />
+        <meta property="og:description" content="YOUHA V6 DEMO" />
+        {/* <meta property="og:image" content="/images/favicon/share.png" /> */}
         <meta property="og:image:width" content="200" />
         <meta property="og:image:height" content="200" />
         <meta property="og:image:type" content="image/png" />
-        <meta property="og:url" content="https://jellysmack.youha.info/" />
+        <meta property="og:url" content="https://youha-v6-demo.vercel.app/" />
         <meta name="twitter:card" content="summary" data-react-helmet="true" />
         <meta name="twitter:creator" content="" data-react-helmet="true" />
         <meta
           name="twitter:title"
-          content="Jellysmack X youha 크리에이터 지원 프로젝트"
+          content="YOUHA V6 DEMO"
           data-react-helmet="true"
         />
         <meta
           name="twitter:description"
-          content="글로벌 크리에이터 지원 플랫폼 Jellysmack과 유튜버 데이터 분석 플랫폼 youha가 만나 크리에이터의 미래를 지원합니다."
+          content="YOUHA V6 DEMO"
           data-react-helmet="true"
         />
-        <meta name="twitter:image" content="/images/favicon/share.png" />
+        {/* <meta name="twitter:image" content="/images/favicon/share.png" /> */}
         <meta name="HandheldFriendly" content="true" />
         <link
           rel="shortcut icon"
