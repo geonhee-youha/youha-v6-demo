@@ -17,6 +17,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { categories } from "../../constants/categories";
 import { theme } from "../../themes/theme";
 import Container from "../atoms/Container";
 import Icon from "../atoms/Icon";
@@ -28,133 +29,9 @@ const headers = [
 ];
 
 const navs = [
-  { href: "/ranking", title: "유튜버 랭킹", type: "hot" },
-  { href: "/case", title: "성공 사례", type: "default" },
+  { href: "/ranking", title: "유하 랭킹", type: "hot" },
+  { href: "/insight", title: "인사이트", type: "default" },
   { href: "/mcn", title: "MCN 찾기", type: "default" },
-  { href: "/finance", title: "금융", type: "new" },
-];
-
-export const categories = [
-  {
-    title: "게임",
-    value: "game",
-    secondaries: [
-      {
-        title: "액션게임",
-        value: "action",
-      },
-      {
-        title: "리듬게임",
-        value: "rythem",
-      },
-      {
-        title: "RPG게임",
-        value: "rpg",
-      },
-      {
-        title: "스포츠게임",
-        value: "sports",
-      },
-      {
-        title: "전략게임",
-        value: "stretegy",
-      },
-      {
-        title: "RTS게임",
-        value: "rts",
-      },
-    ],
-  },
-  {
-    title: "뷰티·메이크업",
-    value: "beauty",
-    secondaries: [
-      {
-        title: "뷰티",
-        value: "beauty",
-      },
-      {
-        title: "메이크업",
-        value: "makeup",
-      },
-      {
-        title: "스킨케어",
-        value: "skincare",
-      },
-      {
-        title: "헤어스타일",
-        value: "hairstyle",
-      },
-      {
-        title: "네일",
-        value: "nail",
-      },
-    ],
-  },
-  {
-    title: "패션",
-    value: "fashion",
-    secondaries: [
-      {
-        title: "옷",
-        value: "cloths",
-      },
-      {
-        title: "주얼리",
-        value: "jewerly",
-      },
-      {
-        title: "슈즈",
-        value: "shoes",
-      },
-      {
-        title: "모자",
-        value: "hat",
-      },
-    ],
-  },
-  {
-    title: "전자제품",
-    value: "it",
-    secondaries: [
-      {
-        title: "스마트폰",
-        value: "smartphone",
-      },
-      {
-        title: "카메라",
-        value: "camera",
-      },
-      {
-        title: "컴퓨터",
-        value: "computer",
-      },
-      {
-        title: "게임콘솔",
-        value: "gameconsole",
-      },
-      {
-        title: "헤드셋",
-        value: "headset",
-      },
-      {
-        title: "텔레비전",
-        value: "television",
-      },
-      {
-        title: "스마트워치",
-        value: "smartwatch",
-      },
-      {
-        title: "전자담배",
-        value: "smoke",
-      },
-      {
-        title: "배터리",
-        value: "battery",
-      },
-    ],
-  },
 ];
 
 const languages = [{ title: "KOR" }, { title: "ENG" }];
@@ -170,9 +47,9 @@ export default function GlobalNavigationBar() {
         top: 0,
         width: "100%",
         backgroundColor: "#ffffff",
-        borderBottom: `1px solid ${grey[300]}`,
         display: focused ? "flex" : "none",
         zIndex: 99,
+        // borderBottom: `1px solid ${grey[300]}`,
       }}
     >
       <Container>
@@ -214,9 +91,7 @@ function Header() {
             m: theme.spacing(0, 0, 0, 3),
             cursor: "pointer",
             "&:hover": {
-              "& *": {
-                color: grey[600],
-              },
+              opacity: 0.4,
             },
           }}
         >
@@ -240,7 +115,7 @@ function Header() {
           m: theme.spacing(0, 3, 0, 0),
           "& img": {
             width: "auto",
-            height: 20,
+            height: 24,
             cursor: "pointer",
           },
         }}
@@ -269,10 +144,17 @@ function Header() {
             backgroundColor: grey[100],
             transition: `all 0.35s ease`,
             "&:hover": {
-              boxShadow: `#2F59CC 0px 0px 0px 1px inset`,
+              boxShadow: `${grey[400]} 0px 0px 0px 1px inset`,
             },
             "&.Mui-focused": {
-              boxShadow: `#2F59CC 0px 0px 0px 2px inset`,
+              boxShadow: `${grey[400]} 0px 0px 0px 0px inset`,
+              backgroundColor: grey[200],
+              "& input": {
+                fontSize: 14,
+                "&::placeholder": {
+                  color: grey[700],
+                },
+              },
             },
             "& input": {
               fontSize: 14,
@@ -312,7 +194,7 @@ function Header() {
             borderRadius: "50%",
             "&:hover": {
               "& svg": {
-                color: grey[600],
+                opacity: 0.4,
               },
             },
           }}
@@ -329,6 +211,9 @@ function Header() {
 
 function Nav() {
   const [categoriesOpen, setCategoriesOpen] = useState<boolean>(false);
+  const onClick = () => {
+    setCategoriesOpen((prev) => !prev);
+  };
   const onMouseOver = () => {
     setCategoriesOpen(true);
   };
@@ -346,6 +231,16 @@ function Nav() {
     const focused = `/${pathnames[1]}` === href;
     return (
       <>
+        {title === "MCN 찾기" && (
+          <Box
+            sx={{
+              width: `2px`,
+              height: `12px`,
+              backgroundColor: grey[300],
+              m: theme.spacing(0, 3, 0, 0),
+            }}
+          />
+        )}
         <Link href={href} passHref>
           <Box
             sx={{
@@ -356,7 +251,7 @@ function Nav() {
               cursor: "pointer",
               "&:hover": {
                 "& > *": {
-                  color: "#2F59CC",
+                  color: grey[400],
                 },
               },
             }}
@@ -407,98 +302,91 @@ function Nav() {
             )}
           </Box>
         </Link>
-        {title === "성공 사례" && (
-          <Box
-            sx={{
-              width: `2px`,
-              height: `12px`,
-              backgroundColor: grey[300],
-              m: theme.spacing(0, 3, 0, 0),
-            }}
-          />
-        )}
       </>
     );
   }
   return (
-    <Toolbar>
+    <Box
+      sx={{
+        position: "relative",
+        height: 48,
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: "#ffffff",
+      }}
+    >
       <Box
         sx={{
-          flex: 1,
+          position: "relative",
           display: "flex",
           alignItems: "center",
           height: "100%",
+          m: theme.spacing(0, 3, 0, 0),
+          cursor: "pointer",
         }}
+        onMouseOver={onMouseOver}
+        onMouseOut={onMouseOut}
       >
         <Box
           sx={{
             position: "relative",
-            display: "flex",
-            alignItems: "center",
-            height: "100%",
-            m: theme.spacing(0, 3, 0, 0),
-            cursor: "pointer",
+            width: 20,
+            height: 20,
+            m: theme.spacing(0, 1, 0, 0),
+            overflow: "hidden",
           }}
-          onMouseOver={onMouseOver}
-          onMouseOut={onMouseOut}
         >
           <Box
             sx={{
-              position: "relative",
-              width: 20,
-              height: 20,
-              m: theme.spacing(0, 1, 0, 0),
-              overflow: "hidden",
+              position: "absolute",
+              transition: `all 0.35s ease`,
+              top: 0,
+              left: 0,
+              transform: categoriesOpen ? `translateY(-100%)` : `none`,
             }}
           >
-            <Box
+            <Icon
+              name="bars"
+              prefix="fas"
+              size={20}
               sx={{
-                position: "absolute",
-                transition: `all 0.35s ease`,
-                top: 0,
-                left: 0,
-                transform: categoriesOpen ? `translateY(-100%)` : `none`,
+                opacity: categoriesOpen ? 0.4 : 1,
               }}
-            >
-              <Icon
-                name="bars"
-                prefix="fas"
-                size={20}
-                color={categoriesOpen ? "#2F59CC" : grey[900]}
-              />
-            </Box>
-            <Box
-              sx={{
-                position: "absolute",
-                transition: `all 0.35s ease`,
-                top: "100%",
-                left: 0,
-                transform: categoriesOpen ? `translateY(-100%)` : `none`,
-              }}
-            >
-              <Icon
-                name="angle-up"
-                prefix="fas"
-                size={20}
-                color={categoriesOpen ? "#2F59CC" : grey[900]}
-              />
-            </Box>
+            />
           </Box>
-          <Typography
+          <Box
             sx={{
-              fontWeight: "700",
-              color: categoriesOpen ? "#2F59CC" : grey[900],
+              position: "absolute",
+              transition: `all 0.35s ease`,
+              top: "100%",
+              left: 0,
+              transform: categoriesOpen ? `translateY(-100%)` : `none`,
             }}
           >
-            전체 카테고리
-          </Typography>
-          <Categories open={categoriesOpen} setOpen={setCategoriesOpen} />
+            <Icon
+              name="angle-up"
+              prefix="fas"
+              size={20}
+              sx={{
+                opacity: categoriesOpen ? 0.4 : 1,
+              }}
+            />
+          </Box>
         </Box>
-        {navs.map((item, index) => (
-          <NavBtn key={index} item={item} />
-        ))}
+        <Typography
+          sx={{
+            fontWeight: "700",
+            opacity: categoriesOpen ? 0.4 : 1,
+          }}
+        >
+          전체 카테고리
+        </Typography>
+        <Categories open={categoriesOpen} setOpen={setCategoriesOpen} />
       </Box>
-    </Toolbar>
+      {navs.map((item, index) => (
+        <NavBtn key={index} item={item} />
+      ))}
+    </Box>
   );
 }
 
@@ -514,96 +402,64 @@ function Categories({
       sx={{
         position: "absolute",
         top: 48,
-        left: 0,
+        left: -16,
         width: 240,
         display: open ? "flex" : "none",
         boxShadow: `rgb(0 0 0 / 10%) 0px 2px 10px`,
-        backgroundColor: "#ffffff",
-        borderRadius: 1,
-        maxHeight: `calc(100vh - 56px - 48px - 24px)`,
-        border: `1px solid ${grey[300]}`,
+        maxHeight: `calc(100vh - 64px - 48px - 24px)`,
         flexDirection: "column",
         overflow: "auto",
         p: theme.spacing(1, 0),
+        backgroundColor: grey[50],
       }}
       className="categories"
     >
       {categories.map((item, index) => {
-        const { title, value, secondaries } = item;
+        const router = useRouter();
+        const { emoji, title, value } = item;
+        const onClick = () => {
+          setOpen(false);
+          router.push(`/search?type=youtuber&categories=${value}`);
+        };
         return (
-          <Box key={index}>
+          <ButtonBase
+            key={index}
+            sx={{
+              width: "100%",
+              p: theme.spacing(1, 2),
+              "&:hover": {
+                backgroundColor: alpha("#2F59CC", 0.08),
+              },
+            }}
+            onClick={onClick}
+          >
             <Box
               sx={{
-                p: theme.spacing(1, 2),
+                width: 20,
+                textAlign: "center",
+                m: theme.spacing(0, 1, 0, 0),
               }}
             >
               <Typography
                 sx={{
-                  fontSize: 12,
-                  lineHeight: "16px",
-                  fontWeight: "700",
-                  color: grey[400],
+                  fontSize: 16,
+                  lineHeight: "20px",
+                  color: grey[900],
                 }}
               >
-                {title}
+                {emoji}
               </Typography>
             </Box>
-            <Box
+            <Typography
               sx={{
-                p: theme.spacing(0, 0, 2, 0),
+                fontSize: 14,
+                lineHeight: "20px",
+                color: grey[900],
               }}
             >
-              {secondaries.map((item, index) => {
-                const router = useRouter();
-                const { title } = item;
-                const onClick = () => {
-                  setOpen(false);
-                  router.push(`/search?first=${value}&secondary=${item.value}`);
-                };
-                return (
-                  <ButtonBase
-                    key={index}
-                    sx={{
-                      width: "100%",
-                      p: theme.spacing(1, 2),
-                      "&:hover .ripple": {
-                        opacity: 1,
-                      },
-                      "&:hover *": {
-                        fontWeight: "700",
-                        color: "#2F59CC",
-                      },
-                    }}
-                    onClick={onClick}
-                  >
-                    <Box
-                      sx={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        backgroundColor: alpha("#2F59CC", 0.08),
-                        transition: `all 0.35s ease`,
-                        opacity: 0,
-                        zIndex: 0,
-                      }}
-                      className="ripple"
-                    />
-                    <Typography
-                      sx={{
-                        fontSize: 14,
-                        lineHeight: "20px",
-                        color: grey[900],
-                      }}
-                    >
-                      {title}
-                    </Typography>
-                  </ButtonBase>
-                );
-              })}
-            </Box>
-          </Box>
+              {title}
+            </Typography>
+          </ButtonBase>
         );
       })}
     </Box>
@@ -636,14 +492,13 @@ function Languages({
       sx={{
         position: "absolute",
         top: 48,
-        right: 0,
+        right: -18,
         display: open ? "flex" : "none",
         boxShadow: `rgb(0 0 0 / 10%) 0px 2px 10px`,
-        backgroundColor: "#ffffff",
-        borderRadius: 1,
-        border: `1px solid ${grey[300]}`,
         flexDirection: "column",
         p: theme.spacing(1, 0),
+        backgroundColor: grey[50],
+        zIndex: 9,
       }}
       className="languages"
     >
@@ -658,30 +513,12 @@ function Languages({
             sx={{
               width: "100%",
               p: theme.spacing(1, 2),
-              "&:hover .ripple": {
-                opacity: 1,
-              },
-              "&:hover *": {
-                fontWeight: "700",
-                color: "#2F59CC",
+              "&:hover": {
+                backgroundColor: alpha("#2F59CC", 0.08),
               },
             }}
             onClick={onClick}
           >
-            <Box
-              sx={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: alpha("#2F59CC", 0.08),
-                transition: `all 0.35s ease`,
-                opacity: 0,
-                zIndex: 0,
-              }}
-              className="ripple"
-            />
             <Typography
               sx={{
                 fontSize: 14,

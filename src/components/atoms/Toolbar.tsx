@@ -4,7 +4,7 @@ export default function Toolbar({ children }: { children?: React.ReactNode }) {
   return (
     <Box
       sx={{
-        height: 56,
+        height: 64,
         display: "flex",
         alignItems: "center",
       }}

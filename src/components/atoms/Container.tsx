@@ -16,7 +16,7 @@ export default function Container({
         p: theme.spacing(0, 10),
         width: "100%",
         minWidth: 1200,
-        maxWidth: 1440,
+        maxWidth: 1200,
         ...sx,
       }}
     >
