@@ -1,5 +1,5 @@
 import { IconName } from "@fortawesome/fontawesome-svg-core";
-import { alpha, Box, ButtonBase, Typography } from "@mui/material";
+import { alpha, Box, ButtonBase, SxProps, Typography } from "@mui/material";
 import youhaBlue from "../../constants/youhaBlue";
 import { theme } from "../../themes/theme";
 import Icon from "./Icon";
@@ -11,6 +11,7 @@ export default function Button({
   color = "#ffffff",
   children,
   onClick,
+  sx,
 }: {
   type?: string;
   name?: IconName;
@@ -18,11 +19,12 @@ export default function Button({
   color?: string;
   children?: React.ReactNode;
   onClick?: () => void;
+  sx?: SxProps;
 }) {
   return (
     <ButtonBase
       sx={{
-        height: 40,
+        height: 36,
         borderRadius: 0.5,
         justifyContent: "center",
         alignItems: "center",
@@ -35,6 +37,7 @@ export default function Button({
         "&:hover .ripple": {
           opacity: 1,
         },
+        ...sx,
       }}
       onClick={onClick}
     >

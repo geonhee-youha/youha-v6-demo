@@ -8,7 +8,7 @@ import { theme } from "../themes/theme";
 export default function Index() {
   return (
     <>
-      <MainBanner />
+      {/* <MainBanner />
       <Container>
         <Box sx={{ m: theme.spacing(10, 0) }}>
           <Typography
@@ -85,7 +85,7 @@ export default function Index() {
             </Stack>
           </Box>
         </Stack>
-      </Container>
+      </Container> */}
     </>
   );
 }

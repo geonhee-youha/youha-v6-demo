@@ -217,4 +217,9 @@ export const categories = [
     title: "운세·타로",
     value: "fortune_tarot",
   },
+  {
+    emoji: "🗨️",
+    title: "기타",
+    value: "etc",
+  },
 ];

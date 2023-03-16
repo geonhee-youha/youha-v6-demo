@@ -144,10 +144,10 @@ function Header() {
             backgroundColor: grey[100],
             transition: `all 0.35s ease`,
             "&:hover": {
-              boxShadow: `${grey[400]} 0px 0px 0px 1px inset`,
+              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
             },
             "&.Mui-focused": {
-              boxShadow: `${grey[400]} 0px 0px 0px 0px inset`,
+              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
               backgroundColor: grey[200],
               "& input": {
                 fontSize: 14,
@@ -187,23 +187,7 @@ function Header() {
           m: theme.spacing(0, 0, 0, 3),
         }}
       >
-        <IconButton
-          sx={{
-            width: 24,
-            height: "100%",
-            borderRadius: "50%",
-            "&:hover": {
-              "& svg": {
-                opacity: 0.4,
-              },
-            },
-          }}
-          disableRipple
-          onClick={onClickLanguages}
-        >
-          <Icon prefix="fal" name="globe" size={20} />
-        </IconButton>
-        <Languages open={languagesOpen} setOpen={setLanguagesOpen} />
+        <Languages />
       </Box>
     </Toolbar>
   );
@@ -410,7 +394,10 @@ function Categories({
         flexDirection: "column",
         overflow: "auto",
         p: theme.spacing(1, 0),
-        backgroundColor: grey[50],
+        // backgroundColor: grey[50],
+        backgroundColor: "#ffffff",
+        border: `1px solid ${grey[300]}`,
+        borderRadius: 0.5,
       }}
       className="categories"
     >
@@ -466,71 +453,89 @@ function Categories({
   );
 }
 
-function Languages({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}) {
-  const languagesRef = useRef<any>(null);
+function Languages() {
+  const ref = useRef<any>(null);
+  const [open, setOpen] = useState<boolean>(false);
+  const onClick = () => {
+    setOpen((prev) => !prev);
+  };
   useEffect(() => {
-    document.addEventListener("mousedown", onClickOutside);
-
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", onClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const onClickOutside = (event: Event) => {
-    if (!languagesRef.current.contains(event.target)) {
+  const handleClickOutside = (event: any) => {
+    if (ref && !ref.current.contains(event.target)) {
       setOpen(false);
     }
   };
   return (
-    <Box
-      ref={languagesRef}
-      sx={{
-        position: "absolute",
-        top: 48,
-        right: -18,
-        display: open ? "flex" : "none",
-        boxShadow: `rgb(0 0 0 / 10%) 0px 2px 10px`,
-        flexDirection: "column",
-        p: theme.spacing(1, 0),
-        backgroundColor: grey[50],
-        zIndex: 9,
-      }}
-      className="languages"
-    >
-      {languages.map((item, index) => {
-        const { title } = item;
-        const onClick = () => {
-          setOpen(false);
-        };
-        return (
-          <ButtonBase
-            key={index}
-            sx={{
-              width: "100%",
-              p: theme.spacing(1, 2),
-              "&:hover": {
-                backgroundColor: alpha("#2F59CC", 0.08),
-              },
-            }}
-            onClick={onClick}
-          >
-            <Typography
+    <Box ref={ref} sx={{ height: "100%" }}>
+      <IconButton
+        sx={{
+          width: 24,
+          height: "100%",
+          borderRadius: "50%",
+          "&:hover": {
+            "& svg": {
+              opacity: 0.4,
+            },
+          },
+        }}
+        disableRipple
+        onClick={onClick}
+      >
+        <Icon prefix="fal" name="globe" size={20} />
+      </IconButton>
+      <Box
+        ref={ref}
+        sx={{
+          position: "absolute",
+          top: 48,
+          right: -18,
+          display: open ? "flex" : "none",
+          boxShadow: `rgb(0 0 0 / 10%) 0px 2px 10px`,
+          flexDirection: "column",
+          p: theme.spacing(1, 0),
+          zIndex: 9,
+          // backgroundColor: grey[50],
+          backgroundColor: "#ffffff",
+          border: `1px solid ${grey[300]}`,
+          borderRadius: 0.5,
+        }}
+        className="languages"
+      >
+        {languages.map((item, index) => {
+          const { title } = item;
+          const onClick = () => {
+            setOpen(false);
+          };
+          return (
+            <ButtonBase
+              key={index}
               sx={{
-                fontSize: 14,
-                lineHeight: "20px",
-                color: grey[900],
+                width: "100%",
+                p: theme.spacing(1, 2),
+                "&:hover": {
+                  backgroundColor: alpha("#2F59CC", 0.08),
+                },
               }}
+              onClick={onClick}
             >
-              {title}
-            </Typography>
-          </ButtonBase>
-        );
-      })}
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  lineHeight: "20px",
+                  color: grey[900],
+                }}
+              >
+                {title}
+              </Typography>
+            </ButtonBase>
+          );
+        })}
+      </Box>
     </Box>
   );
 }
