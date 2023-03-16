@@ -73,7 +73,7 @@ function Header() {
   };
   const onSearchClick = () => {
     if (value === "") return;
-    router.push(`/search?value=${value}`);
+    router.push(`/search?type=youtuber&value=${value}`);
   };
   function HeaderBtn({
     item,
