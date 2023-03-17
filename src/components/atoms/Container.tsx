@@ -17,6 +17,13 @@ export default function Container({
         width: "100%",
         minWidth: 1280,
         maxWidth: 1280,
+        "@media(max-width: 480px)": {
+          m: 0,
+          minWidth: "initial",
+          maxWidth: "initial",
+          p: theme.spacing(0, 2.5),
+          overflowX: "hidden",
+        },
         ...sx,
       }}
     >

@@ -17,6 +17,7 @@ import Icon from "../../components/atoms/Icon";
 import React, {
   ChangeEvent,
   Dispatch,
+  KeyboardEvent,
   SetStateAction,
   useEffect,
   useRef,
@@ -41,7 +42,13 @@ function valuetext(value: number) {
 
 export default function Page() {
   const router = useRouter();
-  const { type, categories: categoryOrigin } = router.query;
+  const {
+    type,
+    categories: categoryOrigin,
+    value: searchValueOrigin,
+  } = router.query;
+  const searchValue =
+    typeof searchValueOrigin === "string" ? searchValueOrigin : "";
   const categories =
     typeof categoryOrigin === "string" ? categoryOrigin.split(",") : [];
   const [value, setValue] = useState<string>("");
@@ -49,10 +56,18 @@ export default function Page() {
     const value = event.target.value;
     setValue(value);
   };
+  const onKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onSearchClick();
+    }
+  };
   const onSearchClick = () => {
     if (value === "") return;
     router.push(`/search?value=${value}`);
   };
+  useEffect(() => {
+    setValue(searchValue);
+  }, [searchValue]);
   const [channelFilterOpen, setChannelFilterOpen] = useState<boolean>(false);
   const [targetFilterOpen, setTargetFilterOpen] = useState<boolean>(false);
   const [contentsFilterOpen, setContentsFilterOpen] = useState<boolean>(false);
@@ -245,6 +260,7 @@ export default function Page() {
             <InputBase
               value={value}
               onChange={onChange}
+              onKeyPress={onKeyPress}
               sx={{
                 width: 172,
                 height: 40,

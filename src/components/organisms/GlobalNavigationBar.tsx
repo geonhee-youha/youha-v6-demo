@@ -12,6 +12,7 @@ import { useRouter } from "next/router";
 import {
   ChangeEvent,
   Dispatch,
+  KeyboardEvent,
   SetStateAction,
   useEffect,
   useRef,
@@ -65,17 +66,19 @@ export default function GlobalNavigationBar() {
 function Header() {
   const router = useRouter();
   const [value, setValue] = useState<string>("");
-  const [languagesOpen, setLanguagesOpen] = useState<boolean>(false);
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setValue(value);
   };
-  const onClickLanguages = () => {
-    setLanguagesOpen((prev) => !prev);
+  const onKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onSearchClick();
+    }
   };
   const onSearchClick = () => {
     if (value === "") return;
     router.push(`/search?type=youtuber&value=${value}`);
+    setValue("");
   };
   function HeaderBtn({
     item,
@@ -130,11 +133,16 @@ function Header() {
         sx={{
           position: "relative",
           m: theme.spacing(0, "auto", 0, 0),
+          "@media(max-width: 480px)": {
+            flex: 1,
+            m: theme.spacing(0),
+          },
         }}
       >
         <InputBase
           value={value}
           onChange={onChange}
+          onKeyPress={onKeyPress}
           placeholder="어떤 유튜버가 궁금하세요?"
           sx={{
             width: 360,
@@ -165,6 +173,9 @@ function Header() {
                 opacity: 1,
               },
             },
+            "@media(max-width: 480px)": {
+              width: "100%",
+            },
           }}
         />
         <IconButton
@@ -179,17 +190,28 @@ function Header() {
           <Icon name="search" size={20} />
         </IconButton>
       </Box>
-      {headers.map((item, index) => (
-        <HeaderBtn key={index} item={item} />
-      ))}
       <Box
         sx={{
-          position: "relative",
+          display: "flex",
           height: "100%",
-          m: theme.spacing(0, 0, 0, 3),
+          alignItems: "center",
+          "@media(max-width: 480px)": {
+            display: "none",
+          },
         }}
       >
-        <Languages />
+        {headers.map((item, index) => (
+          <HeaderBtn key={index} item={item} />
+        ))}
+        <Box
+          sx={{
+            position: "relative",
+            height: "100%",
+            m: theme.spacing(0, 0, 0, 3),
+          }}
+        >
+          <Languages />
+        </Box>
       </Box>
     </Toolbar>
   );
@@ -299,6 +321,9 @@ function Nav() {
         display: "flex",
         alignItems: "center",
         backgroundColor: "#ffffff",
+        "@media(max-width: 480px)": {
+          display: "none",
+        },
       }}
     >
       <Box
@@ -396,7 +421,6 @@ function Categories({
         flexDirection: "column",
         overflow: "auto",
         p: theme.spacing(1, 0),
-        // backgroundColor: grey[50],
         backgroundColor: "#ffffff",
         border: `1px solid ${grey[300]}`,
         borderRadius: 0.5,

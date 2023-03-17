@@ -38,6 +38,7 @@ import _ from "lodash";
 import GlobalNavigationBar from "../components/organisms/GlobalNavigationBar";
 import { Box } from "@mui/material";
 import Footer from "../components/organisms/Footer";
+import BottomNavigationBar from "../components/organisms/BottomNavigationBar";
 
 ChartJS.register(
   LineController,
@@ -228,11 +229,15 @@ function MyApp(props: MyAppProps) {
               sx={{
                 minWidth: 1280,
                 width: "100%",
+                "@media(max-width: 480px)": {
+                  minWidth: "initial",
+                },
               }}
             >
               <GlobalNavigationBar />
               <Component {...pageProps} key={router.route} />
               <Footer />
+              <BottomNavigationBar />
             </Box>
           </Box>
         </ThemeProvider>
