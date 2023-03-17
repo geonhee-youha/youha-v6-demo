@@ -3,16 +3,14 @@ import {
   alpha,
   Box,
   ButtonBase,
-  Chip,
   IconButton,
   InputBase,
-  Stack,
+  Slider,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import Container from "../../components/atoms/Container";
 import { theme } from "../../themes/theme";
-import { categories } from "../../constants/categories";
 import { grey } from "@mui/material/colors";
 import youhaBlue from "../../constants/youhaBlue";
 import Icon from "../../components/atoms/Icon";
@@ -25,35 +23,26 @@ import React, {
   useState,
 } from "react";
 import Button from "../../components/atoms/Button";
+import { numberToKorean } from "../../utils";
+import {
+  categoryList,
+  channelTypeList,
+  mcnList,
+  recentUploadDateList,
+  sortList,
+  subscribersAgeList,
+  subscribersGenderList,
+  tabList,
+} from "../../constants";
 
-const tabs = [
-  { title: "유튜버", value: "youtuber" },
-  { title: "동영상", value: "video" },
-  { title: "쇼츠", value: "shorts" },
-];
-
-const sorts = [
-  { title: "구독자 순", value: "subscribers" },
-  { title: "예상 광고단가 순", value: "price" },
-  { title: "평균 조회수 순", value: "views" },
-];
-
-const subscribersGenders = [
-  { title: "남성", value: "male" },
-  { title: "여성", value: "female" },
-];
-
-const subscribersAges = [
-  { title: "10대", value: "10" },
-  { title: "20~30대", value: "20" },
-  { title: "40~50대", value: "40" },
-  { title: "60대 이상", value: "60" },
-];
+function valuetext(value: number) {
+  return `${value}%`;
+}
 
 export default function Page() {
   const router = useRouter();
   const { type, categories: categoryOrigin } = router.query;
-  const queryCategories =
+  const categories =
     typeof categoryOrigin === "string" ? categoryOrigin.split(",") : [];
   const [value, setValue] = useState<string>("");
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -67,77 +56,127 @@ export default function Page() {
   const [channelFilterOpen, setChannelFilterOpen] = useState<boolean>(false);
   const [targetFilterOpen, setTargetFilterOpen] = useState<boolean>(false);
   const [contentsFilterOpen, setContentsFilterOpen] = useState<boolean>(false);
-  const [etcFilterOpen, setEtcFilterOpen] = useState<boolean>(false);
-  const [subscribersMinValue, setSubscribersMinValue] = useState<string>("");
-  const onSubscribersMinChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSubscribersMinValue(value);
+  const [mcnFilterOpen, setMcnFilterOpen] = useState<boolean>(false);
+
+  //채널 필터
+  const [subscribers, setSubscribers] = useState<number[]>([0, 5000000]);
+  const onSubscribersChange = (event: Event, newValue: number | number[]) => {
+    setSubscribers(newValue as number[]);
   };
-  const [subscribersMaxValue, setSubscribersMaxValue] = useState<string>("");
-  const onSubscribersMaxChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSubscribersMaxValue(value);
+  const [price, setPrice] = useState<number[]>([0, 100000000]);
+  const onpriceChange = (event: Event, newValue: number | number[]) => {
+    setPrice(newValue as number[]);
   };
-  const onClickSubscribersReset = () => {
-    setSubscribersMinValue("");
-    setSubscribersMaxValue("");
-  };
-  const [priceMinValue, setPriceMinValue] = useState<string>("");
-  const onPriceMinChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setPriceMinValue(value);
-  };
-  const [priceMaxValue, setPriceMaxValue] = useState<string>("");
-  const onPriceMaxChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setPriceMaxValue(value);
-  };
-  const onClickPriceReset = () => {
-    setPriceMinValue("");
-    setPriceMaxValue("");
-  };
+  const [channelType, setChannelType] = useState<string>("");
   const channelFilterFocused =
-    (subscribersMinValue !== "" && subscribersMaxValue !== "") ||
-    (priceMinValue !== "" && priceMaxValue !== "");
+    subscribers[0] !== 0 ||
+    subscribers[1] !== 5000000 ||
+    price[0] !== 0 ||
+    price[1] !== 100000000 ||
+    channelType !== "";
+
+  //시청자 필터
   const [subscribersGender, setSubscribersGender] = useState<string>("");
-  const onClickSubscribersGenderReset = () => {
-    setSubscribersGender("");
-  };
   const [subscribersAge, setSubscribersAge] = useState<string>("");
-  const onClickSubscribersAgeReset = () => {
-    setSubscribersAge("");
+  const [subscribersKoreanRatio, setSubscribersKoreanRatio] = useState<
+    number[]
+  >([0, 100]);
+  const onChangeSubscriberKoreanRatio = (
+    event: Event,
+    newValue: number | number[]
+  ) => {
+    setSubscribersKoreanRatio(newValue as number[]);
   };
   const targetFilterFocused =
-    subscribersGender !== "" || subscribersAge !== "";
+    subscribersGender !== "" ||
+    subscribersAge !== "" ||
+    subscribersKoreanRatio[0] !== 0 ||
+    subscribersKoreanRatio[1] !== 100;
 
+  //콘텐츠 필터
+  const [everageViews, setEverageViews] = useState<number[]>([0, 10000000]);
+  const onChangeEverageViews = (event: Event, newValue: number | number[]) => {
+    setEverageViews(newValue as number[]);
+  };
+  const [commentRatio, setCommentRatio] = useState<number[]>([0, 100]);
+  const onChangeCommentRatio = (event: Event, newValue: number | number[]) => {
+    setCommentRatio(newValue as number[]);
+  };
+  const [likeRatio, setLikeRatio] = useState<number[]>([0, 100]);
+  const onChangeLikeRatio = (event: Event, newValue: number | number[]) => {
+    setLikeRatio(newValue as number[]);
+  };
+  const [recentUploadDate, setRecentUploadDate] = useState<string>("");
+  const [uploadFrequency, setUploadFrequency] = useState<number[]>([0, 100]);
+  const onChangeUploadFrequency = (
+    event: Event,
+    newValue: number | number[]
+  ) => {
+    setUploadFrequency(newValue as number[]);
+  };
+  const contentsFilterFocused =
+    everageViews[0] !== 0 ||
+    everageViews[1] !== 10000000 ||
+    commentRatio[0] !== 0 ||
+    commentRatio[1] !== 100 ||
+    likeRatio[0] !== 0 ||
+    likeRatio[1] !== 100 ||
+    recentUploadDate !== "" ||
+    uploadFrequency[0] !== 0 ||
+    uploadFrequency[1] !== 100;
+
+  //MCN 필터
+  const [mcns, setMcns] = useState<string[]>([""]);
+  const mcnFilterFocused = mcns[0] !== "";
+
+  //필터 초기화
+  const onClickReset = () => {
+    //채널 필터
+    setSubscribers([0, 5000000]);
+    setPrice([0, 100000000]);
+    setChannelType("");
+    //시청자 필터
+    setSubscribersGender("");
+    setSubscribersAge("");
+    setSubscribersKoreanRatio([0, 100]);
+    //콘텐츠 필터
+    setCommentRatio([0, 100]);
+    setLikeRatio([0, 100]);
+    setRecentUploadDate("");
+    setUploadFrequency([0, 100]);
+    //MCN 필터
+    setMcns([""]);
+  };
+
+  // 정렬
   const [sort, setSort] = useState<string>("subscribers");
   useEffect(() => {
     if (channelFilterOpen) {
       setTargetFilterOpen(false);
       setContentsFilterOpen(false);
-      setEtcFilterOpen(false);
+      setMcnFilterOpen(false);
     }
     if (targetFilterOpen) {
       setChannelFilterOpen(false);
       setContentsFilterOpen(false);
-      setEtcFilterOpen(false);
+      setMcnFilterOpen(false);
     }
     if (contentsFilterOpen) {
       setChannelFilterOpen(false);
       setTargetFilterOpen(false);
-      setEtcFilterOpen(false);
+      setMcnFilterOpen(false);
     }
-    if (etcFilterOpen) {
+    if (mcnFilterOpen) {
       setChannelFilterOpen(false);
       setTargetFilterOpen(false);
       setContentsFilterOpen(false);
     }
-  }, [channelFilterOpen, targetFilterOpen, contentsFilterOpen, etcFilterOpen]);
+  }, [channelFilterOpen, targetFilterOpen, contentsFilterOpen, mcnFilterOpen]);
   return (
     <Container>
       <Box
         sx={{
-          p: theme.spacing(2, 0),
+          p: theme.spacing(2, 0, 10, 0),
         }}
       >
         <Box
@@ -164,7 +203,7 @@ export default function Page() {
             >
               유하 통합검색
             </Typography>
-            {tabs.map((item, index) => {
+            {tabList.map((item, index) => {
               const { title, value } = item;
               const focused = type === value;
               const onClick = () => {
@@ -265,27 +304,26 @@ export default function Page() {
             >
               <Typography
                 sx={{
-                  fontSize: 16,
+                  fontSize: 18,
+                  lineHeight: "28px",
                   fontWeight: "700",
                 }}
               >
                 카테고리
               </Typography>
             </Box>
-            {categories.map((item, index) => {
+            {categoryList.map((item, index) => {
               const router = useRouter();
               const { emoji, title, value } = item;
-              const focused = queryCategories.includes(value);
+              const focused = categories.includes(value);
               const onClick = () => {
-                const newQueryCategories = focused
-                  ? queryCategories.filter((el) => el !== value)
-                  : [...queryCategories, value];
-                console.log(newQueryCategories);
-
+                const newCategories = focused
+                  ? categories.filter((el) => el !== value)
+                  : [...categories, value];
                 router.push(
                   `/search?${
                     type !== undefined ? "type=youtuber&" : `type=${type}&`
-                  }categories=${newQueryCategories.map((el, index) => {
+                  }categories=${newCategories.map((el, index) => {
                     return el;
                   })}`
                 );
@@ -308,9 +346,9 @@ export default function Page() {
                       width: 20,
                       height: 20,
                       borderRadius: 0.5,
-                      border: `1px solid ${
+                      boxShadow: `${
                         focused ? youhaBlue[500] : grey[300]
-                      }`,
+                      } 0px 0px 0px 1px`,
                       m: theme.spacing(0, 1, 0, 0),
                       backgroundColor: focused ? youhaBlue[500] : "transparent",
                       display: "flex",
@@ -385,256 +423,488 @@ export default function Page() {
                   open={channelFilterOpen}
                   setOpen={setChannelFilterOpen}
                 >
-                  <Stack spacing={2}>
+                  <Box
+                    sx={{
+                      p: theme.spacing(2),
+                    }}
+                    className="FilterSection"
+                  >
                     <Box
                       sx={{
-                        p: theme.spacing(0),
+                        display: "flex",
+                        alignItems: "flex-end",
                       }}
                     >
-                      <Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              flex: 1,
-                              fontSize: 20,
-                              lineHeight: "32px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            구독자수
-                          </Typography>
-                          <IconButton
-                            sx={{
-                              width: 32,
-                              height: 32,
-                              borderRadius: "50%",
-                              "&:hover": {
-                                "& svg": {
-                                  opacity: 0.4,
-                                },
-                              },
-                            }}
-                            disableRipple
-                            onClick={onClickSubscribersReset}
-                          >
-                            <Icon name="undo" size={20} color={grey[600]} />
-                          </IconButton>
-                        </Box>
-                        <Typography
-                          sx={{
-                            fontSize: 14,
-                            lineHeight: "20px",
-                            color: grey[600],
-                          }}
-                        >
-                          채널의 구독자 수입니다.
-                        </Typography>
-                      </Box>
-                      <Stack
-                        direction="row"
-                        alignItems="center"
-                        spacing={1}
+                      <Typography
                         sx={{
-                          p: theme.spacing(2, 0),
+                          flex: 1,
+                          fontSize: 18,
+                          lineHeight: "28px",
+                          fontWeight: "700",
+                          m: theme.spacing(0, 1, 0, 0),
                         }}
                       >
-                        <InputBase
-                          value={subscribersMinValue}
-                          onChange={onSubscribersMinChange}
-                          placeholder="최소"
-                          sx={{
-                            flex: 1,
-                            height: 40,
-                            borderRadius: 1,
-                            p: theme.spacing(0, 2, 0, 2),
-                            backgroundColor: grey[100],
-                            transition: `all 0.35s ease`,
-                            "&:hover": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
-                            },
-                            "&.Mui-focused": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
-                              backgroundColor: grey[200],
-                              "& input": {
-                                fontSize: 14,
-                                "&::placeholder": {
-                                  color: grey[700],
-                                },
-                              },
-                            },
-                            "& input": {
-                              fontSize: 14,
-                              "&::placeholder": {
-                                color: grey[500],
-                                opacity: 1,
-                              },
-                            },
-                          }}
-                        />
-                        <InputBase
-                          value={subscribersMaxValue}
-                          onChange={onSubscribersMaxChange}
-                          placeholder="최대"
-                          sx={{
-                            flex: 1,
-                            height: 40,
-                            borderRadius: 1,
-                            p: theme.spacing(0, 2, 0, 2),
-                            backgroundColor: grey[100],
-                            transition: `all 0.35s ease`,
-                            "&:hover": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
-                            },
-                            "&.Mui-focused": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
-                              backgroundColor: grey[200],
-                              "& input": {
-                                fontSize: 14,
-                                "&::placeholder": {
-                                  color: grey[700],
-                                },
-                              },
-                            },
-                            "& input": {
-                              fontSize: 14,
-                              "&::placeholder": {
-                                color: grey[500],
-                                opacity: 1,
-                              },
-                            },
-                          }}
-                        />
-                      </Stack>
+                        구독자수
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          lineHeight: "28px",
+                          color: youhaBlue[500],
+                        }}
+                      >
+                        {`${numberToKorean(subscribers[0])}${
+                          subscribers[0] === 0 ? "" : "명"
+                        }`}{" "}
+                        ~{" "}
+                        {subscribers[1] === 5000000
+                          ? "무제한"
+                          : `${numberToKorean(subscribers[1])}명`}
+                      </Typography>
                     </Box>
                     <Box
                       sx={{
-                        p: theme.spacing(0),
+                        m: theme.spacing(2, -0.5, 0, -0.5),
                       }}
                     >
-                      <Box>
+                      <Box
+                        sx={{
+                          height: 20,
+                          p: theme.spacing(0, 2, 0, 2),
+                        }}
+                      >
+                        <Slider
+                          getAriaValueText={valuetext}
+                          valueLabelFormat={valuetext}
+                          value={subscribers}
+                          onChange={onSubscribersChange}
+                          max={5000000}
+                          step={50000}
+                          sx={{
+                            height: 20,
+                            position: "relative",
+                            m: `0 !important`,
+                            p: `${theme.spacing(0, 0, 0, 0)} !important`,
+                            "& .MuiSlider-rail": {
+                              opacity: 1,
+                              // backgroundColor: youhaBlue[500],
+                              backgroundColor: grey[200],
+                              height: 4,
+                            },
+                            "& .MuiSlider-track": {
+                              height: 4,
+                              // backgroundColor: grey[200],
+                              border: "none",
+                            },
+                            "& .MuiSlider-thumb": {
+                              width: 20,
+                              height: 20,
+                              backgroundColor: "#ffffff",
+                              boxShadow: `none !important`,
+                              zIndex: 99,
+                            },
+                            "& .MuiSlider-thumb::before": {
+                              boxShadow: `0px 3px 4px -2px rgb(0 0 0 / 20%), 0px 2px 6px 0px rgb(0 0 0 / 14%), 0px 1px 9px 0px rgb(0 0 0 / 12%)`,
+                            },
+                            "& .MuiSlider-valueLabel": {
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              fontWeight: "700",
+                              fontFamily: `LINESeedKR`,
+                              p: theme.spacing(0.5, 1),
+                              backgroundColor: grey[900],
+                              "& *": {
+                                background: "transparent",
+                              },
+                            },
+                          }}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          position: "relative",
+                          height: 28,
+                        }}
+                      >
                         <Box
                           sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
                             display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
                           }}
                         >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
                           <Typography
                             sx={{
-                              flex: 1,
-                              fontSize: 20,
-                              lineHeight: "32px",
-                              fontWeight: "700",
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
                             }}
                           >
-                            예상 광고단가
+                            0
                           </Typography>
-                          <IconButton
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: "50%",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            transform: "translateX(-50%)",
+                          }}
+                        >
+                          <Box
                             sx={{
-                              width: 32,
-                              height: 32,
-                              borderRadius: "50%",
-                              "&:hover": {
-                                "& svg": {
-                                  opacity: 0.4,
-                                },
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            250만
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            right: 0,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            무제한
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      p: theme.spacing(2),
+                    }}
+                    className="FilterSection"
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          flex: 1,
+                          fontSize: 18,
+                          lineHeight: "28px",
+                          fontWeight: "700",
+                          m: theme.spacing(0, 1, 0, 0),
+                        }}
+                      >
+                        광고단가
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          lineHeight: "28px",
+                          color: youhaBlue[500],
+                        }}
+                      >
+                        {`${numberToKorean(price[0])}${
+                          price[0] === 0 ? "" : "원"
+                        }`}{" "}
+                        ~{" "}
+                        {price[1] === 100000000
+                          ? "무제한"
+                          : `${numberToKorean(price[1])}원`}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        m: theme.spacing(2, -0.5, 0, -0.5),
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          height: 20,
+                          p: theme.spacing(0, 2, 0, 2),
+                        }}
+                      >
+                        <Slider
+                          getAriaValueText={valuetext}
+                          valueLabelFormat={valuetext}
+                          value={price}
+                          onChange={onpriceChange}
+                          max={100000000}
+                          step={1000000}
+                          sx={{
+                            height: 20,
+                            position: "relative",
+                            m: `0 !important`,
+                            p: `${theme.spacing(0, 0, 0, 0)} !important`,
+                            "& .MuiSlider-rail": {
+                              opacity: 1,
+                              // backgroundColor: youhaBlue[500],
+                              backgroundColor: grey[200],
+                              height: 4,
+                            },
+                            "& .MuiSlider-track": {
+                              height: 4,
+                              // backgroundColor: grey[200],
+                              border: "none",
+                            },
+                            "& .MuiSlider-thumb": {
+                              width: 20,
+                              height: 20,
+                              backgroundColor: "#ffffff",
+                              boxShadow: `none !important`,
+                              zIndex: 99,
+                            },
+                            "& .MuiSlider-thumb::before": {
+                              boxShadow: `0px 3px 4px -2px rgb(0 0 0 / 20%), 0px 2px 6px 0px rgb(0 0 0 / 14%), 0px 1px 9px 0px rgb(0 0 0 / 12%)`,
+                            },
+                            "& .MuiSlider-valueLabel": {
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              fontWeight: "700",
+                              fontFamily: `LINESeedKR`,
+                              p: theme.spacing(0.5, 1),
+                              backgroundColor: grey[900],
+                              "& *": {
+                                background: "transparent",
+                              },
+                            },
+                          }}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          position: "relative",
+                          height: 28,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            0
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: "50%",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            transform: "translateX(-50%)",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            5,000만
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            right: 0,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            무제한
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      p: theme.spacing(2),
+                    }}
+                    className="FilterSection"
+                  >
+                    <Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "flex-end",
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            flex: 1,
+                            fontSize: 18,
+                            lineHeight: "28px",
+                            fontWeight: "700",
+                          }}
+                        >
+                          채널 타입
+                        </Typography>
+                      </Box>
+                      <Typography
+                        sx={{
+                          m: theme.spacing(0.5, 0, 1, 0),
+                          fontSize: 14,
+                          lineHeight: "16px",
+                          color: grey[600],
+                        }}
+                      >
+                        어떤 영상 타입을 업로드하는 채널인지 여부입니다.
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        p: theme.spacing(1, 0, 0, 0),
+                      }}
+                    >
+                      {channelTypeList.map((item, index) => {
+                        const { title, value } = item;
+                        const focused = channelType === value;
+                        const onClick = () => {
+                          setChannelType(value);
+                        };
+                        return (
+                          <ButtonBase
+                            key={index}
+                            sx={{
+                              width: "100%",
+                              p: theme.spacing(1, 0),
+                              "&:hover .MuiTypography-root": {
+                                opacity: 0.4,
                               },
                             }}
                             disableRipple
-                            onClick={onClickPriceReset}
+                            onClick={onClick}
                           >
-                            <Icon name="undo" size={20} color={grey[600]} />
-                          </IconButton>
-                        </Box>
-                        <Typography
-                          sx={{
-                            fontSize: 14,
-                            lineHeight: "20px",
-                            color: grey[600],
-                          }}
-                        >
-                          채널의 예상 광고단가입니다.
-                        </Typography>
-                      </Box>
-                      <Stack
-                        direction="row"
-                        alignItems="center"
-                        spacing={1}
-                        sx={{
-                          p: theme.spacing(1, 0),
-                        }}
-                      >
-                        <InputBase
-                          value={priceMinValue}
-                          onChange={onPriceMinChange}
-                          placeholder="최소"
-                          sx={{
-                            flex: 1,
-                            height: 40,
-                            borderRadius: 1,
-                            p: theme.spacing(0, 2, 0, 2),
-                            backgroundColor: grey[100],
-                            transition: `all 0.35s ease`,
-                            "&:hover": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
-                            },
-                            "&.Mui-focused": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
-                              backgroundColor: grey[200],
-                              "& input": {
+                            <Box
+                              sx={{
+                                width: 20,
+                                height: 20,
+                                borderRadius: "50%",
+                                p: theme.spacing(0.5),
+                                border: `1px solid ${grey[300]}`,
+                                m: theme.spacing(0, 1, 0, 0),
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                  height: "100%",
+                                  borderRadius: "50%",
+                                  backgroundColor: focused
+                                    ? youhaBlue[500]
+                                    : "transparent",
+                                }}
+                              />
+                            </Box>
+                            <Typography
+                              sx={{
                                 fontSize: 14,
-                                "&::placeholder": {
-                                  color: grey[700],
-                                },
-                              },
-                            },
-                            "& input": {
-                              fontSize: 14,
-                              "&::placeholder": {
-                                color: grey[500],
-                                opacity: 1,
-                              },
-                            },
-                          }}
-                        />
-                        <InputBase
-                          value={priceMaxValue}
-                          onChange={onPriceMaxChange}
-                          placeholder="최대"
-                          sx={{
-                            flex: 1,
-                            height: 40,
-                            borderRadius: 1,
-                            p: theme.spacing(0, 2, 0, 2),
-                            backgroundColor: grey[100],
-                            transition: `all 0.35s ease`,
-                            "&:hover": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
-                            },
-                            "&.Mui-focused": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
-                              backgroundColor: grey[200],
-                              "& input": {
-                                fontSize: 14,
-                                "&::placeholder": {
-                                  color: grey[700],
-                                },
-                              },
-                            },
-                            "& input": {
-                              fontSize: 14,
-                              "&::placeholder": {
-                                color: grey[500],
-                                opacity: 1,
-                              },
-                            },
-                          }}
-                        />
-                      </Stack>
+                                lineHeight: "20px",
+                                color: grey[900],
+                              }}
+                            >
+                              {title}
+                            </Typography>
+                          </ButtonBase>
+                        );
+                      })}
                     </Box>
-                  </Stack>
+                  </Box>
                 </FilterItem>
                 <FilterItem
                   title="시청자 필터"
@@ -642,709 +912,1355 @@ export default function Page() {
                   open={targetFilterOpen}
                   setOpen={setTargetFilterOpen}
                 >
-                  <Stack spacing={2}>
+                  <Box
+                    sx={{
+                      flex: 1,
+                      p: theme.spacing(2),
+                      borderRight: `1px solid ${grey[300]}`,
+                    }}
+                    className="FilterSection"
+                  >
                     <Box
                       sx={{
-                        p: theme.spacing(0),
+                        display: "flex",
                       }}
                     >
-                      <Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              flex: 1,
-                              fontSize: 20,
-                              lineHeight: "32px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            시청자 성별
-                          </Typography>
-                          <IconButton
-                            sx={{
-                              width: 32,
-                              height: 32,
-                              borderRadius: "50%",
-                              "&:hover": {
-                                "& svg": {
-                                  opacity: 0.4,
-                                },
-                              },
-                            }}
-                            disableRipple
-                            onClick={onClickSubscribersGenderReset}
-                          >
-                            <Icon name="undo" size={20} color={grey[600]} />
-                          </IconButton>
-                        </Box>
-                        <Typography
-                          sx={{
-                            fontSize: 14,
-                            lineHeight: "20px",
-                            color: grey[600],
-                          }}
-                        >
-                          주 시청 성별을 선택하세요.
-                        </Typography>
-                      </Box>
-                      <Box
+                      <Typography
                         sx={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          p: theme.spacing(2, 0, 1, 0),
+                          flex: 1,
+                          fontSize: 18,
+                          lineHeight: "28px",
+                          fontWeight: "700",
                         }}
                       >
-                        {subscribersGenders.map((item, index) => {
-                          const { title, value } = item;
-                          const focused = subscribersGender === value;
-                          const onClick = () => {
-                            setSubscribersGender(focused ? "" : value);
-                          };
-                          return (
-                            <ButtonBase
-                              key={index}
-                              sx={{
-                                p: theme.spacing(1, 2),
-                                backgroundColor: focused
-                                  ? youhaBlue[50]
-                                  : grey[100],
-                                borderRadius: 2,
-                                "&:hover": {
-                                  boxShadow: `${
-                                    focused ? youhaBlue[500] : grey[300]
-                                  } 0px 0px 0px 1px inset`,
-                                },
-                                m: theme.spacing(0, 1, 1, 0),
-                              }}
-                              disableRipple
-                              onClick={onClick}
-                            >
-                              <Typography
-                                sx={{
-                                  fontSize: 14,
-                                  lineHeight: "20px",
-                                  color: focused ? youhaBlue[500] : grey[900],
-                                }}
-                              >
-                                {title}
-                              </Typography>
-                            </ButtonBase>
-                          );
-                        })}
-                      </Box>
+                        주 시청자 성별
+                      </Typography>
                     </Box>
                     <Box
                       sx={{
-                        p: theme.spacing(0),
+                        p: theme.spacing(1, 0, 0, 0),
                       }}
                     >
-                      <Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              flex: 1,
-                              fontSize: 20,
-                              lineHeight: "32px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            시청자 연령대
-                          </Typography>
-                          <IconButton
-                            sx={{
-                              width: 32,
-                              height: 32,
-                              borderRadius: "50%",
-                              "&:hover": {
-                                "& svg": {
-                                  opacity: 0.4,
-                                },
-                              },
-                            }}
-                            disableRipple
-                            onClick={onClickSubscribersAgeReset}
-                          >
-                            <Icon name="undo" size={20} color={grey[600]} />
-                          </IconButton>
-                        </Box>
-                        <Typography
-                          sx={{
-                            fontSize: 14,
-                            lineHeight: "20px",
-                            color: grey[600],
-                          }}
-                        >
-                          주 시청 연령대를 선택하세요.
-                        </Typography>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          p: theme.spacing(2, 0, 1, 0),
-                        }}
-                      >
-                        {subscribersAges.map((item, index) => {
-                          const { title, value } = item;
-                          const focused = subscribersGender === value;
-                          const onClick = () => {
-                            setSubscribersGender(focused ? "" : value);
-                          };
-                          return (
-                            <ButtonBase
+                      {subscribersGenderList.map((item, index) => {
+                        const { title, value } = item;
+                        const focused = subscribersGender === value;
+                        const onClick = () => {
+                          setSubscribersGender(value);
+                        };
+                        return (
+                          <ButtonBase
                             key={index}
+                            sx={{
+                              width: "100%",
+                              p: theme.spacing(1, 0),
+                              "&:hover .MuiTypography-root": {
+                                opacity: 0.4,
+                              },
+                            }}
+                            disableRipple
+                            onClick={onClick}
+                          >
+                            <Box
                               sx={{
-                                p: theme.spacing(1, 2),
-                                backgroundColor: focused
-                                  ? youhaBlue[50]
-                                  : grey[100],
-                                borderRadius: 2,
-                                "&:hover": {
-                                  boxShadow: `${
-                                    focused ? youhaBlue[500] : grey[300]
-                                  } 0px 0px 0px 1px inset`,
-                                },
-                                m: theme.spacing(0, 1, 1, 0),
+                                width: 20,
+                                height: 20,
+                                borderRadius: "50%",
+                                p: theme.spacing(0.5),
+                                border: `1px solid ${grey[300]}`,
+                                m: theme.spacing(0, 1, 0, 0),
                               }}
-                              disableRipple
-                              onClick={onClick}
                             >
-                              <Typography
+                              <Box
                                 sx={{
-                                  fontSize: 14,
-                                  lineHeight: "20px",
-                                  color: focused ? youhaBlue[500] : grey[900],
+                                  width: "100%",
+                                  height: "100%",
+                                  borderRadius: "50%",
+                                  backgroundColor: focused
+                                    ? youhaBlue[500]
+                                    : "transparent",
                                 }}
-                              >
-                                {title}
-                              </Typography>
-                            </ButtonBase>
-                          );
-                        })}
+                              />
+                            </Box>
+                            <Typography
+                              sx={{
+                                fontSize: 14,
+                                lineHeight: "20px",
+                                color: grey[900],
+                              }}
+                            >
+                              {title}
+                            </Typography>
+                          </ButtonBase>
+                        );
+                      })}
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      flex: 1,
+                      p: theme.spacing(2),
+                    }}
+                    className="FilterSection"
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          flex: 1,
+                          fontSize: 18,
+                          lineHeight: "28px",
+                          fontWeight: "700",
+                        }}
+                      >
+                        주 시청자 연령대
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        p: theme.spacing(1, 0, 0, 0),
+                      }}
+                    >
+                      {subscribersAgeList.map((item, index) => {
+                        const { title, value } = item;
+                        const focused = subscribersAge === value;
+                        const onClick = () => {
+                          setSubscribersAge(value);
+                        };
+                        return (
+                          <ButtonBase
+                            key={index}
+                            sx={{
+                              width: "100%",
+                              p: theme.spacing(1, 0),
+                              "&:hover .MuiTypography-root": {
+                                opacity: 0.4,
+                              },
+                            }}
+                            disableRipple
+                            onClick={onClick}
+                          >
+                            <Box
+                              sx={{
+                                width: 20,
+                                height: 20,
+                                borderRadius: "50%",
+                                p: theme.spacing(0.5),
+                                border: `1px solid ${grey[300]}`,
+                                m: theme.spacing(0, 1, 0, 0),
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                  height: "100%",
+                                  borderRadius: "50%",
+                                  backgroundColor: focused
+                                    ? youhaBlue[500]
+                                    : "transparent",
+                                }}
+                              />
+                            </Box>
+                            <Typography
+                              sx={{
+                                fontSize: 14,
+                                lineHeight: "20px",
+                                color: grey[900],
+                              }}
+                            >
+                              {title}
+                            </Typography>
+                          </ButtonBase>
+                        );
+                      })}
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      p: theme.spacing(2),
+                    }}
+                    className="FilterSection"
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          flex: 1,
+                          fontSize: 18,
+                          lineHeight: "28px",
+                          fontWeight: "700",
+                        }}
+                      >
+                        한국 시청자 비율
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          lineHeight: "28px",
+                          color: youhaBlue[500],
+                        }}
+                      >
+                        {subscribersKoreanRatio[0]}
+                        {subscribersKoreanRatio[0] === 0 ? "" : "%"} ~{" "}
+                        {subscribersKoreanRatio[1]}%
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        m: theme.spacing(2, -0.5, 0, -0.5),
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          height: 20,
+                          p: theme.spacing(0, 2, 0, 2),
+                        }}
+                      >
+                        <Slider
+                          getAriaValueText={valuetext}
+                          valueLabelFormat={valuetext}
+                          value={subscribersKoreanRatio}
+                          onChange={onChangeSubscriberKoreanRatio}
+                          sx={{
+                            height: 20,
+                            position: "relative",
+                            m: `0 !important`,
+                            p: `${theme.spacing(0, 0, 0, 0)} !important`,
+                            "& .MuiSlider-rail": {
+                              opacity: 1,
+                              // backgroundColor: youhaBlue[500],
+                              backgroundColor: grey[200],
+                              height: 4,
+                            },
+                            "& .MuiSlider-track": {
+                              height: 4,
+                              // backgroundColor: grey[200],
+                              border: "none",
+                            },
+                            "& .MuiSlider-thumb": {
+                              width: 20,
+                              height: 20,
+                              backgroundColor: "#ffffff",
+                              boxShadow: `none !important`,
+                              zIndex: 99,
+                            },
+                            "& .MuiSlider-thumb::before": {
+                              boxShadow: `0px 3px 4px -2px rgb(0 0 0 / 20%), 0px 2px 6px 0px rgb(0 0 0 / 14%), 0px 1px 9px 0px rgb(0 0 0 / 12%)`,
+                            },
+                            "& .MuiSlider-valueLabel": {
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              fontWeight: "700",
+                              fontFamily: `LINESeedKR`,
+                              p: theme.spacing(0.5, 1),
+                              backgroundColor: grey[900],
+                              "& *": {
+                                background: "transparent",
+                              },
+                            },
+                          }}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          position: "relative",
+                          height: 28,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            0
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: "50%",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            transform: "translateX(-50%)",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            50%
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            right: 0,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            100%
+                          </Typography>
+                        </Box>
                       </Box>
                     </Box>
-                  </Stack>
+                  </Box>
                 </FilterItem>
                 <FilterItem
                   title="콘텐츠 필터"
+                  focused={contentsFilterFocused}
                   open={contentsFilterOpen}
                   setOpen={setContentsFilterOpen}
                 >
-                  <Stack spacing={2}>
+                  <Box
+                    sx={{
+                      p: theme.spacing(2),
+                    }}
+                    className="FilterSection"
+                  >
                     <Box
                       sx={{
-                        p: theme.spacing(0),
+                        display: "flex",
+                        alignItems: "flex-end",
                       }}
                     >
-                      <Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              flex: 1,
-                              fontSize: 20,
-                              lineHeight: "32px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            평균 조회수
-                          </Typography>
-                          <IconButton
-                            sx={{
-                              width: 32,
-                              height: 32,
-                              borderRadius: "50%",
-                              "&:hover": {
-                                "& svg": {
-                                  opacity: 0.4,
-                                },
-                              },
-                            }}
-                            disableRipple
-                            onClick={onClickSubscribersReset}
-                          >
-                            <Icon name="undo" size={20} color={grey[600]} />
-                          </IconButton>
-                        </Box>
-                        <Typography
-                          sx={{
-                            fontSize: 14,
-                            lineHeight: "20px",
-                            color: grey[600],
-                          }}
-                        >
-                          채널 내 광고영상의 평균 조회수입니다.
-                        </Typography>
-                      </Box>
-                      <Stack
-                        direction="row"
-                        alignItems="center"
-                        spacing={1}
+                      <Typography
                         sx={{
-                          p: theme.spacing(2, 0),
+                          flex: 1,
+                          fontSize: 18,
+                          lineHeight: "28px",
+                          fontWeight: "700",
                         }}
                       >
-                        <InputBase
-                          value={subscribersMinValue}
-                          onChange={onSubscribersMinChange}
-                          placeholder="최소"
-                          sx={{
-                            flex: 1,
-                            height: 40,
-                            borderRadius: 1,
-                            p: theme.spacing(0, 2, 0, 2),
-                            backgroundColor: grey[100],
-                            transition: `all 0.35s ease`,
-                            "&:hover": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
-                            },
-                            "&.Mui-focused": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
-                              backgroundColor: grey[200],
-                              "& input": {
-                                fontSize: 14,
-                                "&::placeholder": {
-                                  color: grey[700],
-                                },
-                              },
-                            },
-                            "& input": {
-                              fontSize: 14,
-                              "&::placeholder": {
-                                color: grey[500],
-                                opacity: 1,
-                              },
-                            },
-                          }}
-                        />
-                        <InputBase
-                          value={subscribersMaxValue}
-                          onChange={onSubscribersMaxChange}
-                          placeholder="최대"
-                          sx={{
-                            flex: 1,
-                            height: 40,
-                            borderRadius: 1,
-                            p: theme.spacing(0, 2, 0, 2),
-                            backgroundColor: grey[100],
-                            transition: `all 0.35s ease`,
-                            "&:hover": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
-                            },
-                            "&.Mui-focused": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
-                              backgroundColor: grey[200],
-                              "& input": {
-                                fontSize: 14,
-                                "&::placeholder": {
-                                  color: grey[700],
-                                },
-                              },
-                            },
-                            "& input": {
-                              fontSize: 14,
-                              "&::placeholder": {
-                                color: grey[500],
-                                opacity: 1,
-                              },
-                            },
-                          }}
-                        />
-                      </Stack>
+                        평균 조회수
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          lineHeight: "28px",
+                          color: youhaBlue[500],
+                        }}
+                      >
+                        {`${numberToKorean(everageViews[0])}${
+                          everageViews[0] === 0 ? "" : "회"
+                        }`}{" "}
+                        ~{" "}
+                        {everageViews[1] === 10000000
+                          ? "무제한"
+                          : `${numberToKorean(everageViews[1])}회`}
+                      </Typography>
                     </Box>
                     <Box
                       sx={{
-                        p: theme.spacing(0),
+                        m: theme.spacing(2, -0.5, 0, -0.5),
                       }}
                     >
-                      <Box>
+                      <Box
+                        sx={{
+                          height: 20,
+                          p: theme.spacing(0, 2, 0, 2),
+                        }}
+                      >
+                        <Slider
+                          getAriaValueText={valuetext}
+                          valueLabelFormat={valuetext}
+                          value={everageViews}
+                          onChange={onChangeEverageViews}
+                          max={10000000}
+                          step={1000000}
+                          sx={{
+                            height: 20,
+                            position: "relative",
+                            m: `0 !important`,
+                            p: `${theme.spacing(0, 0, 0, 0)} !important`,
+                            "& .MuiSlider-rail": {
+                              opacity: 1,
+                              // backgroundColor: youhaBlue[500],
+                              backgroundColor: grey[200],
+                              height: 4,
+                            },
+                            "& .MuiSlider-track": {
+                              height: 4,
+                              // backgroundColor: grey[200],
+                              border: "none",
+                            },
+                            "& .MuiSlider-thumb": {
+                              width: 20,
+                              height: 20,
+                              backgroundColor: "#ffffff",
+                              boxShadow: `none !important`,
+                              zIndex: 99,
+                            },
+                            "& .MuiSlider-thumb::before": {
+                              boxShadow: `0px 3px 4px -2px rgb(0 0 0 / 20%), 0px 2px 6px 0px rgb(0 0 0 / 14%), 0px 1px 9px 0px rgb(0 0 0 / 12%)`,
+                            },
+                            "& .MuiSlider-valueLabel": {
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              fontWeight: "700",
+                              fontFamily: `LINESeedKR`,
+                              p: theme.spacing(0.5, 1),
+                              backgroundColor: grey[900],
+                              "& *": {
+                                background: "transparent",
+                              },
+                            },
+                          }}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          position: "relative",
+                          height: 28,
+                        }}
+                      >
                         <Box
                           sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
                             display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
                           }}
                         >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
                           <Typography
                             sx={{
-                              flex: 1,
-                              fontSize: 20,
-                              lineHeight: "32px",
-                              fontWeight: "700",
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
                             }}
                           >
-                            예상 광고단가
+                            0
                           </Typography>
-                          <IconButton
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: "50%",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            transform: "translateX(-50%)",
+                          }}
+                        >
+                          <Box
                             sx={{
-                              width: 32,
-                              height: 32,
-                              borderRadius: "50%",
-                              "&:hover": {
-                                "& svg": {
-                                  opacity: 0.4,
-                                },
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            500만
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            right: 0,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            무제한
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      p: theme.spacing(2),
+                    }}
+                    className="FilterSection"
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          flex: 1,
+                          fontSize: 18,
+                          lineHeight: "28px",
+                          fontWeight: "700",
+                        }}
+                      >
+                        댓글 작성율
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          lineHeight: "28px",
+                          color: youhaBlue[500],
+                        }}
+                      >
+                        {`${commentRatio[0]}${
+                          commentRatio[0] === 0 ? "" : "%"
+                        }`}{" "}
+                        ~ {`${numberToKorean(commentRatio[1])}%`}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        m: theme.spacing(2, -0.5, 0, -0.5),
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          height: 20,
+                          p: theme.spacing(0, 2, 0, 2),
+                        }}
+                      >
+                        <Slider
+                          getAriaValueText={valuetext}
+                          valueLabelFormat={valuetext}
+                          value={commentRatio}
+                          onChange={onChangeCommentRatio}
+                          sx={{
+                            height: 20,
+                            position: "relative",
+                            m: `0 !important`,
+                            p: `${theme.spacing(0, 0, 0, 0)} !important`,
+                            "& .MuiSlider-rail": {
+                              opacity: 1,
+                              // backgroundColor: youhaBlue[500],
+                              backgroundColor: grey[200],
+                              height: 4,
+                            },
+                            "& .MuiSlider-track": {
+                              height: 4,
+                              // backgroundColor: grey[200],
+                              border: "none",
+                            },
+                            "& .MuiSlider-thumb": {
+                              width: 20,
+                              height: 20,
+                              backgroundColor: "#ffffff",
+                              boxShadow: `none !important`,
+                              zIndex: 99,
+                            },
+                            "& .MuiSlider-thumb::before": {
+                              boxShadow: `0px 3px 4px -2px rgb(0 0 0 / 20%), 0px 2px 6px 0px rgb(0 0 0 / 14%), 0px 1px 9px 0px rgb(0 0 0 / 12%)`,
+                            },
+                            "& .MuiSlider-valueLabel": {
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              fontWeight: "700",
+                              fontFamily: `LINESeedKR`,
+                              p: theme.spacing(0.5, 1),
+                              backgroundColor: grey[900],
+                              "& *": {
+                                background: "transparent",
+                              },
+                            },
+                          }}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          position: "relative",
+                          height: 28,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            0
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: "50%",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            transform: "translateX(-50%)",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            50%
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            right: 0,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            무제한
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      p: theme.spacing(2),
+                    }}
+                    className="FilterSection"
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          flex: 1,
+                          fontSize: 18,
+                          lineHeight: "28px",
+                          fontWeight: "700",
+                        }}
+                      >
+                        콘텐츠 호감도
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          lineHeight: "28px",
+                          color: youhaBlue[500],
+                        }}
+                      >
+                        {`${likeRatio[0]}${likeRatio[0] === 0 ? "" : "%"}`} ~{" "}
+                        {`${numberToKorean(likeRatio[1])}%`}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        m: theme.spacing(2, -0.5, 0, -0.5),
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          height: 20,
+                          p: theme.spacing(0, 2, 0, 2),
+                        }}
+                      >
+                        <Slider
+                          getAriaValueText={valuetext}
+                          valueLabelFormat={valuetext}
+                          value={likeRatio}
+                          onChange={onChangeLikeRatio}
+                          sx={{
+                            height: 20,
+                            position: "relative",
+                            m: `0 !important`,
+                            p: `${theme.spacing(0, 0, 0, 0)} !important`,
+                            "& .MuiSlider-rail": {
+                              opacity: 1,
+                              // backgroundColor: youhaBlue[500],
+                              backgroundColor: grey[200],
+                              height: 4,
+                            },
+                            "& .MuiSlider-track": {
+                              height: 4,
+                              // backgroundColor: grey[200],
+                              border: "none",
+                            },
+                            "& .MuiSlider-thumb": {
+                              width: 20,
+                              height: 20,
+                              backgroundColor: "#ffffff",
+                              boxShadow: `none !important`,
+                              zIndex: 99,
+                            },
+                            "& .MuiSlider-thumb::before": {
+                              boxShadow: `0px 3px 4px -2px rgb(0 0 0 / 20%), 0px 2px 6px 0px rgb(0 0 0 / 14%), 0px 1px 9px 0px rgb(0 0 0 / 12%)`,
+                            },
+                            "& .MuiSlider-valueLabel": {
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              fontWeight: "700",
+                              fontFamily: `LINESeedKR`,
+                              p: theme.spacing(0.5, 1),
+                              backgroundColor: grey[900],
+                              "& *": {
+                                background: "transparent",
+                              },
+                            },
+                          }}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          position: "relative",
+                          height: 28,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            0
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: "50%",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            transform: "translateX(-50%)",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            50%
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            right: 0,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            무제한
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      p: theme.spacing(2),
+                    }}
+                    className="FilterSection"
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          flex: 1,
+                          fontSize: 18,
+                          lineHeight: "28px",
+                          fontWeight: "700",
+                        }}
+                      >
+                        최근 업로드 날짜
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        p: theme.spacing(1, 0, 0, 0),
+                      }}
+                    >
+                      {recentUploadDateList.map((item, index) => {
+                        const { title, value } = item;
+                        const focused = subscribersGender === value;
+                        const onClick = () => {
+                          setRecentUploadDate(value);
+                        };
+                        return (
+                          <ButtonBase
+                            key={index}
+                            sx={{
+                              width: "100%",
+                              p: theme.spacing(1, 0),
+                              "&:hover .MuiTypography-root": {
+                                opacity: 0.4,
                               },
                             }}
                             disableRipple
-                            onClick={onClickPriceReset}
+                            onClick={onClick}
                           >
-                            <Icon name="undo" size={20} color={grey[600]} />
-                          </IconButton>
-                        </Box>
-                        <Typography
-                          sx={{
-                            fontSize: 14,
-                            lineHeight: "20px",
-                            color: grey[600],
-                          }}
-                        >
-                          채널의 예상 광고단가입니다.
-                        </Typography>
-                      </Box>
-                      <Stack
-                        direction="row"
-                        alignItems="center"
-                        spacing={1}
+                            <Box
+                              sx={{
+                                width: 20,
+                                height: 20,
+                                borderRadius: "50%",
+                                p: theme.spacing(0.5),
+                                border: `1px solid ${grey[300]}`,
+                                m: theme.spacing(0, 1, 0, 0),
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  width: "100%",
+                                  height: "100%",
+                                  borderRadius: "50%",
+                                  backgroundColor: focused
+                                    ? youhaBlue[500]
+                                    : "transparent",
+                                }}
+                              />
+                            </Box>
+                            <Typography
+                              sx={{
+                                fontSize: 14,
+                                lineHeight: "20px",
+                                color: grey[900],
+                              }}
+                            >
+                              {title}
+                            </Typography>
+                          </ButtonBase>
+                        );
+                      })}
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      p: theme.spacing(2),
+                    }}
+                    className="FilterSection"
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <Typography
                         sx={{
-                          p: theme.spacing(1, 0),
+                          flex: 1,
+                          fontSize: 18,
+                          lineHeight: "28px",
+                          fontWeight: "700",
                         }}
                       >
-                        <InputBase
-                          value={priceMinValue}
-                          onChange={onPriceMinChange}
-                          placeholder="최소"
-                          sx={{
-                            flex: 1,
-                            height: 40,
-                            borderRadius: 1,
-                            p: theme.spacing(0, 2, 0, 2),
-                            backgroundColor: grey[100],
-                            transition: `all 0.35s ease`,
-                            "&:hover": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
-                            },
-                            "&.Mui-focused": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
-                              backgroundColor: grey[200],
-                              "& input": {
-                                fontSize: 14,
-                                "&::placeholder": {
-                                  color: grey[700],
-                                },
-                              },
-                            },
-                            "& input": {
-                              fontSize: 14,
-                              "&::placeholder": {
-                                color: grey[500],
-                                opacity: 1,
-                              },
-                            },
-                          }}
-                        />
-                        <InputBase
-                          value={priceMaxValue}
-                          onChange={onPriceMaxChange}
-                          placeholder="최대"
-                          sx={{
-                            flex: 1,
-                            height: 40,
-                            borderRadius: 1,
-                            p: theme.spacing(0, 2, 0, 2),
-                            backgroundColor: grey[100],
-                            transition: `all 0.35s ease`,
-                            "&:hover": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
-                            },
-                            "&.Mui-focused": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
-                              backgroundColor: grey[200],
-                              "& input": {
-                                fontSize: 14,
-                                "&::placeholder": {
-                                  color: grey[700],
-                                },
-                              },
-                            },
-                            "& input": {
-                              fontSize: 14,
-                              "&::placeholder": {
-                                color: grey[500],
-                                opacity: 1,
-                              },
-                            },
-                          }}
-                        />
-                      </Stack>
+                        주간 업로드 빈도
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 14,
+                          lineHeight: "28px",
+                          color: youhaBlue[500],
+                        }}
+                      >
+                        {`${uploadFrequency[0] / 10}${
+                          uploadFrequency[0] === 0 ? "" : "회"
+                        }`}{" "}
+                        ~{" "}
+                        {uploadFrequency[1] === 100
+                          ? "무제한"
+                          : `${uploadFrequency[1] / 10}회`}
+                      </Typography>
                     </Box>
-                  </Stack>
+                    <Box
+                      sx={{
+                        m: theme.spacing(2, -0.5, 0, -0.5),
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          height: 20,
+                          p: theme.spacing(0, 2, 0, 2),
+                        }}
+                      >
+                        <Slider
+                          getAriaValueText={valuetext}
+                          valueLabelFormat={valuetext}
+                          value={uploadFrequency}
+                          onChange={onChangeUploadFrequency}
+                          max={100}
+                          sx={{
+                            height: 20,
+                            position: "relative",
+                            m: `0 !important`,
+                            p: `${theme.spacing(0, 0, 0, 0)} !important`,
+                            "& .MuiSlider-rail": {
+                              opacity: 1,
+                              // backgroundColor: youhaBlue[500],
+                              backgroundColor: grey[200],
+                              height: 4,
+                            },
+                            "& .MuiSlider-track": {
+                              height: 4,
+                              // backgroundColor: grey[200],
+                              border: "none",
+                            },
+                            "& .MuiSlider-thumb": {
+                              width: 20,
+                              height: 20,
+                              backgroundColor: "#ffffff",
+                              boxShadow: `none !important`,
+                              zIndex: 99,
+                            },
+                            "& .MuiSlider-thumb::before": {
+                              boxShadow: `0px 3px 4px -2px rgb(0 0 0 / 20%), 0px 2px 6px 0px rgb(0 0 0 / 14%), 0px 1px 9px 0px rgb(0 0 0 / 12%)`,
+                            },
+                            "& .MuiSlider-valueLabel": {
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              fontWeight: "700",
+                              fontFamily: `LINESeedKR`,
+                              p: theme.spacing(0.5, 1),
+                              backgroundColor: grey[900],
+                              "& *": {
+                                background: "transparent",
+                              },
+                            },
+                          }}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          position: "relative",
+                          height: 28,
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: 0,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            0
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            left: "50%",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            transform: "translateX(-50%)",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            5회
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            bottom: 0,
+                            right: 0,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: 32,
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: `1px`,
+                              height: `6px`,
+                              backgroundColor: grey[400],
+                              m: theme.spacing(0, 0, 0.5, 0),
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: 12,
+                              lineHeight: "16px",
+                              color: grey[500],
+                            }}
+                          >
+                            무제한
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
                 </FilterItem>
                 <FilterItem
-                  title="기타"
-                  open={etcFilterOpen}
-                  setOpen={setEtcFilterOpen}
+                  title="MCN 필터"
+                  focused={mcnFilterFocused}
+                  open={mcnFilterOpen}
+                  setOpen={setMcnFilterOpen}
                 >
-                  <Stack spacing={2}>
-                    <Box
-                      sx={{
-                        p: theme.spacing(0),
-                      }}
-                    >
-                      <Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              flex: 1,
-                              fontSize: 20,
-                              lineHeight: "32px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            구독자수
-                          </Typography>
-                          <IconButton
-                            sx={{
-                              width: 32,
-                              height: 32,
-                              borderRadius: "50%",
-                              "&:hover": {
-                                "& svg": {
-                                  opacity: 0.4,
-                                },
-                              },
-                            }}
-                            disableRipple
-                            onClick={onClickSubscribersReset}
-                          >
-                            <Icon name="undo" size={20} color={grey[600]} />
-                          </IconButton>
-                        </Box>
-                        <Typography
-                          sx={{
-                            fontSize: 14,
-                            lineHeight: "20px",
-                            color: grey[600],
-                          }}
-                        >
-                          채널의 구독자 수입니다.
-                        </Typography>
-                      </Box>
-                      <Stack
-                        direction="row"
-                        alignItems="center"
-                        spacing={1}
+                  <Box
+                    sx={{
+                      p: theme.spacing(2),
+                    }}
+                    className="FilterSection"
+                  >
+                    <Box>
+                      <Box
                         sx={{
-                          p: theme.spacing(2, 0),
+                          display: "flex",
+                          alignItems: "flex-end",
                         }}
                       >
-                        <InputBase
-                          value={subscribersMinValue}
-                          onChange={onSubscribersMinChange}
-                          placeholder="최소"
+                        <Typography
                           sx={{
                             flex: 1,
-                            height: 40,
-                            borderRadius: 1,
-                            p: theme.spacing(0, 2, 0, 2),
-                            backgroundColor: grey[100],
-                            transition: `all 0.35s ease`,
-                            "&:hover": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
-                            },
-                            "&.Mui-focused": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
-                              backgroundColor: grey[200],
-                              "& input": {
-                                fontSize: 14,
-                                "&::placeholder": {
-                                  color: grey[700],
-                                },
-                              },
-                            },
-                            "& input": {
-                              fontSize: 14,
-                              "&::placeholder": {
-                                color: grey[500],
-                                opacity: 1,
-                              },
-                            },
+                            fontSize: 18,
+                            lineHeight: "28px",
+                            fontWeight: "700",
                           }}
-                        />
-                        <InputBase
-                          value={subscribersMaxValue}
-                          onChange={onSubscribersMaxChange}
-                          placeholder="최대"
-                          sx={{
-                            flex: 1,
-                            height: 40,
-                            borderRadius: 1,
-                            p: theme.spacing(0, 2, 0, 2),
-                            backgroundColor: grey[100],
-                            transition: `all 0.35s ease`,
-                            "&:hover": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
-                            },
-                            "&.Mui-focused": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
-                              backgroundColor: grey[200],
-                              "& input": {
-                                fontSize: 14,
-                                "&::placeholder": {
-                                  color: grey[700],
-                                },
-                              },
-                            },
-                            "& input": {
-                              fontSize: 14,
-                              "&::placeholder": {
-                                color: grey[500],
-                                opacity: 1,
-                              },
-                            },
-                          }}
-                        />
-                      </Stack>
+                        >
+                          소속 MCN
+                        </Typography>
+                      </Box>
+                      <Typography
+                        sx={{
+                          m: theme.spacing(0.5, 0, 1, 0),
+                          fontSize: 14,
+                          lineHeight: "16px",
+                          color: grey[600],
+                        }}
+                      >
+                        선택한 MCN 소속의 유튜버만 검색됩니다.
+                      </Typography>
                     </Box>
                     <Box
                       sx={{
-                        p: theme.spacing(0),
+                        p: theme.spacing(1, 0, 0, 0),
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr 1fr 1fr",
+                        gridAutoRows: "1fr",
+                        gridTemplateRows: "auto auto",
                       }}
                     >
-                      <Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                          }}
-                        >
-                          <Typography
+                      {mcnList.map((item, index) => {
+                        const { title, value } = item;
+                        const focused = mcns.includes(value);
+                        const onClick = () => {
+                          let newMcns = _.cloneDeep(mcns);
+                          if (value === "") {
+                            newMcns = [""];
+                          } else {
+                            newMcns = _.filter(newMcns, (el) => el !== "");
+                            if (focused) {
+                              newMcns = _.filter(newMcns, (el) => el !== value);
+                            } else {
+                              newMcns = [...newMcns, value];
+                            }
+                          }
+                          setMcns(newMcns);
+                        };
+                        return (
+                          <ButtonBase
+                            key={index}
                             sx={{
-                              flex: 1,
-                              fontSize: 20,
-                              lineHeight: "32px",
-                              fontWeight: "700",
-                            }}
-                          >
-                            예상 광고단가
-                          </Typography>
-                          <IconButton
-                            sx={{
-                              width: 32,
-                              height: 32,
-                              borderRadius: "50%",
-                              "&:hover": {
-                                "& svg": {
-                                  opacity: 0.4,
-                                },
+                              width: "100%",
+                              p: theme.spacing(1, 0),
+                              "&:hover .MuiTypography-root": {
+                                opacity: 0.4,
                               },
                             }}
                             disableRipple
-                            onClick={onClickPriceReset}
+                            onClick={onClick}
                           >
-                            <Icon name="undo" size={20} color={grey[600]} />
-                          </IconButton>
-                        </Box>
-                        <Typography
-                          sx={{
-                            fontSize: 14,
-                            lineHeight: "20px",
-                            color: grey[600],
-                          }}
-                        >
-                          채널의 예상 광고단가입니다.
-                        </Typography>
-                      </Box>
-                      <Stack
-                        direction="row"
-                        alignItems="center"
-                        spacing={1}
-                        sx={{
-                          p: theme.spacing(1, 0),
-                        }}
-                      >
-                        <InputBase
-                          value={priceMinValue}
-                          onChange={onPriceMinChange}
-                          placeholder="최소"
-                          sx={{
-                            flex: 1,
-                            height: 40,
-                            borderRadius: 1,
-                            p: theme.spacing(0, 2, 0, 2),
-                            backgroundColor: grey[100],
-                            transition: `all 0.35s ease`,
-                            "&:hover": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
-                            },
-                            "&.Mui-focused": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
-                              backgroundColor: grey[200],
-                              "& input": {
+                            <Box
+                              sx={{
+                                width: 20,
+                                height: 20,
+                                borderRadius: 0.5,
+                                boxShadow: `${
+                                  focused ? youhaBlue[500] : grey[300]
+                                } 0px 0px 0px 1px`,
+                                m: theme.spacing(0, 1, 0, 0),
+                                backgroundColor: focused
+                                  ? youhaBlue[500]
+                                  : "transparent",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                              }}
+                              className="Checkbox"
+                            >
+                              <Icon
+                                name="check"
+                                color="#ffffff"
+                                prefix="fas"
+                                size={16}
+                                sx={{
+                                  opacity: focused ? 1 : 0,
+                                }}
+                              />
+                            </Box>
+                            <Typography
+                              sx={{
                                 fontSize: 14,
-                                "&::placeholder": {
-                                  color: grey[700],
-                                },
-                              },
-                            },
-                            "& input": {
-                              fontSize: 14,
-                              "&::placeholder": {
-                                color: grey[500],
-                                opacity: 1,
-                              },
-                            },
-                          }}
-                        />
-                        <InputBase
-                          value={priceMaxValue}
-                          onChange={onPriceMaxChange}
-                          placeholder="최대"
-                          sx={{
-                            flex: 1,
-                            height: 40,
-                            borderRadius: 1,
-                            p: theme.spacing(0, 2, 0, 2),
-                            backgroundColor: grey[100],
-                            transition: `all 0.35s ease`,
-                            "&:hover": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
-                            },
-                            "&.Mui-focused": {
-                              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
-                              backgroundColor: grey[200],
-                              "& input": {
-                                fontSize: 14,
-                                "&::placeholder": {
-                                  color: grey[700],
-                                },
-                              },
-                            },
-                            "& input": {
-                              fontSize: 14,
-                              "&::placeholder": {
-                                color: grey[500],
-                                opacity: 1,
-                              },
-                            },
-                          }}
-                        />
-                      </Stack>
+                                lineHeight: "20px",
+                                color: grey[900],
+                              }}
+                            >
+                              {title}
+                            </Typography>
+                          </ButtonBase>
+                        );
+                      })}
                     </Box>
-                  </Stack>
+                  </Box>
                 </FilterItem>
+                <ButtonBase
+                  sx={{
+                    p: theme.spacing(0, 1),
+                    borderRadius: "50%",
+                    "&:hover": {
+                      "& svg": {
+                        opacity: 0.4,
+                      },
+                    },
+                  }}
+                  disableRipple
+                  onClick={onClickReset}
+                >
+                  <Icon name="trash-alt" size={20} color={grey[500]} />
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      lineHeight: "20px",
+                      color: grey[500],
+                      m: theme.spacing(0, 0, 0, 0.5),
+                    }}
+                  >
+                    필터 초기화
+                  </Typography>
+                </ButtonBase>
               </Box>
               <Button>선택한 채널 광고 제안하기</Button>
             </Box>
@@ -1417,7 +2333,7 @@ function SortItem({
             color: grey[900],
           }}
         >
-          {sorts[_.findIndex(sorts, (el) => el.value === sort)].title}
+          {sortList[_.findIndex(sortList, (el) => el.value === sort)].title}
         </Typography>
         <Icon
           name="angle-down"
@@ -1445,8 +2361,9 @@ function SortItem({
           borderRadius: 0.5,
         }}
       >
-        {sorts.map((item, index) => {
+        {sortList.map((item, index) => {
           const { title, value } = item;
+          const focused = sort === value;
           const onClick = () => {
             setSort(value);
             setOpen(false);
@@ -1468,7 +2385,7 @@ function SortItem({
                 sx={{
                   fontSize: 14,
                   lineHeight: "20px",
-                  color: grey[900],
+                  color: focused ? youhaBlue[500] : grey[900],
                 }}
               >
                 {title}
@@ -1510,36 +2427,8 @@ function FilterItem({
       setOpen(false);
     }
   };
-  function Panel({
-    open,
-    children,
-  }: {
-    open: boolean;
-    children?: React.ReactNode;
-  }) {
-    return (
-      <Box
-        sx={{
-          position: "absolute",
-          top: 64,
-          left: 0,
-          width: 416,
-          display: open ? "flex" : "none",
-          boxShadow: `rgb(0 0 0 / 10%) 0px 2px 10px`,
-          flexDirection: "column",
-          overflow: "auto",
-          p: theme.spacing(2),
-          border: `1px solid ${grey[300]}`,
-          borderRadius: 0.5,
-          backgroundColor: "#ffffff",
-        }}
-      >
-        {children}
-      </Box>
-    );
-  }
   return (
-    <Box ref={ref}>
+    <Box ref={ref} sx={{ position: "relative" }}>
       <ButtonBase
         sx={{
           alignItems: "center",
@@ -1571,7 +2460,45 @@ function FilterItem({
           }}
         />
       </ButtonBase>
-      <Panel open={open}>{children}</Panel>
+      <Panel open={open} title={title}>
+        {children}
+      </Panel>
+    </Box>
+  );
+}
+
+function Panel({
+  open,
+  title,
+  children,
+}: {
+  open: boolean;
+  title: string;
+  children?: React.ReactNode;
+}) {
+  const mcnFilter = title === "MCN 필터";
+  return (
+    <Box
+      sx={{
+        position: "absolute",
+        top: 48,
+        left: mcnFilter ? "initial" : 0,
+        right: mcnFilter ? -516 : "initial",
+        width: mcnFilter ? 976 : 360,
+        display: open ? "flex" : "none",
+        boxShadow: `rgb(0 0 0 / 10%) 0px 2px 10px`,
+        flexDirection: "column",
+        overflow: "auto",
+        border: `1px solid ${grey[300]}`,
+        borderRadius: 0.5,
+        backgroundColor: "#ffffff",
+        zIndex: 99,
+        "& > .FilterSection:not(:nth-child(1))": {
+          borderTop: `1px solid ${grey[300]}`,
+        },
+      }}
+    >
+      {children}
     </Box>
   );
 }

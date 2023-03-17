@@ -356,8 +356,8 @@ const reset = css`
     font-family: "LINESeedKR",NanumGothic,"나눔고딕","Nanum Gothic","맑은 고딕","Malgun Gothic",Dotum
   }
   #__next {
-    height: 100%;
     width: 100%;
+    height: 100%;
     --sat: var(--sait);
     --sar: var(--sair);
     --sab: var(--saib);

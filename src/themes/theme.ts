@@ -6,10 +6,11 @@ import {
   cyan,
   grey,
 } from "@mui/material/colors";
+import youhaBlue from "../constants/youhaBlue";
 export const theme = createTheme({
   palette: {
     mode: "light",
-    primary: cyan,
+    primary: youhaBlue,
     secondary: purple,
     grey: grey,
     error: red,

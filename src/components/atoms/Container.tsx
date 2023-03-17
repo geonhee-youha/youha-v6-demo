@@ -13,10 +13,10 @@ export default function Container({
     <Box
       sx={{
         m: theme.spacing(0, "auto"),
-        p: theme.spacing(0, 10),
+        p: theme.spacing(0, 4),
         width: "100%",
-        minWidth: 1200,
-        maxWidth: 1200,
+        minWidth: 1280,
+        maxWidth: 1280,
         ...sx,
       }}
     >

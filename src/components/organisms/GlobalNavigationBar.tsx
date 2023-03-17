@@ -17,7 +17,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { categories } from "../../constants/categories";
+import { categoryList } from "../../constants";
 import { theme } from "../../themes/theme";
 import Container from "../atoms/Container";
 import Icon from "../atoms/Icon";
@@ -45,10 +45,12 @@ export default function GlobalNavigationBar() {
       sx={{
         position: "sticky",
         top: 0,
+        left: 0,
+        right: 0,
         width: "100%",
         backgroundColor: "#ffffff",
         display: focused ? "flex" : "none",
-        zIndex: 99,
+        zIndex: 999,
         // borderBottom: `1px solid ${grey[300]}`,
       }}
     >
@@ -401,7 +403,7 @@ function Categories({
       }}
       className="categories"
     >
-      {categories.map((item, index) => {
+      {categoryList.map((item, index) => {
         const router = useRouter();
         const { emoji, title, value } = item;
         const onClick = () => {
