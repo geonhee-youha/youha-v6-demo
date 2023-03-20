@@ -52,7 +52,7 @@ export default function GlobalNavigationBar() {
         backgroundColor: "#ffffff",
         display: focused ? "flex" : "none",
         zIndex: 999,
-        // borderBottom: `1px solid ${grey[300]}`,
+        borderBottom: `1px solid ${grey[300]}`,
       }}
     >
       <Container>

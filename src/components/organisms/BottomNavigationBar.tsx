@@ -8,8 +8,8 @@ import Icon from "../atoms/Icon";
 
 const bottomTabList: { href: string; title: string; iconName: IconName }[] = [
   { href: "/", title: "홈", iconName: "home-lg-alt" },
+  { href: "/ranking", title: "유하 랭킹", iconName: "trophy" },
   { href: "/insight", title: "인사이트", iconName: "lightbulb-exclamation" },
-  { href: "/category", title: "카테고리", iconName: "bars" },
   { href: "/mcn", title: "MCN", iconName: "building" },
   { href: "/mypage", title: "마이페이지", iconName: "user" },
 ];

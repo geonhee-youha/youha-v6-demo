@@ -199,6 +199,11 @@ export default function Page() {
             display: "flex",
             alignItems: "center",
             p: theme.spacing(2, 0),
+            "@media(max-width: 480px)": {
+              width: "100%",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            },
           }}
         >
           <Box
@@ -206,6 +211,10 @@ export default function Page() {
               flex: 1,
               display: "flex",
               alignItems: "center",
+              "@media(max-width: 480px)": {
+                flex: "initial",
+                width: "100%",
+              },
             }}
           >
             <Typography
@@ -214,47 +223,70 @@ export default function Page() {
                 fontSize: 20,
                 lineHeight: "32px",
                 fontWeight: "700",
+                "@media(max-width: 480px)": {
+                  flex: 1,
+                  width: "auto",
+                  fontSize: 16,
+                  lineHeight: "24px",
+                },
               }}
             >
               유하 통합검색
             </Typography>
-            {tabList.map((item, index) => {
-              const { title, value } = item;
-              const focused = type === value;
-              const onClick = () => {
-                router.push(
-                  `/search?type=${value}&categories=${categoryOrigin}`
-                );
-              };
-              return (
-                <ButtonBase
-                  key={index}
-                  sx={{
-                    m: theme.spacing(0, 1.5, 0, 0),
-                    "&:hover *": {
-                      color: grey[900],
-                    },
-                  }}
-                  disableRipple
-                  onClick={onClick}
-                >
-                  <Typography
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              {tabList.map((item, index) => {
+                const { title, value } = item;
+                const focused = type === value;
+                const onClick = () => {
+                  router.push(
+                    `/search?type=${value}&categories=${categoryOrigin}`
+                  );
+                };
+                return (
+                  <ButtonBase
+                    key={index}
                     sx={{
-                      fontSize: 20,
-                      lineHeight: "32px",
-                      fontWeight: "700",
-                      color: focused ? grey[900] : grey[400],
+                      m: theme.spacing(0, 1.5, 0, 0),
+                      "&:hover *": {
+                        color: grey[900],
+                      },
+                      "@media(max-width: 480px)": {
+                        m: theme.spacing(0, 1, 0, 0),
+                        "& .MuiTypography-root": {
+                          fontSize: 16,
+                          lineHeight: "24px",
+                        },
+                      },
                     }}
+                    disableRipple
+                    onClick={onClick}
                   >
-                    {title}
-                  </Typography>
-                </ButtonBase>
-              );
-            })}
+                    <Typography
+                      sx={{
+                        fontSize: 20,
+                        lineHeight: "32px",
+                        fontWeight: "700",
+                        color: focused ? grey[900] : grey[400],
+                      }}
+                    >
+                      {title}
+                    </Typography>
+                  </ButtonBase>
+                );
+              })}
+            </Box>
           </Box>
           <Box
             sx={{
               position: "relative",
+              "@media(max-width: 480px)": {
+                display: "none",
+              },
             }}
           >
             <InputBase
