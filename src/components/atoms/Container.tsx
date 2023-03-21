@@ -21,7 +21,7 @@ export default function Container({
           m: 0,
           minWidth: "initial",
           maxWidth: "initial",
-          p: theme.spacing(0, 2.5),
+          p: theme.spacing(0, 2),
           overflowX: "hidden",
         },
         ...sx,

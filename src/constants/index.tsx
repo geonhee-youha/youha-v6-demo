@@ -224,7 +224,6 @@ export const categoryList = [
   },
 ];
 
-
 export const tabList = [
   { title: "유튜버", value: "youtuber" },
   { title: "동영상", value: "video" },
@@ -237,19 +236,19 @@ export const sortList = [
   { title: "평균 조회수 순", value: "views" },
 ];
 
-export const channelTypeList = [
+export const channelFormList = [
   { title: "전체", value: "" },
   { title: "롱폼 전문", value: "long-form" },
   { title: "쇼츠 전문", value: "short-form" },
 ];
 
-export const subscribersGenderList = [
+export const targetGenderList = [
   { title: "전체", value: "" },
   { title: "남성", value: "male" },
   { title: "여성", value: "female" },
 ];
 
-export const subscribersAgeList = [
+export const targetAgeList = [
   { title: "전체", value: "" },
   { title: "10대", value: "10" },
   { title: "20~30대", value: "20" },
@@ -318,10 +317,57 @@ export const mcnList = [
   { title: "더키트", value: "더키트" },
   { title: "태그바이", value: "태그바이" },
   { title: "라우드코퍼레이션", value: "라우드코퍼레이션" },
-  { title: "스튜디오 산타클로스 엔터테인먼트", value: "스튜디오 산타클로스 엔터테인먼트" },
+  {
+    title: "스튜디오 산타클로스 엔터테인먼트",
+    value: "스튜디오 산타클로스 엔터테인먼트",
+  },
   { title: "아티스트앤스튜디오", value: "아티스트앤스튜디오" },
   { title: "언어스", value: "언어스" },
   { title: "제이메이저", value: "제이메이저" },
   { title: "세븐디바이드", value: "세븐디바이드" },
   { title: "골든웨일즈", value: "골든웨일즈" },
-]
+];
+
+export type FilterProps = {
+  categories: string[];
+  channel: {
+    subscribers: number[];
+    price: number[];
+    form: string;
+  };
+  target: {
+    gender: string;
+    age: string;
+    koreanRatio: number[];
+  };
+  contents: {
+    everageViews: number[];
+    commentRatio: number[];
+    likeRatio: number[];
+    recentUploadDate: string;
+    uploadFrequency: number[];
+  };
+  mcns: string[];
+};
+
+export const filterObject: FilterProps = {
+  categories: [],
+  channel: {
+    subscribers: [0, 5000000],
+    price: [0, 100000000],
+    form: "",
+  },
+  target: {
+    gender: "",
+    age: "",
+    koreanRatio: [0, 100],
+  },
+  contents: {
+    everageViews: [0, 10000000],
+    commentRatio: [0, 100],
+    likeRatio: [0, 100],
+    recentUploadDate: "",
+    uploadFrequency: [0, 100],
+  },
+  mcns: [""],
+};

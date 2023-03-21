@@ -6,6 +6,8 @@ import Icon from "./Icon";
 
 export default function Button({
   type,
+  size = "md",
+  fullWidth,
   name,
   backgroundColor = youhaBlue[700],
   color = "#ffffff",
@@ -14,6 +16,8 @@ export default function Button({
   sx,
 }: {
   type?: string;
+  size?: string;
+  fullWidth?:boolean,
   name?: IconName;
   backgroundColor?: string;
   color?: string;
@@ -24,12 +28,11 @@ export default function Button({
   return (
     <ButtonBase
       sx={{
-        height: 36,
+        width: fullWidth ? '100%' : 'auto',
         borderRadius: 0.5,
         justifyContent: "center",
         alignItems: "center",
         overflow: "hidden",
-        p: theme.spacing(0, 2, 0, 2),
         backgroundColor: type === "outlined" ? "transparent" : backgroundColor,
         boxShadow: `${backgroundColor} 0px 0px 0px ${
           type === "outlined" ? 1 : 0
@@ -37,6 +40,8 @@ export default function Button({
         "&:hover .ripple": {
           opacity: 1,
         },
+        height: size === "lg" ? 44 : 36,
+        p: theme.spacing(0, 2),
         ...sx,
       }}
       onClick={onClick}
@@ -66,11 +71,11 @@ export default function Button({
       )}
       <Typography
         sx={{
-          fontSize: 14,
-          lineHeight: "20px",
           color: type === "outlined" ? backgroundColor : color,
           fontWeight: "700",
           zIndex: 1,
+          fontSize: size === "lg" ? 16 : 14,
+          lineHeight: size === "lg" ? "24px" : "20px",
         }}
       >
         {children}

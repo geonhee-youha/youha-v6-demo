@@ -1,6 +1,12 @@
-import { Box } from "@mui/material";
+import { Box, SxProps } from "@mui/material";
 
-export default function Toolbar({ children }: { children?: React.ReactNode }) {
+export default function Toolbar({
+  sx,
+  children,
+}: {
+  sx?: SxProps;
+  children?: React.ReactNode;
+}) {
   return (
     <Box
       sx={{
@@ -11,6 +17,7 @@ export default function Toolbar({ children }: { children?: React.ReactNode }) {
         "@media(max-width: 480px)": {
           height: 56,
         },
+        ...sx
       }}
     >
       {children}
