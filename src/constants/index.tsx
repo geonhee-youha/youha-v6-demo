@@ -267,7 +267,6 @@ export const mcnList = [
   { title: "전체", value: "" },
   { title: "다이아 티비", value: "다이아 티비" },
   { title: "트레져헌터", value: "트레져헌터" },
-  { title: "소속없음", value: "소속없음" },
   { title: "샌드박스", value: "샌드박스" },
   { title: "비디오빌리지", value: "비디오빌리지" },
   { title: "레페리 뷰티 엔터테인먼트", value: "레페리 뷰티 엔터테인먼트" },
@@ -326,6 +325,7 @@ export const mcnList = [
   { title: "제이메이저", value: "제이메이저" },
   { title: "세븐디바이드", value: "세븐디바이드" },
   { title: "골든웨일즈", value: "골든웨일즈" },
+  { title: "소속없음", value: "소속없음" },
 ];
 
 export type FilterProps = {

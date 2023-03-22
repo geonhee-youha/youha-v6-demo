@@ -7,6 +7,7 @@ import {
   IconButton,
   InputBase,
   Slider,
+  Stack,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
@@ -39,6 +40,8 @@ import {
   tabList,
 } from "../../constants";
 import Toolbar from "../../components/atoms/Toolbar";
+import YoutuberItem from "../../components/molecules/YoutuberItem";
+import { testCreators } from "../../data";
 
 function valuetext(value: number) {
   return `${value}%`;
@@ -513,6 +516,15 @@ export default function Page() {
   const onClickPrice = () => {
     router.push("/");
   };
+  const youtuberIds = testCreators.flatMap((el) => el.id);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const equals = (a: string[], b: string[]) => {
+    if (a.length === b.length && a.every((v, i) => v === b[i])) return true;
+  };
+  const selected = equals(youtuberIds.sort(), selectedIds.sort());
+  const onClickSelect = () => {
+    setSelectedIds(selected ? [] : youtuberIds);
+  };
   return (
     <>
       <Container>
@@ -785,6 +797,7 @@ export default function Page() {
             <Box
               sx={{
                 flex: 1,
+                width: 1200 - 240,
               }}
             >
               <Box
@@ -2620,7 +2633,7 @@ export default function Page() {
                                     },
                                   },
                                   "& input": {
-                                    fontSize: 12,
+                                    fontSize: `12px !important`,
                                     "&::placeholder": {
                                       color: grey[500],
                                       opacity: 1,
@@ -2688,68 +2701,69 @@ export default function Page() {
                               onChangeMcns(newMcns);
                             };
                             return (
-                              <ButtonBase
-                                key={index}
-                                sx={{
-                                  width: "100%",
-                                  p: theme.spacing(1, 0),
-                                  "&:hover .MuiTypography-root": {
-                                    opacity: 0.4,
-                                  },
-                                }}
-                                disableRipple
-                                onClick={onClick}
-                              >
-                                <Box
+                              <Box key={index}>
+                                <ButtonBase
                                   sx={{
-                                    width: 20,
-                                    height: 20,
-                                    borderRadius: 0.5,
-                                    boxShadow: `${
-                                      focused ? youhaBlue[500] : grey[300]
-                                    } 0px 0px 0px 1px`,
-                                    m: theme.spacing(0, 1, 0, 0),
-                                    backgroundColor: focused
-                                      ? youhaBlue[500]
-                                      : "transparent",
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
+                                    width: "auto",
+                                    p: theme.spacing(1, 0),
+                                    "&:hover .MuiTypography-root": {
+                                      opacity: 0.4,
+                                    },
                                   }}
-                                  className="Checkbox"
+                                  disableRipple
+                                  onClick={onClick}
                                 >
-                                  <Icon
-                                    name="check"
-                                    color="#ffffff"
-                                    prefix="fas"
-                                    size={16}
+                                  <Box
                                     sx={{
-                                      opacity: focused ? 1 : 0,
+                                      width: 20,
+                                      height: 20,
+                                      borderRadius: 0.5,
+                                      boxShadow: `${
+                                        focused ? youhaBlue[500] : grey[300]
+                                      } 0px 0px 0px 1px`,
+                                      m: theme.spacing(0, 1, 0, 0),
+                                      backgroundColor: focused
+                                        ? youhaBlue[500]
+                                        : "transparent",
+                                      display: "flex",
+                                      justifyContent: "center",
+                                      alignItems: "center",
                                     }}
-                                  />
-                                </Box>
-                                <Typography
-                                  sx={{
-                                    fontSize: 14,
-                                    lineHeight: "20px",
-                                    color: grey[900],
-                                    opacity: notSearched ? 0.4 : 1,
-                                  }}
-                                >
-                                  {mcnValue !== "" &&
-                                  title.includes(mcnValue) ? (
-                                    <>
-                                      {title.split(mcnValue)[0]}
-                                      <span style={{ color: pink[500] }}>
-                                        {mcnValue}
-                                      </span>
-                                      {title.split(mcnValue)[1]}
-                                    </>
-                                  ) : (
-                                    title
-                                  )}
-                                </Typography>
-                              </ButtonBase>
+                                    className="Checkbox"
+                                  >
+                                    <Icon
+                                      name="check"
+                                      color="#ffffff"
+                                      prefix="fas"
+                                      size={16}
+                                      sx={{
+                                        opacity: focused ? 1 : 0,
+                                      }}
+                                    />
+                                  </Box>
+                                  <Typography
+                                    sx={{
+                                      fontSize: 14,
+                                      lineHeight: "20px",
+                                      color: grey[900],
+                                      opacity: notSearched ? 0.4 : 1,
+                                    }}
+                                  >
+                                    {mcnValue !== "" &&
+                                    title.includes(mcnValue) ? (
+                                      <>
+                                        {title.split(mcnValue)[0]}
+                                        <span style={{ color: pink[500] }}>
+                                          {mcnValue}
+                                        </span>
+                                        {title.split(mcnValue)[1]}
+                                      </>
+                                    ) : (
+                                      title
+                                    )}
+                                  </Typography>
+                                </ButtonBase>
+                              </Box>
                             );
                           })}
                         </Box>
@@ -2825,6 +2839,33 @@ export default function Page() {
                   p: theme.spacing(2, 0),
                 }}
               >
+                <ButtonBase
+                  sx={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: 0.5,
+                    boxShadow: `${
+                      selected ? youhaBlue[500] : grey[300]
+                    } 0px 0px 0px 1px`,
+                    m: theme.spacing(0, 1, 0, 0),
+                    backgroundColor: selected ? youhaBlue[500] : "transparent",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  onClick={onClickSelect}
+                  className="Checkbox"
+                >
+                  <Icon
+                    name="check"
+                    color="#ffffff"
+                    prefix="fas"
+                    size={16}
+                    sx={{
+                      opacity: selected ? 1 : 0,
+                    }}
+                  />
+                </ButtonBase>
                 <Typography
                   sx={{
                     flex: 1,
@@ -2836,6 +2877,19 @@ export default function Page() {
                 </Typography>
                 <SortItem sort={sort} setSort={setSort} />
               </Box>
+              <Stack spacing={2} className="Youtubers">
+                {testCreators.map((item, index) => {
+                  return (
+                    <YoutuberItem
+                      key={index}
+                      index={index}
+                      item={item}
+                      selectedIds={selectedIds}
+                      setSelectedIds={setSelectedIds}
+                    />
+                  );
+                })}
+              </Stack>
             </Box>
           </Box>
         </Box>
@@ -2887,7 +2941,6 @@ export default function Page() {
           <Box
             sx={{
               flex: 1,
-              overflowY: "auto",
               backgroundColor: grey[100],
               p: theme.spacing(0, 0, 12, 0),
               "& > .FilterSection": {
@@ -4866,7 +4919,7 @@ function SortItem({
     }
   };
   return (
-    <Box ref={ref} sx={{ position: "relative" }}>
+    <Box ref={ref} sx={{ position: "relative", zIndex: 99 }}>
       <ButtonBase
         sx={{
           alignItems: "center",
@@ -4911,6 +4964,8 @@ function SortItem({
           p: theme.spacing(1, 0),
           border: `1px solid ${grey[300]}`,
           borderRadius: 0.5,
+          zIndex: 99,
+          backgroundColor: `#ffffff`,
         }}
       >
         {sortList.map((item, index) => {
