@@ -545,6 +545,7 @@ export default function Page() {
             p: theme.spacing(2, 0, 10, 0),
             "@media(max-width: 480px)": {
               p: theme.spacing(0, 0, 10, 0),
+              m: theme.spacing(0, -2, 0, -2),
             },
           }}
         >
@@ -557,6 +558,7 @@ export default function Page() {
                 width: "100%",
                 flexDirection: "column",
                 alignItems: "flex-start",
+                p: theme.spacing(2, 2),
               },
             }}
           >
@@ -810,6 +812,9 @@ export default function Page() {
               sx={{
                 flex: 1,
                 width: 1200 - 240,
+                "@media(max-width: 480px)": {
+                  width: "auto",
+                },
               }}
             >
               <Box
@@ -819,7 +824,7 @@ export default function Page() {
                   alignItems: "center",
                   p: theme.spacing(2, 0),
                   "@media(max-width: 480px)": {
-                    p: theme.spacing(1, 0),
+                    p: theme.spacing(1, 2, 2, 2),
                   },
                 }}
               >
@@ -2842,13 +2847,30 @@ export default function Page() {
                     </Typography>
                   </ButtonBase>
                 </Box>
-                <Button>선택한 채널 광고 제안하기</Button>
+                <Button size="md">
+                  선택한 채널 광고 제안하기
+                </Button>
               </Box>
+              <Box
+                sx={{
+                  width: "100%",
+                  height: 8,
+                  backgroundColor: grey[200],
+                  display: "none",
+                  "@media(max-width: 480px)": {
+                    display: "block",
+                  },
+                }}
+              />
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
                   p: theme.spacing(2, 0),
+                  "@media(max-width: 480px)": {
+                    p: theme.spacing(2),
+                    borderBottom: `1px solid ${grey[300]}`,
+                  },
                 }}
               >
                 <ButtonBase
@@ -2889,7 +2911,17 @@ export default function Page() {
                 </Typography>
                 <SortItem sort={sort} setSort={setSort} />
               </Box>
-              <Stack spacing={2} className="Youtubers">
+              <Stack
+                spacing={2}
+                className="Youtubers"
+                sx={{
+                  "@media(max-width: 480px)": {
+                    "& > *": {
+                      m: `0 !important`,
+                    },
+                  },
+                }}
+              >
                 {creatorList.map((item, index) => {
                   return (
                     <YoutuberItem
@@ -2912,11 +2944,19 @@ export default function Page() {
         </Box>
       </Container>
       <Drawer anchor="bottom" open={filterOpen} onClose={onCloseFilter}>
-        <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+        <Box
+          sx={{
+            position: "relative",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            overflow: "hidden",
+          }}
+        >
           <Toolbar
             sx={{
               position: "relative",
-              p: theme.spacing(0, 0.5),
+              p: theme.spacing(1, 0.5),
               borderBottom: `1px solid ${grey[300]}`,
               justifyContent: "space-between",
             }}
@@ -2965,6 +3005,7 @@ export default function Page() {
                 borderBottom: `1px solid ${grey[300]}`,
                 m: theme.spacing(0, 0, 2, 0),
               },
+              overflowY: "auto",
             }}
           >
             <Box
@@ -5159,38 +5200,25 @@ function Pagenations({
     setPage(newValue);
   };
   return (
-    <Stack
-      direction="row"
-      spacing={1}
+    <Box
       sx={{
-        p: theme.spacing(2, 0, 0, 0),
+        width: "100vw",
+        overflowX: "scroll",
       }}
     >
-      {pageIndex !== 0 && (
-        <ButtonBase
-          sx={{
-            width: 32,
-            height: 32,
-            borderRadius: 0.5,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: grey[200],
-          }}
-          disableRipple
-          onClick={onClickPrev}
-        >
-          <Icon name="chevron-left" color={grey[500]} size={12} />
-        </ButtonBase>
-      )}
-      {pageList[pageIndex].map((item, index) => {
-        const focused = page === item - 1;
-        const onClick = () => {
-          setPage(item - 1);
-        };
-        return (
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{
+          p: theme.spacing(2, 0, 0, 0),
+          "@media(max-width: 480px)": {
+            minWidth: 384,
+            p: theme.spacing(2),
+          },
+        }}
+      >
+        {pageIndex !== 0 && (
           <ButtonBase
-            key={index}
             sx={{
               width: 32,
               height: 32,
@@ -5198,41 +5226,65 @@ function Pagenations({
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              backgroundColor: focused ? grey[800] : grey[200],
+              backgroundColor: grey[200],
             }}
             disableRipple
-            onClick={onClick}
+            onClick={onClickPrev}
           >
-            <Typography
-              sx={{
-                fontSize: 12,
-                lineHeight: "16px",
-                fontWeight: "700",
-                color: focused ? `#ffffff` : grey[500],
-              }}
-            >
-              {item}
-            </Typography>
+            <Icon name="chevron-left" color={grey[500]} size={12} />
           </ButtonBase>
-        );
-      })}
-      {pageIndex !== pageList.length - 1 && (
-        <ButtonBase
-          sx={{
-            width: 32,
-            height: 32,
-            borderRadius: 0.5,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: grey[200],
-          }}
-          disableRipple
-          onClick={onClickNext}
-        >
-          <Icon name="chevron-right" color={grey[500]} size={16} />
-        </ButtonBase>
-      )}
-    </Stack>
+        )}
+        {pageList[pageIndex].map((item, index) => {
+          const focused = page === item - 1;
+          const onClick = () => {
+            setPage(item - 1);
+          };
+          return (
+            <ButtonBase
+              key={index}
+              sx={{
+                width: 32,
+                height: 32,
+                borderRadius: 0.5,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: focused ? grey[800] : grey[200],
+              }}
+              disableRipple
+              onClick={onClick}
+            >
+              <Typography
+                sx={{
+                  fontSize: 12,
+                  lineHeight: "16px",
+                  fontWeight: "700",
+                  color: focused ? `#ffffff` : grey[500],
+                }}
+              >
+                {item}
+              </Typography>
+            </ButtonBase>
+          );
+        })}
+        {pageIndex !== pageList.length - 1 && (
+          <ButtonBase
+            sx={{
+              width: 32,
+              height: 32,
+              borderRadius: 0.5,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: grey[200],
+            }}
+            disableRipple
+            onClick={onClickNext}
+          >
+            <Icon name="chevron-right" color={grey[500]} size={16} />
+          </ButtonBase>
+        )}
+      </Stack>
+    </Box>
   );
 }

@@ -14,21 +14,25 @@ export default function Button({
   children,
   onClick,
   sx,
+  mobile,
+  web,
 }: {
   type?: string;
   size?: string;
-  fullWidth?:boolean,
+  fullWidth?: boolean;
   name?: IconName;
   backgroundColor?: string;
   color?: string;
   children?: React.ReactNode;
-  onClick?: () => void;
+  onClick?: (e: any) => void;
   sx?: SxProps;
+  mobile?: boolean;
+  web?: boolean;
 }) {
   return (
     <ButtonBase
       sx={{
-        width: fullWidth ? '100%' : 'auto',
+        width: fullWidth ? "100%" : "auto",
         borderRadius: 0.5,
         justifyContent: "center",
         alignItems: "center",
@@ -40,11 +44,22 @@ export default function Button({
         "&:hover .ripple": {
           opacity: 1,
         },
-        height: size === "lg" ? 44 : 36,
+        height: 36,
         p: theme.spacing(0, 2),
+        "&.lg": {
+          height: 44,
+        },
+        "&.sm": {
+          height: 32,
+        },
+        display: mobile ? "none" : web ? "flex" : "flex",
+        "@media(max-width: 480px)": {
+          display: mobile ? "flex" : web ? "none" : "flex",
+        },
         ...sx,
       }}
       onClick={onClick}
+      className={size}
     >
       <Box
         sx={{
@@ -74,9 +89,18 @@ export default function Button({
           color: type === "outlined" ? backgroundColor : color,
           fontWeight: "700",
           zIndex: 1,
-          fontSize: size === "lg" ? 16 : 14,
-          lineHeight: size === "lg" ? "24px" : "20px",
+          fontSize: 14,
+          lineHeight: "20px",
+          "&.lg": {
+            fontSize: 16,
+            lineHeight: "24px",
+          },
+          "&.sm": {
+            fontSize: 12,
+            lineHeight: "16px",
+          },
         }}
+        className={size}
       >
         {children}
       </Typography>
