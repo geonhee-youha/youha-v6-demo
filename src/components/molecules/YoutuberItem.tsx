@@ -21,7 +21,6 @@ export default function YoutuberItem({
   setSelectedIds: Dispatch<SetStateAction<string[]>>;
   item: any;
 }) {
-  console.log(item);
   const [bookmarked, setBookmarked] = useState<boolean>(false);
   const {
     id,

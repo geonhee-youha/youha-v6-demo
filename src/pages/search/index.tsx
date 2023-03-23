@@ -488,8 +488,6 @@ export default function Page() {
     filter.contents.uploadFrequency[0] !== 0 ||
     filter.contents.uploadFrequency[1] !== 100 ||
     filter.mcns[0] !== "";
-  // 정렬
-  const [sort, setSort] = useState<string>("subscribers");
   useEffect(() => {
     if (channelFilterOpen) {
       setTargetFilterOpen(false);
@@ -516,8 +514,22 @@ export default function Page() {
   const onClickPrice = () => {
     router.push("/");
   };
-  const youtuberIds = testCreators.flatMap((el) => el.id);
+  // 정렬
+  const [sort, setSort] = useState<string>("subscribers");
+  //유튜버 목록 제어
+  const creatorListOrigin = [
+    ...testCreators,
+    ...testCreators,
+    ...testCreators,
+    ...testCreators,
+    ...testCreators,
+    ...testCreators,
+    ...testCreators.slice(0, 3),
+  ];
+  const youtuberIds = creatorListOrigin.flatMap((el) => el.id);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [page, setPage] = useState<number>(0);
+  const creatorList = creatorListOrigin.slice(page * 10, (page + 1) * 10);
   const equals = (a: string[], b: string[]) => {
     if (a.length === b.length && a.every((v, i) => v === b[i])) return true;
   };
@@ -2878,7 +2890,7 @@ export default function Page() {
                 <SortItem sort={sort} setSort={setSort} />
               </Box>
               <Stack spacing={2} className="Youtubers">
-                {testCreators.map((item, index) => {
+                {creatorList.map((item, index) => {
                   return (
                     <YoutuberItem
                       key={index}
@@ -2890,6 +2902,11 @@ export default function Page() {
                   );
                 })}
               </Stack>
+              <Pagenations
+                page={page}
+                creatorListOrigin={creatorListOrigin}
+                setPage={setPage}
+              />
             </Box>
           </Box>
         </Box>
@@ -5107,5 +5124,115 @@ function Panel({
     >
       {children}
     </Box>
+  );
+}
+
+function Pagenations({
+  page,
+  creatorListOrigin,
+  setPage,
+}: {
+  page: number;
+  creatorListOrigin: any[];
+  setPage: Dispatch<SetStateAction<number>>;
+}) {
+  const maxPageIndex = Math.floor(creatorListOrigin.length / 10);
+  const pageIndex = Math.floor(page / 7);
+  const chunk = ({ data = [], size = 1 }: { data: any[]; size: number }) => {
+    const arr = [];
+    for (let i = 0; i < data.length; i += size) {
+      arr.push(data.slice(i, i + size));
+    }
+
+    return arr;
+  };
+  const pageList = chunk({
+    data: Array.from({ length: maxPageIndex + 1 }, (_, i) => i + 1),
+    size: 7,
+  });
+  const onClickPrev = () => {
+    const newValue = page - 7 <= 0 ? 0 : page - 7;
+    setPage(newValue);
+  };
+  const onClickNext = () => {
+    const newValue = page + 7 >= maxPageIndex ? maxPageIndex : page + 7;
+    setPage(newValue);
+  };
+  return (
+    <Stack
+      direction="row"
+      spacing={1}
+      sx={{
+        p: theme.spacing(2, 0, 0, 0),
+      }}
+    >
+      {pageIndex !== 0 && (
+        <ButtonBase
+          sx={{
+            width: 32,
+            height: 32,
+            borderRadius: 0.5,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: grey[200],
+          }}
+          disableRipple
+          onClick={onClickPrev}
+        >
+          <Icon name="chevron-left" color={grey[500]} size={12} />
+        </ButtonBase>
+      )}
+      {pageList[pageIndex].map((item, index) => {
+        const focused = page === item - 1;
+        const onClick = () => {
+          setPage(item - 1);
+        };
+        return (
+          <ButtonBase
+            key={index}
+            sx={{
+              width: 32,
+              height: 32,
+              borderRadius: 0.5,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: focused ? grey[800] : grey[200],
+            }}
+            disableRipple
+            onClick={onClick}
+          >
+            <Typography
+              sx={{
+                fontSize: 12,
+                lineHeight: "16px",
+                fontWeight: "700",
+                color: focused ? `#ffffff` : grey[500],
+              }}
+            >
+              {item}
+            </Typography>
+          </ButtonBase>
+        );
+      })}
+      {pageIndex !== pageList.length - 1 && (
+        <ButtonBase
+          sx={{
+            width: 32,
+            height: 32,
+            borderRadius: 0.5,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: grey[200],
+          }}
+          disableRipple
+          onClick={onClickNext}
+        >
+          <Icon name="chevron-right" color={grey[500]} size={16} />
+        </ButtonBase>
+      )}
+    </Stack>
   );
 }
