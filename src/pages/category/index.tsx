@@ -1,8 +1,9 @@
 import { alpha, Box, ButtonBase, Typography } from "@mui/material";
-import { grey } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import Container from "../../components/atoms/Container";
 import { categoryList } from "../../constants";
+import youhaBlue from "../../constants/youhaBlue";
+import youhaGrey from "../../constants/youhaGrey";
 import { theme } from "../../themes/theme";
 
 export default function Page() {
@@ -41,7 +42,7 @@ export default function Page() {
                 width: "100%",
                 p: theme.spacing(1, 0),
                 "&:hover": {
-                  backgroundColor: alpha("#2F59CC", 0.08),
+                  backgroundColor: alpha(youhaBlue[500], 0.08),
                 },
               }}
               onClick={onClick}
@@ -57,7 +58,7 @@ export default function Page() {
                   sx={{
                     fontSize: 16,
                     lineHeight: "20px",
-                    color: grey[900],
+                    color: youhaGrey[900],
                   }}
                 >
                   {emoji}
@@ -67,7 +68,7 @@ export default function Page() {
                 sx={{
                   fontSize: 14,
                   lineHeight: "20px",
-                  color: grey[900],
+                  color: youhaGrey[900],
                 }}
               >
                 {title}

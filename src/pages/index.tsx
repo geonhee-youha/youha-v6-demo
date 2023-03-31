@@ -1,9 +1,4 @@
-import { Box, Stack, Typography } from "@mui/material";
-import Container from "../components/atoms/Container";
-import YoutuberRow from "../components/molecules/YoutuberRow";
-import MainBanner from "../components/organisms/MainBanner";
-import { testCreators } from "../data";
-import { theme } from "../themes/theme";
+import PopupBanner from "../components/organisms/PopupBanner";
 
 export default function Index() {
   return (
@@ -68,10 +63,10 @@ export default function Index() {
                 m: theme.spacing(2, 0, 0, 0),
                 // m: theme.spacing(2, 0, 0, 0),
                 // p: theme.spacing(1, 3),
-                // border: `1px solid ${grey[200]}`,
+                // border: `1px solid ${grey[300]}`,
                 // borderRadius: 1,
                 // "& > *:not(:last-child)": {
-                //   borderBottom: `1px solid ${grey[200]}`,
+                //   borderBottom: `1px solid ${grey[300]}`,
                 // },
               }}
             >

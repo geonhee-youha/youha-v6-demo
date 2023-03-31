@@ -2,6 +2,28 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;700;900&display=swap");
+@import url("//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSans-kr.css");
+@import url("https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;500;700&family=Noto+Sans+Mono&display=swap");
+@import url("https://webfontworld.github.io/TheJamsil/TheJamsil.css");
+
+@font-face {
+  font-family: "LeferiPoint";
+  src: url("/fonts/LeferiPoint/LeferiPointWhite.otf") format("opentype");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: "LeferiPoint";
+  src: url("/fonts/LeferiPoint/LeferiBaseRegular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "LeferiPoint";
+  src: url("/fonts/LeferiPoint/LeferiBaseBold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
 
 @font-face {
   font-family: "LINESeedKR";
@@ -29,9 +51,10 @@
 }
 body {
   color: #263238;
-  font-family: "LINESeedKR", Pretendard, -apple-system, BlinkMacSystemFont,
-    system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
-    "Noto Sans KR", "Malgun Gothic", sans-serif;
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto,
+    "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR",
+    "Malgun Gothic", sans-serif;
+  letter-spacing: -0.5px;
 }
 @media (max-width: 575px) {
   * {

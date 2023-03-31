@@ -1,8 +1,8 @@
 import { IconName } from "@fortawesome/fontawesome-svg-core";
 import { Box, ButtonBase, Typography } from "@mui/material";
-import { grey } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import youhaBlue from "../../constants/youhaBlue";
+import youhaGrey from "../../constants/youhaGrey";
 import { theme } from "../../themes/theme";
 import Icon from "../atoms/Icon";
 
@@ -35,7 +35,7 @@ export default function BottomNavigationBar() {
       {bottomTabList.map((item, index) => {
         const { href, title, iconName } = item;
         const focused = pathName === href;
-        const color = focused ? youhaBlue[500] : grey[900];
+        const color = focused ? youhaBlue[500] : youhaGrey[900];
         const onClick = () => {
           router.push(href);
         };

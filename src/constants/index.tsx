@@ -123,6 +123,11 @@
 
 export const categoryList = [
   {
+    emoji: "",
+    title: "전체",
+    value: "",
+  },
+  {
     emoji: "💄",
     title: "뷰티·패션",
     value: "beauty_fashion",
@@ -230,25 +235,30 @@ export const tabList = [
   { title: "쇼츠", value: "shorts" },
 ];
 
-export const sortList = [
+export const youtuberSortList = [
   { title: "구독자 순", value: "subscribers" },
   { title: "예상 광고단가 순", value: "price" },
   { title: "평균 조회수 순", value: "views" },
 ];
 
-export const channelFormList = [
+export type FilterProps = {
+  title: string;
+  value: string;
+};
+
+export const hasShortsList: FilterProps[] = [
   { title: "전체", value: "" },
-  { title: "롱폼 전문", value: "long-form" },
-  { title: "쇼츠 전문", value: "short-form" },
+  { title: "쇼츠 보유", value: "shorts" },
+  { title: "쇼츠 미보유", value: "non-shorts" },
 ];
 
-export const targetGenderList = [
+export const targetGenderList: FilterProps[] = [
   { title: "전체", value: "" },
   { title: "남성", value: "male" },
   { title: "여성", value: "female" },
 ];
 
-export const targetAgeList = [
+export const targetAgeList: FilterProps[] = [
   { title: "전체", value: "" },
   { title: "10대", value: "10" },
   { title: "20~30대", value: "20" },
@@ -256,14 +266,14 @@ export const targetAgeList = [
   { title: "60대 이상", value: "60" },
 ];
 
-export const recentUploadDateList = [
+export const recentUploadDateList: FilterProps[] = [
   { title: "전체", value: "" },
   { title: "7일 이내", value: "7" },
   { title: "15일 이내", value: "15" },
   { title: "30일 이내", value: "30" },
 ];
 
-export const mcnList = [
+export const mcnList: FilterProps[] = [
   { title: "전체", value: "" },
   { title: "다이아 티비", value: "다이아 티비" },
   { title: "트레져헌터", value: "트레져헌터" },
@@ -328,12 +338,14 @@ export const mcnList = [
   { title: "소속없음", value: "소속없음" },
 ];
 
-export type FilterProps = {
-  categories: string[];
+export type YoutuberFilterValueProps = {
+  categories: {
+    categories: string[];
+  };
   channel: {
     subscribers: number[];
     price: number[];
-    form: string;
+    shorts: string;
   };
   target: {
     gender: string;
@@ -347,15 +359,19 @@ export type FilterProps = {
     recentUploadDate: string;
     uploadFrequency: number[];
   };
-  mcns: string[];
+  mcns: {
+    mcns: string[];
+  };
 };
 
-export const filterObject: FilterProps = {
-  categories: [],
+export const youtuberFilterValueDefaultProps: YoutuberFilterValueProps = {
+  categories: {
+    categories: [],
+  },
   channel: {
     subscribers: [0, 5000000],
     price: [0, 100000000],
-    form: "",
+    shorts: "",
   },
   target: {
     gender: "",
@@ -369,5 +385,7 @@ export const filterObject: FilterProps = {
     recentUploadDate: "",
     uploadFrequency: [0, 100],
   },
-  mcns: [""],
+  mcns: {
+    mcns: [""],
+  },
 };

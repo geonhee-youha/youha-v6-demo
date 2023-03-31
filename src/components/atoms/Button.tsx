@@ -51,6 +51,7 @@ export default function Button({
         },
         "&.sm": {
           height: 32,
+          p: theme.spacing(0, 1.5),
         },
         display: mobile ? "none" : web ? "flex" : "flex",
         "@media(max-width: 480px)": {

@@ -6,7 +6,7 @@ import {
   InputBase,
   Typography,
 } from "@mui/material";
-import { cyan, grey, pink } from "@mui/material/colors";
+import { cyan, pink } from "@mui/material/colors";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
@@ -19,6 +19,8 @@ import {
   useState,
 } from "react";
 import { categoryList } from "../../constants";
+import youhaBlue from "../../constants/youhaBlue";
+import youhaGrey from "../../constants/youhaGrey";
 import { theme } from "../../themes/theme";
 import Container from "../atoms/Container";
 import Icon from "../atoms/Icon";
@@ -52,7 +54,7 @@ export default function GlobalNavigationBar() {
         backgroundColor: "#ffffff",
         display: focused ? "flex" : "none",
         zIndex: 999,
-        borderBottom: `1px solid ${grey[300]}`,
+        borderBottom: `1px solid ${youhaGrey[200]}`,
       }}
     >
       <Container>
@@ -65,10 +67,10 @@ export default function GlobalNavigationBar() {
 
 function Header() {
   const router = useRouter();
-  const [value, setValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>("");
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setValue(value);
+    setSearchValue(value);
   };
   const onKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -76,9 +78,9 @@ function Header() {
     }
   };
   const onSearchClick = () => {
-    if (value === "") return;
-    router.push(`/search?type=youtuber&value=${value}`);
-    setValue("");
+    if (searchValue === "") return;
+    router.push(`/search?type=youtuber&search=${searchValue}`);
+    setSearchValue("");
   };
   function HeaderBtn({
     item,
@@ -93,10 +95,10 @@ function Header() {
             display: "flex",
             alignItems: "center",
             height: "100%",
-            m: theme.spacing(0, 0, 0, 3),
+            m: theme.spacing(0, 0, 0, 2),
             cursor: "pointer",
             "&:hover": {
-              opacity: 0.4,
+              opacity: 0.7,
             },
           }}
         >
@@ -104,7 +106,8 @@ function Header() {
             sx={{
               fontSize: 14,
               lineHeight: "20px",
-              color: grey[900],
+              fontWeight: 500,
+              color: youhaGrey[700],
             }}
           >
             {title}
@@ -140,7 +143,7 @@ function Header() {
         }}
       >
         <InputBase
-          value={value}
+          value={searchValue}
           onChange={onChange}
           onKeyPress={onKeyPress}
           placeholder="어떤 유튜버가 궁금하세요?"
@@ -148,28 +151,29 @@ function Header() {
             width: 360,
             height: 40,
             p: theme.spacing(0, 6, 0, 2),
-            borderRadius: 1,
+            borderRadius: 20,
             display: "flex",
             alignItems: "center",
-            backgroundColor: grey[100],
-            transition: `all 0.35s ease`,
+            backgroundColor: youhaGrey[50],
+            // transition: `all 0.35s ease`,
             "&:hover": {
-              boxShadow: `${grey[300]} 0px 0px 0px 1px inset`,
+              boxShadow: `${youhaGrey[300]} 0px 0px 0px 1px inset`,
             },
             "&.Mui-focused": {
-              boxShadow: `${grey[300]} 0px 0px 0px 0px inset`,
-              backgroundColor: grey[200],
+              boxShadow: `${youhaBlue[500]} 0px 0px 0px 1px inset !important`,
+              backgroundColor: "#ffffff",
               "& input": {
                 fontSize: 14,
                 "&::placeholder": {
-                  color: grey[700],
+                  color: youhaGrey[500],
                 },
               },
             },
             "& input": {
               fontSize: 14,
               "&::placeholder": {
-                color: grey[500],
+                fontWeight: 400,
+                color: youhaGrey[500],
                 opacity: 1,
               },
             },
@@ -203,15 +207,7 @@ function Header() {
         {headers.map((item, index) => (
           <HeaderBtn key={index} item={item} />
         ))}
-        <Box
-          sx={{
-            position: "relative",
-            height: "100%",
-            m: theme.spacing(0, 0, 0, 3),
-          }}
-        >
-          <Languages />
-        </Box>
+        <Languages />
       </Box>
     </Toolbar>
   );
@@ -242,9 +238,9 @@ function Nav() {
         {title === "MCN 찾기" && (
           <Box
             sx={{
-              width: `2px`,
+              width: `1px`,
               height: `12px`,
-              backgroundColor: grey[300],
+              backgroundColor: youhaGrey[200],
               m: theme.spacing(0, 3, 0, 0),
             }}
           />
@@ -258,16 +254,19 @@ function Nav() {
               m: theme.spacing(0, 3, 0, 0),
               cursor: "pointer",
               "&:hover": {
-                "& > *": {
-                  color: grey[400],
+                "& > svg": {
+                  color: youhaBlue[500],
+                },
+                "& > .MuiTypography-root": {
+                  color: youhaBlue[500],
                 },
               },
             }}
           >
             <Typography
               sx={{
-                fontWeight: "700",
-                color: focused ? "#2F59CC" : grey[900],
+                fontWeight: 700,
+                color: focused ? youhaBlue[500] : youhaGrey[900],
               }}
             >
               {title}
@@ -282,7 +281,7 @@ function Nav() {
                   sx={{
                     fontSize: 10,
                     lineHeight: "14px",
-                    fontWeight: "900",
+                    fontWeight: 700,
                     color: `${pink[500]} !important`,
                   }}
                 >
@@ -300,7 +299,7 @@ function Nav() {
                   sx={{
                     fontSize: 10,
                     lineHeight: "14px",
-                    fontWeight: "900",
+                    fontWeight: 700,
                     color: `${cyan[500]} !important`,
                   }}
                 >
@@ -361,7 +360,7 @@ function Nav() {
               prefix="fas"
               size={20}
               sx={{
-                opacity: categoriesOpen ? 0.4 : 1,
+                color: categoriesOpen ? youhaBlue[500] : youhaGrey[900],
               }}
             />
           </Box>
@@ -379,15 +378,15 @@ function Nav() {
               prefix="fas"
               size={20}
               sx={{
-                opacity: categoriesOpen ? 0.4 : 1,
+                color: categoriesOpen ? youhaBlue[500] : youhaGrey[900],
               }}
             />
           </Box>
         </Box>
         <Typography
           sx={{
-            fontWeight: "700",
-            opacity: categoriesOpen ? 0.4 : 1,
+            fontWeight: 700,
+            color: categoriesOpen ? youhaBlue[500] : youhaGrey[900],
           }}
         >
           전체 카테고리
@@ -422,7 +421,7 @@ function Categories({
         overflow: "auto",
         p: theme.spacing(1, 0),
         backgroundColor: "#ffffff",
-        border: `1px solid ${grey[300]}`,
+        border: `1px solid ${youhaGrey[200]}`,
         borderRadius: 0.5,
       }}
       className="categories"
@@ -434,14 +433,14 @@ function Categories({
           setOpen(false);
           router.push(`/search?type=youtuber&categories=${value}`);
         };
-        return (
+        return value === "" ? null : (
           <ButtonBase
             key={index}
             sx={{
               width: "100%",
               p: theme.spacing(1, 2),
               "&:hover": {
-                backgroundColor: alpha("#2F59CC", 0.08),
+                backgroundColor: alpha(youhaBlue[500], 0.08),
               },
             }}
             onClick={onClick}
@@ -457,7 +456,7 @@ function Categories({
                 sx={{
                   fontSize: 16,
                   lineHeight: "20px",
-                  color: grey[900],
+                  color: youhaGrey[900],
                 }}
               >
                 {emoji}
@@ -467,7 +466,7 @@ function Categories({
               sx={{
                 fontSize: 14,
                 lineHeight: "20px",
-                color: grey[900],
+                color: youhaGrey[900],
               }}
             >
               {title}
@@ -497,7 +496,14 @@ function Languages() {
     }
   };
   return (
-    <Box ref={ref} sx={{ height: "100%" }}>
+    <Box
+      ref={ref}
+      sx={{
+        position: "relative",
+        height: "100%",
+        m: theme.spacing(0, 0, 0, 3),
+      }}
+    >
       <IconButton
         sx={{
           width: 24,
@@ -505,14 +511,14 @@ function Languages() {
           borderRadius: "50%",
           "&:hover": {
             "& svg": {
-              opacity: 0.4,
+              opacity: 0.7,
             },
           },
         }}
         disableRipple
         onClick={onClick}
       >
-        <Icon prefix="fal" name="globe" size={20} />
+        <Icon prefix="fal" name="globe" size={20} color={youhaGrey[700]} />
       </IconButton>
       <Box
         ref={ref}
@@ -525,9 +531,8 @@ function Languages() {
           flexDirection: "column",
           p: theme.spacing(1, 0),
           zIndex: 9,
-          // backgroundColor: grey[50],
           backgroundColor: "#ffffff",
-          border: `1px solid ${grey[300]}`,
+          border: `1px solid ${youhaGrey[200]}`,
           borderRadius: 0.5,
         }}
         className="languages"
@@ -553,7 +558,7 @@ function Languages() {
                 sx={{
                   fontSize: 14,
                   lineHeight: "20px",
-                  color: grey[900],
+                  color: youhaGrey[900],
                 }}
               >
                 {title}
