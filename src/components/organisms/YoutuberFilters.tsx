@@ -11,7 +11,7 @@ import { numberToKorean } from "../../utils";
 import {
   categoryList,
   hasShortsList,
-  YoutuberFilterValueProps,
+  FilterValueProps,
   mcnList,
   targetAgeList,
   targetGenderList,
@@ -34,9 +34,9 @@ export default function YoutuberFilters({
   mobile,
 }: {
   categoriesValue: string[];
-  filterValue: YoutuberFilterValueProps;
-  setFilterValue: Dispatch<SetStateAction<YoutuberFilterValueProps>>;
-  setFilterTempValue: Dispatch<SetStateAction<YoutuberFilterValueProps>>;
+  filterValue: FilterValueProps;
+  setFilterValue: Dispatch<SetStateAction<FilterValueProps>>;
+  setFilterTempValue: Dispatch<SetStateAction<FilterValueProps>>;
   setCategoriesValue: Dispatch<SetStateAction<string[]>>;
   setCategoriesTempValue: Dispatch<SetStateAction<string[]>>;
   mobile?: boolean;
@@ -48,140 +48,162 @@ export default function YoutuberFilters({
     event: Event,
     newValue: number | number[]
   ) => {
-    const newFilter = {
-      ...filterValue,
-      channel: {
-        ...filterValue.channel,
-        subscribers: newValue as number[],
-      },
-    };
-    if (!mobile) setFilterValue(newFilter);
-    setFilterTempValue(newFilter);
+    if (filterValue.channel) {
+      const newFilter = {
+        ...filterValue,
+        channel: {
+          ...filterValue.channel,
+          subscribers: newValue as number[],
+        },
+      };
+      if (!mobile) setFilterValue(newFilter);
+      setFilterTempValue(newFilter);
+    }
   };
   const onChangeChannelPrice = (event: Event, newValue: number | number[]) => {
-    const newFilter = {
-      ...filterValue,
-      channel: {
-        ...filterValue.channel,
-        price: newValue as number[],
-      },
-    };
-    if (!mobile) setFilterValue(newFilter);
-    setFilterTempValue(newFilter);
+    if (filterValue.channel) {
+      const newFilter = {
+        ...filterValue,
+        channel: {
+          ...filterValue.channel,
+          price: newValue as number[],
+        },
+      };
+      if (!mobile) setFilterValue(newFilter);
+      setFilterTempValue(newFilter);
+    }
   };
   const onChangeHasShorts = (newValue: string) => {
-    const newFilter = {
-      ...filterValue,
-      channel: {
-        ...filterValue.channel,
-        form: newValue,
-      },
-    };
-    if (!mobile) setFilterValue(newFilter);
-    setFilterTempValue(newFilter);
+    if (filterValue.channel) {
+      const newFilter = {
+        ...filterValue,
+        channel: {
+          ...filterValue.channel,
+          form: newValue,
+        },
+      };
+      if (!mobile) setFilterValue(newFilter);
+      setFilterTempValue(newFilter);
+    }
   };
   const onChangeTargetGender = (newValue: string) => {
-    const newFilter = {
-      ...filterValue,
-      target: {
-        ...filterValue.target,
-        gender: newValue,
-      },
-    };
-    if (!mobile) setFilterValue(newFilter);
-    setFilterTempValue(newFilter);
+    if (filterValue.target) {
+      const newFilter = {
+        ...filterValue,
+        target: {
+          ...filterValue.target,
+          gender: newValue,
+        },
+      };
+      if (!mobile) setFilterValue(newFilter);
+      setFilterTempValue(newFilter);
+    }
   };
   const onChangeTargetAge = (newValue: string) => {
-    const newFilter = {
-      ...filterValue,
-      target: {
-        ...filterValue.target,
-        age: newValue,
-      },
-    };
-    if (!mobile) setFilterValue(newFilter);
-    setFilterTempValue(newFilter);
+    if (filterValue.target) {
+      const newFilter = {
+        ...filterValue,
+        target: {
+          ...filterValue.target,
+          age: newValue,
+        },
+      };
+      if (!mobile) setFilterValue(newFilter);
+      setFilterTempValue(newFilter);
+    }
   };
   const onChangeTargetKoreanRatio = (
     event: Event,
     newValue: number | number[]
   ) => {
-    const newFilter = {
-      ...filterValue,
-      target: {
-        ...filterValue.target,
-        koreanRatio: newValue as number[],
-      },
-    };
-    if (!mobile) setFilterValue(newFilter);
-    setFilterTempValue(newFilter);
+    if (filterValue.target) {
+      const newFilter = {
+        ...filterValue,
+        target: {
+          ...filterValue.target,
+          koreanRatio: newValue as number[],
+        },
+      };
+      if (!mobile) setFilterValue(newFilter);
+      setFilterTempValue(newFilter);
+    }
   };
   const onChangeContentsEverageViews = (
     event: Event,
     newValue: number | number[]
   ) => {
-    const newFilter = {
-      ...filterValue,
-      contents: {
-        ...filterValue.contents,
-        everageViews: newValue as number[],
-      },
-    };
-    if (!mobile) setFilterValue(newFilter);
-    setFilterTempValue(newFilter);
+    if (filterValue.contents) {
+      const newFilter = {
+        ...filterValue,
+        contents: {
+          ...filterValue.contents,
+          everageViews: newValue as number[],
+        },
+      };
+      if (!mobile) setFilterValue(newFilter);
+      setFilterTempValue(newFilter);
+    }
   };
   const onChangeContentsCommentRatio = (
     event: Event,
     newValue: number | number[]
   ) => {
-    const newFilter = {
-      ...filterValue,
-      contents: {
-        ...filterValue.contents,
-        commentRatio: newValue as number[],
-      },
-    };
-    if (!mobile) setFilterValue(newFilter);
-    setFilterTempValue(newFilter);
+    if (filterValue.contents) {
+      const newFilter = {
+        ...filterValue,
+        contents: {
+          ...filterValue.contents,
+          commentRatio: newValue as number[],
+        },
+      };
+      if (!mobile) setFilterValue(newFilter);
+      setFilterTempValue(newFilter);
+    }
   };
   const onChangeContentsLikeRatio = (
     event: Event,
     newValue: number | number[]
   ) => {
-    const newFilter = {
-      ...filterValue,
-      contents: {
-        ...filterValue.contents,
-        likeRatio: newValue as number[],
-      },
-    };
-    if (!mobile) setFilterValue(newFilter);
-    setFilterTempValue(newFilter);
+    if (filterValue.contents) {
+      const newFilter = {
+        ...filterValue,
+        contents: {
+          ...filterValue.contents,
+          likeRatio: newValue as number[],
+        },
+      };
+      if (!mobile) setFilterValue(newFilter);
+      setFilterTempValue(newFilter);
+    }
   };
   const onChangeContentsRecentUploadDate = (newValue: string) => {
-    const newFilter = {
-      ...filterValue,
-      contents: {
-        ...filterValue.contents,
-        recentUploadDate: newValue,
-      },
-    };
-    if (!mobile) setFilterValue(newFilter);
-    setFilterTempValue(newFilter);
+    if (filterValue.contents) {
+      const newFilter = {
+        ...filterValue,
+        contents: {
+          ...filterValue.contents,
+          recentUploadDate: newValue,
+        },
+      };
+      if (!mobile) setFilterValue(newFilter);
+      setFilterTempValue(newFilter);
+    }
   };
   const onChangeContentsUploadFrequency = (
     event: Event,
     newValue: number | number[]
   ) => {
-    const newFilter = {
-      ...filterValue,
-      contents: {
-        ...filterValue.contents,
-        uploadFrequency: newValue as number[],
-      },
-    };
-    if (!mobile) setFilterValue(newFilter);
-    setFilterTempValue(newFilter);
+    if (filterValue.contents) {
+      const newFilter = {
+        ...filterValue,
+        contents: {
+          ...filterValue.contents,
+          uploadFrequency: newValue as number[],
+        },
+      };
+      if (!mobile) setFilterValue(newFilter);
+      setFilterTempValue(newFilter);
+    }
   };
   const onChangeCategories = (value: string) => {
     const focused = categoriesValue.includes(value);
@@ -192,39 +214,41 @@ export default function YoutuberFilters({
     setCategoriesTempValue(newValue);
   };
   const onChangeMcns = (value: string) => {
-    const focused = filterValue.mcns.mcns.includes(value);
-    const newValue = focused
-      ? filterValue.mcns.mcns.filter((el) => el !== value)
-      : [...filterValue.mcns.mcns, value];
-    const newFilter = {
-      ...filterValue,
-      mcns: { mcns: value === "" ? [] : newValue },
-    };
-    if (!mobile) setFilterValue(newFilter);
-    setFilterTempValue(newFilter);
+    if (filterValue.mcns) {
+      const focused = filterValue.mcns.mcns.includes(value);
+      const newValue = focused
+        ? filterValue.mcns.mcns.filter((el) => el !== value)
+        : [...filterValue.mcns.mcns, value];
+      const newFilter = {
+        ...filterValue,
+        mcns: { mcns: value === "" ? [] : newValue },
+      };
+      if (!mobile) setFilterValue(newFilter);
+      setFilterTempValue(newFilter);
+    }
   };
   const channelFilterFocused =
-    filterValue.channel.subscribers[0] !== 0 ||
-    filterValue.channel.subscribers[1] !== 5000000 ||
-    filterValue.channel.price[0] !== 0 ||
-    filterValue.channel.price[1] !== 100000000 ||
-    filterValue.channel.shorts !== "";
+    filterValue.channel?.subscribers[0] !== 0 ||
+    filterValue.channel?.subscribers[1] !== 5000000 ||
+    filterValue.channel?.price[0] !== 0 ||
+    filterValue.channel?.price[1] !== 100000000 ||
+    filterValue.channel?.shorts !== "";
   const targetFilterFocused =
-    filterValue.target.gender !== "" ||
-    filterValue.target.age !== "" ||
-    filterValue.target.koreanRatio[0] !== 0 ||
-    filterValue.target.koreanRatio[1] !== 100;
+    filterValue.target?.gender !== "" ||
+    filterValue.target?.age !== "" ||
+    filterValue.target?.koreanRatio[0] !== 0 ||
+    filterValue.target?.koreanRatio[1] !== 100;
   const contentsFilterFocused =
-    filterValue.contents.everageViews[0] !== 0 ||
-    filterValue.contents.everageViews[1] !== 10000000 ||
-    filterValue.contents.commentRatio[0] !== 0 ||
-    filterValue.contents.commentRatio[1] !== 100 ||
-    filterValue.contents.likeRatio[0] !== 0 ||
-    filterValue.contents.likeRatio[1] !== 100 ||
-    filterValue.contents.recentUploadDate !== "" ||
-    filterValue.contents.uploadFrequency[0] !== 0 ||
-    filterValue.contents.uploadFrequency[1] !== 100;
-  const mcnFilterFocused = filterValue.mcns.mcns[0] !== "";
+    filterValue.contents?.everageViews[0] !== 0 ||
+    filterValue.contents?.everageViews[1] !== 10000000 ||
+    filterValue.contents?.commentRatio[0] !== 0 ||
+    filterValue.contents?.commentRatio[1] !== 100 ||
+    filterValue.contents?.likeRatio[0] !== 0 ||
+    filterValue.contents?.likeRatio[1] !== 100 ||
+    filterValue.contents?.recentUploadDate !== "" ||
+    filterValue.contents?.uploadFrequency[0] !== 0 ||
+    filterValue.contents?.uploadFrequency[1] !== 100;
+  const mcnFilterFocused = filterValue.mcns?.mcns[0] !== "";
   const onClickPrice = () => {
     router.push("/");
   };
@@ -244,7 +268,7 @@ export default function YoutuberFilters({
         {
           type: "slider",
           title: "구독자수",
-          valueText: (
+          valueText: filterValue.channel && (
             <>
               {`${numberToKorean(filterValue.channel.subscribers[0])}${
                 filterValue.channel.subscribers[0] === 0 ? "" : "명"
@@ -255,7 +279,7 @@ export default function YoutuberFilters({
                 : `${numberToKorean(filterValue.channel.subscribers[1])}명`}
             </>
           ),
-          value: filterValue.channel.subscribers,
+          value: filterValue.channel ? filterValue.channel.subscribers : "",
           onChangeSlider: onChangeChannelSubscribers,
           max: 5000000,
           step: 50000,
@@ -265,7 +289,7 @@ export default function YoutuberFilters({
           type: "slider",
           title: "예상 광고단가",
           description: "해당 단가는 예상 단가입니다.",
-          valueText: (
+          valueText: filterValue.channel && (
             <>
               {`${numberToKorean(filterValue.channel.price[0])}${
                 filterValue.channel.price[0] === 0 ? "" : "원"
@@ -276,7 +300,7 @@ export default function YoutuberFilters({
                 : `${numberToKorean(filterValue.channel.price[1])}원`}
             </>
           ),
-          value: filterValue.channel.price,
+          value: filterValue.channel ? filterValue.channel.price : "",
           onChangeSlider: onChangeChannelPrice,
           max: 100000000,
           step: 500000,
@@ -290,7 +314,7 @@ export default function YoutuberFilters({
           type: "radio",
           title: "쇼츠 보유",
           description: "쇼츠를 보유한 채널만 표시됩니다.",
-          value: filterValue.channel.shorts,
+          value: filterValue.channel ? filterValue.channel.shorts : "",
           onChangeValue: onChangeHasShorts,
           list: hasShortsList,
         },
@@ -303,28 +327,28 @@ export default function YoutuberFilters({
         {
           type: "radio",
           title: "주 시청자 성별",
-          value: filterValue.target.gender,
+          value: filterValue.target ? filterValue.target.gender : "",
           onChangeValue: onChangeTargetGender,
           list: targetGenderList,
         },
         {
           type: "radio",
           title: "주 시청자 연령",
-          value: filterValue.target.age,
+          value: filterValue.target ? filterValue.target.age : "",
           onChangeValue: onChangeTargetAge,
           list: targetAgeList,
         },
         {
           type: "slider",
           title: "국내 시청자 비율",
-          valueText: (
+          valueText: filterValue.target && (
             <>
               {filterValue.target.koreanRatio[0]}
               {filterValue.target.koreanRatio[0] === 0 ? "" : "%"} ~{" "}
               {filterValue.target.koreanRatio[1]}%
             </>
           ),
-          value: filterValue.target.koreanRatio,
+          value: filterValue.target ? filterValue.target.koreanRatio : "",
           onChangeSlider: onChangeTargetKoreanRatio,
           valueTexts: [0, "50%", "100%"],
         },
@@ -338,7 +362,7 @@ export default function YoutuberFilters({
           type: "slider",
           title: "광고영상 평균 조회수",
           description: "최근 10개의 광고영상들의 평균 조회수입니다.",
-          valueText: (
+          valueText: filterValue.contents && (
             <>
               {`${numberToKorean(filterValue.contents.everageViews[0])}${
                 filterValue.contents.everageViews[0] === 0 ? "" : "회"
@@ -349,7 +373,7 @@ export default function YoutuberFilters({
                 : `${numberToKorean(filterValue.contents.everageViews[1])}회`}
             </>
           ),
-          value: filterValue.contents.everageViews,
+          value: filterValue.contents ? filterValue.contents.everageViews : "",
           onChangeSlider: onChangeContentsEverageViews,
           valueTexts: [0, "500만", "무제한"],
           max: 10000000,
@@ -358,7 +382,7 @@ export default function YoutuberFilters({
         {
           type: "slider",
           title: "댓글 작성율",
-          valueText: (
+          valueText: filterValue.contents && (
             <>
               {`${filterValue.contents.commentRatio[0]}${
                 filterValue.contents.commentRatio[0] === 0 ? "" : "%"
@@ -366,14 +390,14 @@ export default function YoutuberFilters({
               ~ {`${numberToKorean(filterValue.contents.commentRatio[1])}%`}
             </>
           ),
-          value: filterValue.contents.commentRatio,
+          value: filterValue.contents ? filterValue.contents.commentRatio : "",
           onChangeSlider: onChangeContentsCommentRatio,
           valueTexts: [0, "50%", "100%"],
         },
         {
           type: "slider",
           title: "콘텐츠 호감도",
-          valueText: (
+          valueText: filterValue.contents && (
             <>
               {`${filterValue.contents.likeRatio[0]}${
                 filterValue.contents.likeRatio[0] === 0 ? "" : "%"
@@ -381,21 +405,23 @@ export default function YoutuberFilters({
               ~ {`${numberToKorean(filterValue.contents.likeRatio[1])}%`}
             </>
           ),
-          value: filterValue.contents.likeRatio,
+          value: filterValue.contents ? filterValue.contents.likeRatio : "",
           onChangeSlider: onChangeContentsLikeRatio,
           valueTexts: [0, "50%", "100%"],
         },
         {
           type: "radio",
           title: "최근 업로드 날짜",
-          value: filterValue.contents.recentUploadDate,
+          value: filterValue.contents
+            ? filterValue.contents.recentUploadDate
+            : "",
           onChangeValue: onChangeContentsRecentUploadDate,
           list: targetAgeList,
         },
         {
           type: "slider",
           title: "주간 업로드 빈도",
-          valueText: (
+          valueText: filterValue.contents && (
             <>
               {`${filterValue.contents.uploadFrequency[0] / 10}${
                 filterValue.contents.uploadFrequency[0] === 0 ? "" : "회"
@@ -406,7 +432,9 @@ export default function YoutuberFilters({
                 : `${filterValue.contents.uploadFrequency[1] / 10}회`}
             </>
           ),
-          value: filterValue.contents.uploadFrequency,
+          value: filterValue.contents
+            ? filterValue.contents.uploadFrequency
+            : "",
           onChangeSlider: onChangeContentsUploadFrequency,
           valueTexts: [0, "5회", "무제한"],
         },
@@ -420,7 +448,7 @@ export default function YoutuberFilters({
           type: "array",
           title: "소속 MCN",
           description: "선택한 MCN 소속의 유튜버만 보여집니다.",
-          value: filterValue.mcns.mcns,
+          value: filterValue.mcns ? filterValue.mcns.mcns : "",
           onChangeValue: onChangeMcns,
           list: mcnList,
         },

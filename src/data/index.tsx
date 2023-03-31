@@ -1497,7 +1497,7 @@ export const testVideos: VideoProps[] = [
         commercialType: null,
         status: "verified",
         commentsCount: 1,
-        thumbnail: "https://i.ytimg.com/vi/ARh4IKFioQc/mqdefault.jpg",
+        thumbnail: "https://i.ytimg.com/vi/weMwE098DU0/mqdefault.jpg",
         likeCount: null,
         viewCount: 32,
         tags: [],

@@ -67,6 +67,7 @@ export default function GlobalNavigationBar() {
 
 function Header() {
   const router = useRouter();
+  const { type } = router.query;
   const [searchValue, setSearchValue] = useState<string>("");
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -78,8 +79,7 @@ function Header() {
     }
   };
   const onSearchClick = () => {
-    if (searchValue === "") return;
-    router.push(`/search?type=youtuber&search=${searchValue}`);
+    router.push(`/search?type=${type}&search=${searchValue}`);
     setSearchValue("");
   };
   function HeaderBtn({
@@ -146,7 +146,13 @@ function Header() {
           value={searchValue}
           onChange={onChange}
           onKeyPress={onKeyPress}
-          placeholder="어떤 유튜버가 궁금하세요?"
+          placeholder={`어떤 ${
+            type === "video"
+              ? "동영상이"
+              : type === "shorts"
+              ? "쇼츠가"
+              : "유튜버가"
+          } 궁금하세요?`}
           sx={{
             width: 360,
             height: 40,
@@ -407,6 +413,8 @@ function Categories({
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const router = useRouter();
+  const { type } = router.query;
   return (
     <Box
       sx={{
@@ -427,11 +435,10 @@ function Categories({
       className="categories"
     >
       {categoryList.map((item, index) => {
-        const router = useRouter();
         const { emoji, title, value } = item;
         const onClick = () => {
           setOpen(false);
-          router.push(`/search?type=youtuber&categories=${value}`);
+          router.push(`/search?type=${type}&forceCategory=${value}`);
         };
         return value === "" ? null : (
           <ButtonBase

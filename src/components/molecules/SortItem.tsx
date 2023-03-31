@@ -38,7 +38,7 @@ export default function SortItem({
     }
   };
   return (
-    <Box ref={ref} sx={{ position: "relative", zIndex: 9 }}>
+    <Box ref={ref} sx={{ position: "relative", zIndex: 99 }}>
       <ButtonBase
         sx={{
           alignItems: "center",

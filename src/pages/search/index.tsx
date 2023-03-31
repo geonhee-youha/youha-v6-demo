@@ -17,9 +17,11 @@ import React, {
 import Button from "../../components/atoms/Button";
 import {
   youtuberFilterValueDefaultProps,
-  YoutuberFilterValueProps,
   youtuberSortList,
   tabList,
+  videoSortList,
+  FilterValueProps,
+  videoFilterValueDefaultProps,
 } from "../../constants";
 import YoutuberItem from "../../components/molecules/YoutuberItem";
 import { testCreators, testVideos } from "../../data";
@@ -28,10 +30,11 @@ import SortItem from "../../components/molecules/SortItem";
 import Checkbox from "../../components/atoms/Checkbox";
 import Input from "../../components/atoms/Input";
 import YoutuberFilters from "../../components/organisms/YoutuberFilters";
-import YoutuberFilterDrawer from "../../components/organisms/YoutuberFilterDrawer";
+import FilterDrawer from "../../components/organisms/FilterDrawer";
 import CategoryBar from "../../components/organisms/CategoryBar";
 import VideoItem from "../../components/molecules/VideoItem";
 import youhaGrey from "../../constants/youhaGrey";
+import VideoFilters from "../../components/organisms/VideoFilters";
 
 function equals(a: string[], b: string[]) {
   if (a.length === b.length && a.every((v, i) => v === b[i])) return true;
@@ -43,6 +46,7 @@ export default function Page() {
     type: typeOrigin,
     categories: categoryOrigin,
     search: searchValueOrigin,
+    forceCategory,
   } = router.query;
   const query = {
     type:
@@ -51,6 +55,59 @@ export default function Page() {
     categories:
       typeof categoryOrigin === "string" ? categoryOrigin.split(",") : [],
   };
+  const [youtuberCategoriesValue, setYoutuberCategoriesValue] = useState<
+    string[]
+  >([]);
+  const [youtuberCategoriesTempValue, setYoutuberCategoriesTempValue] =
+    useState<string[]>([]);
+  const [videoCategoriesValue, setVideoCategoriesValue] = useState<string[]>(
+    []
+  );
+  const [videoCategoriesTempValue, setVideoCategoriesTempValue] = useState<
+    string[]
+  >([]);
+  const [shortsCategoriesValue, setShortsCategoriesValue] = useState<string[]>(
+    []
+  );
+  const [shortsCategoriesTempValue, setShortsCategoriesTempValue] = useState<
+    string[]
+  >([]);
+  const type = query.type;
+  const categoriesValue =
+    type === "youtuber"
+      ? youtuberCategoriesValue
+      : type === "video"
+      ? videoCategoriesValue
+      : shortsCategoriesValue;
+  const categoriesTempValue =
+    type === "youtuber"
+      ? youtuberCategoriesTempValue
+      : type === "video"
+      ? videoCategoriesTempValue
+      : shortsCategoriesTempValue;
+  const setCategoriesValue =
+    type === "youtuber"
+      ? setYoutuberCategoriesValue
+      : type === "video"
+      ? setVideoCategoriesValue
+      : setShortsCategoriesValue;
+  const setCategoriesTempValue =
+    type === "youtuber"
+      ? setYoutuberCategoriesTempValue
+      : type === "video"
+      ? setVideoCategoriesTempValue
+      : setShortsCategoriesTempValue;
+  console.log(forceCategory);
+
+  useEffect(() => {
+    if (typeof forceCategory === "string" && forceCategory !== "") {
+      setCategoriesValue([forceCategory]);
+      router.replace(
+        `/search?${`type=${query.type}&`}categories=${forceCategory}
+      )}`
+      );
+    }
+  }, [forceCategory]);
   return (
     <>
       <Container>
@@ -63,8 +120,19 @@ export default function Page() {
             },
           }}
         >
-          <Header query={query} />
-          <Main query={query} />
+          <Header
+            query={query}
+            youtuberCategoriesValue={youtuberCategoriesValue}
+            videoCategoriesValue={videoCategoriesValue}
+            shortsCategoriesValue={shortsCategoriesValue}
+          />
+          <Main
+            query={query}
+            categoriesValue={categoriesValue}
+            categoriesTempValue={categoriesTempValue}
+            setCategoriesValue={setCategoriesValue}
+            setCategoriesTempValue={setCategoriesTempValue}
+          />
         </Box>
       </Container>
     </>
@@ -73,12 +141,18 @@ export default function Page() {
 
 function Header({
   query,
+  youtuberCategoriesValue,
+  videoCategoriesValue,
+  shortsCategoriesValue,
 }: {
   query: {
     type: string;
     search: string;
     categories: string[];
   };
+  youtuberCategoriesValue: string[];
+  videoCategoriesValue: string[];
+  shortsCategoriesValue: string[];
 }) {
   const router = useRouter();
   const [searchValue, setSearchValue] = useState<string>("");
@@ -160,8 +234,18 @@ function Header({
             const { title, value } = item;
             const focused = query.type === value;
             const onClick = () => {
+              const categoriesValue =
+                value === "youtuber"
+                  ? youtuberCategoriesValue
+                  : value === "video"
+                  ? videoCategoriesValue
+                  : shortsCategoriesValue;
               router.push(
-                `/search?type=${value}&categories=${query.categories}`
+                `/search?${`type=${value}&`}categories=${categoriesValue.map(
+                  (el, index) => {
+                    return el;
+                  }
+                )}`
               );
             };
             return (
@@ -221,18 +305,22 @@ function Header({
 
 function Main({
   query,
+  categoriesValue,
+  categoriesTempValue,
+  setCategoriesValue,
+  setCategoriesTempValue,
 }: {
   query: {
     type: string;
     search: string;
     categories: string[];
   };
+  categoriesValue: string[];
+  categoriesTempValue: string[];
+  setCategoriesValue: Dispatch<SetStateAction<string[]>>;
+  setCategoriesTempValue: Dispatch<SetStateAction<string[]>>;
 }) {
-  console.log(Math.floor(Math.random() * 50));
-
   const router = useRouter();
-  const [categoriesValue, setCategoriesValue] = useState<string[]>([]);
-  const [categoriesTempValue, setCategoriesTempValue] = useState<string[]>([]);
   const onChangeCategories = (value: string) => {
     const focused = categoriesValue.includes(value);
     const newValue = focused
@@ -240,16 +328,13 @@ function Main({
       : [...categoriesValue, value];
     router.push(
       `/search?${
-        query.type !== undefined ? "type=youtuber&" : `type=${query.type}&`
+        query.type === undefined ? "type=youtuber&" : `type=${query.type}&`
       }categories=${newValue.map((el, index) => {
         return el;
       })}`
     );
     setCategoriesValue(newValue);
   };
-  useEffect(() => {
-    setCategoriesValue(query.categories);
-  }, [query.categories]);
   return (
     <Box
       sx={{
@@ -287,10 +372,28 @@ function Contents({
 }) {
   const { type } = query;
   const [youtuberFilterValue, setYoutuberFilterValue] =
-    useState<YoutuberFilterValueProps>(youtuberFilterValueDefaultProps);
+    useState<FilterValueProps>(youtuberFilterValueDefaultProps);
   const [youtuberFilterTempValue, setYoutuberFilterTempValue] =
-    useState<YoutuberFilterValueProps>(youtuberFilterValueDefaultProps);
-  const [sortValue, setSortValue] = useState<string>("subscribers");
+    useState<FilterValueProps>(youtuberFilterValueDefaultProps);
+  const [videoFilterValue, setVideoFilterValue] = useState<FilterValueProps>(
+    videoFilterValueDefaultProps
+  );
+  const [videoFilterTempValue, setVideoFilterTempValue] =
+    useState<FilterValueProps>(videoFilterValueDefaultProps);
+  const [shortsFilterValue, setShortsFilterValue] = useState<FilterValueProps>(
+    videoFilterValueDefaultProps
+  );
+  const [shortsFilterTempValue, setShortsFilterTempValue] =
+    useState<FilterValueProps>(videoFilterValueDefaultProps);
+  const [youtuberSortValue, setYoutuberSortValue] = useState<string>(
+    youtuberSortList[0].value
+  );
+  const [videoSortValue, setVideoSortValue] = useState<string>(
+    videoSortList[0].value
+  );
+  const [shortsSortValue, setShortsSortValue] = useState<string>(
+    videoSortList[0].value
+  );
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [page, setPage] = useState<number>(0);
   const creatorListOrigin = [
@@ -302,15 +405,59 @@ function Contents({
     ...testCreators,
     ...testCreators.slice(0, 3),
   ];
+  const per = type === "youtuber" ? 10 : type === "video" ? 9 : 8;
   const youtuberIds = creatorListOrigin.flatMap((el) => el.id);
-  const videoList = testVideos.slice(page * 10, (page + 1) * 10);
+  const videoList = testVideos.slice(page * 9, (page + 1) * 9);
+  const shortsList = testVideos.slice(page * 8, (page + 1) * 8);
   const creatorList = creatorListOrigin.slice(page * 10, (page + 1) * 10);
   const list =
     type === "youtuber"
       ? creatorList
       : type === "video"
       ? videoList
-      : videoList;
+      : shortsList;
+  const sortList =
+    type === "youtuber"
+      ? youtuberSortList
+      : type === "video"
+      ? videoSortList
+      : videoSortList;
+  const sortValue =
+    type === "youtuber"
+      ? youtuberSortValue
+      : type === "video"
+      ? videoSortValue
+      : shortsSortValue;
+  const setSortValue =
+    type === "youtuber"
+      ? setYoutuberSortValue
+      : type === "video"
+      ? setVideoSortValue
+      : setShortsSortValue;
+  const filterValue =
+    type === "youtuber"
+      ? youtuberFilterValue
+      : type === "video"
+      ? videoFilterValue
+      : shortsFilterValue;
+  const filterTempValue =
+    type === "youtuber"
+      ? youtuberFilterTempValue
+      : type === "video"
+      ? videoFilterTempValue
+      : shortsFilterTempValue;
+  const setFilterValue =
+    type === "youtuber"
+      ? setYoutuberFilterValue
+      : type === "video"
+      ? setVideoFilterValue
+      : setShortsFilterValue;
+  const setFilterTempValue =
+    type === "youtuber"
+      ? setYoutuberFilterTempValue
+      : type === "video"
+      ? setVideoFilterTempValue
+      : setShortsFilterTempValue;
   return (
     <Box
       sx={{
@@ -327,16 +474,17 @@ function Contents({
         categoriesTempValue={categoriesTempValue}
         setCategoriesValue={setCategoriesValue}
         setCategoriesTempValue={setCategoriesTempValue}
-        youtuberFilterValue={youtuberFilterValue}
-        youtuberFilterTempValue={youtuberFilterTempValue}
-        setYoutuberFilterValue={setYoutuberFilterValue}
-        setYoutuberFilterTempValue={setYoutuberFilterTempValue}
+        filterValue={filterValue}
+        filterTempValue={filterTempValue}
+        setFilterValue={setFilterValue}
+        setFilterTempValue={setFilterTempValue}
       />
       <SortBar
         query={query}
         listIds={youtuberIds}
         selectedIds={selectedIds}
         setSelectedIds={setSelectedIds}
+        sortList={sortList}
         sortValue={sortValue}
         setSortValue={setSortValue}
       />
@@ -346,7 +494,12 @@ function Contents({
         selectedIds={selectedIds}
         setSelectedIds={setSelectedIds}
       />
-      <Pagenations page={page} list={creatorListOrigin} setPage={setPage} />
+      <Pagenations
+        per={per}
+        page={page}
+        list={creatorListOrigin}
+        setPage={setPage}
+      />
     </Box>
   );
 }
@@ -357,10 +510,10 @@ function FilterBar({
   categoriesTempValue,
   setCategoriesValue,
   setCategoriesTempValue,
-  youtuberFilterValue,
-  youtuberFilterTempValue,
-  setYoutuberFilterValue,
-  setYoutuberFilterTempValue,
+  filterValue,
+  filterTempValue,
+  setFilterValue,
+  setFilterTempValue,
 }: {
   query: {
     type: string;
@@ -371,22 +524,19 @@ function FilterBar({
   categoriesTempValue: string[];
   setCategoriesValue: Dispatch<SetStateAction<string[]>>;
   setCategoriesTempValue: Dispatch<SetStateAction<string[]>>;
-  youtuberFilterValue: YoutuberFilterValueProps;
-  youtuberFilterTempValue: YoutuberFilterValueProps;
-  setYoutuberFilterValue: Dispatch<SetStateAction<YoutuberFilterValueProps>>;
-  setYoutuberFilterTempValue: Dispatch<
-    SetStateAction<YoutuberFilterValueProps>
-  >;
+  filterValue: FilterValueProps | FilterValueProps;
+  filterTempValue: FilterValueProps | FilterValueProps;
+  setFilterValue: any;
+  setFilterTempValue: any;
 }) {
-  const [youtuberFilterDrawerOpen, setYoutuberFilterDrawerOpen] =
-    useState<boolean>(false);
+  const [filterDrawerOpen, setFilterDrawerOpen] = useState<boolean>(false);
   const onClickReset = () => {
-    setYoutuberFilterValue(youtuberFilterValueDefaultProps);
-    setYoutuberFilterTempValue(youtuberFilterValueDefaultProps);
+    setFilterValue(youtuberFilterValueDefaultProps);
+    setFilterTempValue(youtuberFilterValueDefaultProps);
   };
   const onClickFilter = () => {
-    setYoutuberFilterDrawerOpen(true);
-    setYoutuberFilterTempValue(youtuberFilterValue);
+    setFilterDrawerOpen(true);
+    setFilterTempValue(filterValue);
   };
   return (
     <>
@@ -397,7 +547,7 @@ function FilterBar({
           alignItems: "center",
           p: theme.spacing(2, 0),
           "@media(max-width: 480px)": {
-            p: theme.spacing(1, 2, 2, 2),
+            p: theme.spacing(0, 2, 2, 2),
           },
         }}
       >
@@ -417,32 +567,53 @@ function FilterBar({
               },
             }}
           >
-            <YoutuberFilters
-              categoriesValue={categoriesValue}
-              filterValue={youtuberFilterValue}
-              setFilterValue={setYoutuberFilterValue}
-              setFilterTempValue={setYoutuberFilterTempValue}
-              setCategoriesValue={setCategoriesValue}
-              setCategoriesTempValue={setCategoriesTempValue}
-            />
+            {query.type === "youtuber" ? (
+              <YoutuberFilters
+                categoriesValue={categoriesValue}
+                filterValue={filterValue}
+                setFilterValue={setFilterValue}
+                setFilterTempValue={setFilterTempValue}
+                setCategoriesValue={setCategoriesValue}
+                setCategoriesTempValue={setCategoriesTempValue}
+              />
+            ) : query.type === "video" ? (
+              <VideoFilters
+                categoriesValue={categoriesValue}
+                filterValue={filterValue}
+                setFilterValue={setFilterValue}
+                setFilterTempValue={setFilterTempValue}
+                setCategoriesValue={setCategoriesValue}
+                setCategoriesTempValue={setCategoriesTempValue}
+              />
+            ) : (
+              <VideoFilters
+                categoriesValue={categoriesValue}
+                filterValue={filterValue}
+                setFilterValue={setFilterValue}
+                setFilterTempValue={setFilterTempValue}
+                setCategoriesValue={setCategoriesValue}
+                setCategoriesTempValue={setCategoriesTempValue}
+              />
+            )}
             <ButtonBase
               sx={{
                 p: theme.spacing(0, 1),
                 borderRadius: "50%",
                 "&:hover": {
-                  opacity: 0.4,
+                  opacity: 0.7,
                 },
                 transition: "none !important",
               }}
               disableRipple
               onClick={onClickReset}
             >
-              <Icon name="trash-alt" size={20} color={grey[500]} />
+              <Icon name="trash-alt" size={20} color={youhaGrey[500]} />
               <Typography
                 sx={{
                   fontSize: 14,
                   lineHeight: "20px",
-                  color: grey[500],
+                  fontWeight: 500,
+                  color: youhaGrey[500],
                   m: theme.spacing(0, 0, 0, 0.5),
                 }}
               >
@@ -497,59 +668,64 @@ function FilterBar({
             </Typography>
           </ButtonBase>
         </Box>
-        <Button
-          size="md"
-          sx={{
-            display: "flex",
-            "@media(max-width: 480px)": {
-              display: "none",
-            },
-          }}
-        >
-          선택한{" "}
-          {query.type === "youtuber"
-            ? "채널"
-            : query.type === "video"
-            ? "동영상"
-            : "쇼츠"}{" "}
-          북마크하기
-        </Button>
-        <Button
-          size="sm"
-          sx={{
-            display: "none",
-            "@media(max-width: 480px)": {
-              display: "flex",
-            },
-          }}
-        >
-          선택한{" "}
-          {query.type === "youtuber"
-            ? "채널"
-            : query.type === "video"
-            ? "동영상"
-            : "쇼츠"}{" "}
-          북마크하기
-        </Button>
+        {query.type === "youtuber" && (
+          <>
+            <Button
+              size="md"
+              sx={{
+                display: "flex",
+                "@media(max-width: 480px)": {
+                  display: "none",
+                },
+              }}
+            >
+              선택한{" "}
+              {query.type === "youtuber"
+                ? "채널"
+                : query.type === "video"
+                ? "동영상"
+                : "쇼츠"}{" "}
+              북마크하기
+            </Button>
+            <Button
+              size="sm"
+              sx={{
+                display: "none",
+                "@media(max-width: 480px)": {
+                  display: "flex",
+                },
+              }}
+            >
+              선택한{" "}
+              {query.type === "youtuber"
+                ? "채널"
+                : query.type === "video"
+                ? "동영상"
+                : "쇼츠"}{" "}
+              북마크하기
+            </Button>
+          </>
+        )}
       </Box>
       <Box
         sx={{
           width: "100%",
           height: 8,
-          backgroundColor: grey[300],
+          backgroundColor: youhaGrey[100],
           display: "none",
           "@media(max-width: 480px)": {
             display: "block",
           },
         }}
       />
-      <YoutuberFilterDrawer
-        open={youtuberFilterDrawerOpen}
-        setOpen={setYoutuberFilterDrawerOpen}
-        filterTempValue={youtuberFilterTempValue}
+      <FilterDrawer
+        query={query}
+        open={filterDrawerOpen}
+        setOpen={setFilterDrawerOpen}
+        filterTempValue={filterTempValue}
         categoriesTempValue={categoriesTempValue}
-        setFilterValue={setYoutuberFilterValue}
-        setFilterTempValue={setYoutuberFilterTempValue}
+        setFilterValue={setFilterValue}
+        setFilterTempValue={setFilterTempValue}
         setCategoriesValue={setCategoriesValue}
         setCategoriesTempValue={setCategoriesTempValue}
       />
@@ -562,6 +738,7 @@ function SortBar({
   listIds,
   selectedIds,
   setSelectedIds,
+  sortList,
   sortValue,
   setSortValue,
 }: {
@@ -573,6 +750,7 @@ function SortBar({
   listIds: string[];
   selectedIds: string[];
   setSelectedIds: Dispatch<SetStateAction<string[]>>;
+  sortList: { title: string; value: string }[];
   sortValue: string;
   setSortValue: Dispatch<SetStateAction<string>>;
 }) {
@@ -592,27 +770,31 @@ function SortBar({
         },
       }}
     >
-      <Checkbox
-        focused={selected}
-        onClick={onClickSelect}
-        sx={{
-          display: "none",
-          "@media(max-width: 480px)": {
-            display: "flex",
-          },
-        }}
-        size="sm"
-      />
-      <Checkbox
-        focused={selected}
-        onClick={onClickSelect}
-        sx={{
-          display: "flex",
-          "@media(max-width: 480px)": {
-            display: "none",
-          },
-        }}
-      />
+      {query.type === "youtuber" && (
+        <>
+          <Checkbox
+            focused={selected}
+            onClick={onClickSelect}
+            sx={{
+              display: "none",
+              "@media(max-width: 480px)": {
+                display: "flex",
+              },
+            }}
+            size="sm"
+          />
+          <Checkbox
+            focused={selected}
+            onClick={onClickSelect}
+            sx={{
+              display: "flex",
+              "@media(max-width: 480px)": {
+                display: "none",
+              },
+            }}
+          />
+        </>
+      )}
       <Typography
         sx={{
           flex: 1,
@@ -627,7 +809,7 @@ function SortBar({
         총 {listIds.length}개의 결과
       </Typography>
       <SortItem
-        sortList={youtuberSortList}
+        sortList={sortList}
         sortValue={sortValue}
         setSortValue={setSortValue}
       />
@@ -656,7 +838,7 @@ function List({
       sx={{
         "&:not(.youtuber)": {
           display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
+          gridTemplateColumns: type === "shorts" ? "1fr 1fr" : "1fr 1fr 1fr",
           gridAutoRows: "1fr",
           gridTemplateRows: "auto auto",
           gridRowGap: 16,
@@ -667,6 +849,7 @@ function List({
         },
         "@media(max-width: 480px)": {
           "&:not(.youtuber)": {
+            display: "block",
             gridTemplateColumns: "1fr",
             gridAutoRows: "1fr",
             gridTemplateRows: "auto auto",
@@ -704,6 +887,7 @@ function List({
             item={item}
             selectedIds={selectedIds}
             setSelectedIds={setSelectedIds}
+            shorts
           />
         );
       })}

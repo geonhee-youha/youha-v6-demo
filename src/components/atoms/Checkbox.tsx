@@ -35,6 +35,11 @@ export default function Checkbox({
           height: 16,
           borderRadius: 0.25,
         },
+        "&.lg": {
+          width: 32,
+          height: 32,
+          borderRadius: 0.25,
+        },
         cursor: 'pointer',
         ...sx,
       }}
@@ -51,6 +56,9 @@ export default function Checkbox({
           transition: "none !important",
           "&.sm": {
             fontSize: `6px !important`,
+          },
+          "&.lg": {
+            fontSize: `10px !important`,
           },
         }}
         className={size}

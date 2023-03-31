@@ -4,12 +4,16 @@ import Link from "next/link";
 import { Dispatch, SetStateAction, useState } from "react";
 import youhaBlue from "../../constants/youhaBlue";
 import { theme } from "../../themes/theme";
-import { comma } from "../../utils";
+import { comma, numberToKorean } from "../../utils";
 import Icon from "../atoms/Icon";
 import Typo from "../atoms/Typo";
 import { IconName } from "@fortawesome/fontawesome-svg-core";
 import youhaGrey from "../../constants/youhaGrey";
 import Checkbox from "../atoms/Checkbox";
+import dayjs from "dayjs";
+import { testVideos } from "../../data";
+import { Chart } from "react-chartjs-2";
+import { trendChartData, trendChartOptions } from "./VideoItem";
 
 export default function YoutuberItem({
   index,
@@ -44,6 +48,7 @@ export default function YoutuberItem({
     setBookmarked((prev) => !prev);
   };
   const size = 120;
+  const videos = [testVideos[index + 1], testVideos[index + 11]];
   return (
     <Link href="/" passHref>
       <ButtonBase
@@ -91,7 +96,7 @@ export default function YoutuberItem({
             },
           }}
         >
-          <Checkbox focused={selected} onClick={onClickSelect}/>
+          <Checkbox focused={selected} onClick={onClickSelect} />
         </Box>
         <Box
           sx={{
@@ -292,6 +297,8 @@ export default function YoutuberItem({
         </Box>
         <Box
           sx={{
+            position: "relative",
+            overflow: "hidden",
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
             gridAutoRows: "1fr",
@@ -301,11 +308,21 @@ export default function YoutuberItem({
             width: 400 + 16,
             gridColumnGap: 16,
             borderLeft: `1px solid ${youhaGrey[200]}`,
+            "&:hover": {
+              "& .Cover": {
+                right: 0,
+              },
+            },
             "@media(max-width: 480px)": {
               width: `100%`,
               p: theme.spacing(0, 2, 2, 2),
               borderLeft: `none`,
               gridRowGap: 8,
+              "&:hover": {
+                "& .Cover": {
+                  right: '-100%',
+                },
+              },
             },
           }}
         >
@@ -371,6 +388,144 @@ export default function YoutuberItem({
               value: "3.6회",
             }}
           />
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              right: `-100%`,
+              bottom: 0,
+              transition: "all 0.35s ease",
+              backgroundColor: "#ffffff",
+              width: "100%",
+            }}
+            className="Cover"
+          >
+            <Box
+              sx={{
+                display: "flex",
+                width: "100%",
+              }}
+            >
+              <Box
+                sx={{
+                  width: 416 / 2,
+                  p: theme.spacing(2, 2, 2, 2),
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    m: theme.spacing(0, 0, 1, 0),
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 16,
+                      height: 16,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      m: theme.spacing(0, 0.5, 0, 0),
+                    }}
+                  >
+                    <Icon
+                      prefix="fad"
+                      name="users"
+                      size={14}
+                      color={youhaGrey[500]}
+                    />
+                  </Box>
+                  <Typography
+                    sx={{
+                      flex: 1,
+                      color: youhaGrey[500],
+                      fontSize: 12,
+                      lineHeight: "16px",
+                      fontWeight: 700,
+                      "@media(max-width: 480px)": {
+                        fontSize: 12,
+                        lineHeight: "16px",
+                      },
+                    }}
+                  >
+                    주간 구독자 추이
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    height: 120 - 16 - 8 - 32,
+                  }}
+                >
+                  <Chart
+                    type="line"
+                    data={trendChartData}
+                    options={trendChartOptions}
+                  />
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  width: 416 / 2,
+                  p: theme.spacing(2, 2, 2, 2),
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    m: theme.spacing(0, 0, 1, 0),
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 16,
+                      height: 16,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      m: theme.spacing(0, 0.5, 0, 0),
+                    }}
+                  >
+                    <Icon
+                      prefix="fad"
+                      name="eye"
+                      size={14}
+                      color={youhaGrey[500]}
+                    />
+                  </Box>
+                  <Typography
+                    sx={{
+                      flex: 1,
+                      color: youhaGrey[500],
+                      fontSize: 12,
+                      lineHeight: "16px",
+                      fontWeight: 700,
+                      "@media(max-width: 480px)": {
+                        fontSize: 12,
+                        lineHeight: "16px",
+                      },
+                    }}
+                  >
+                    주간 조회수 추이
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    height: 120 - 16 - 8 - 32,
+                  }}
+                >
+                  <Chart
+                    type="line"
+                    data={trendChartData}
+                    options={trendChartOptions}
+                  />
+                </Box>
+              </Box>
+            </Box>
+          </Box>
         </Box>
         <ButtonBase
           sx={{
@@ -384,12 +539,17 @@ export default function YoutuberItem({
               position: "absolute",
               p: 0,
               borderRight: `none`,
-              top: 12,
-              right: 12,
-              zIndex: 9,
               borderLeft: "none",
-              width: 24,
-              height: 24,
+              top: 16,
+              right: 16,
+              zIndex: 9,
+              width: 28,
+              height: 28,
+              border: `1px solid ${youhaGrey[200]}`,
+              borderRadius: 0.5,
+              justifyContent: "center",
+              alignItems: "center",
+              backgroundColor: "#ffffff",
             },
           }}
           disableRipple
@@ -410,7 +570,7 @@ export default function YoutuberItem({
           />
           <Icon
             name="bookmark"
-            size={20}
+            size={16}
             prefix={bookmarked ? "fas" : "fal"}
             color={bookmarked ? pink[500] : youhaGrey[300]}
             sx={{
@@ -486,6 +646,115 @@ export function DataRow({
       >
         {value}
       </Typography>
+    </Box>
+  );
+}
+
+function Video({ item }: { item: any }) {
+  const { thumbnail, viewCount, createdAt } = item;
+  const size = 120 - 32;
+  return (
+    <Box
+      sx={{
+        position: "relative",
+        width: (size / 9) * 16,
+        height: size,
+        borderRadius: 1,
+        overflow: "hidden",
+        "& img": {
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+        },
+        "@media(max-width: 480px)": {
+          width: "100%",
+          height: 0,
+          p: theme.spacing(`${(9 / 16) * 100}%`, 0, 0, 0),
+        },
+      }}
+    >
+      <img src={thumbnail} />
+      <Stack
+        direction={"row"}
+        spacing={1}
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8))`,
+          p: theme.spacing(1),
+          display: "flex",
+          alignItems: "flex-end",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box
+            sx={{
+              width: 16,
+              height: 16,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              m: theme.spacing(0, 0.5, 0, 0),
+            }}
+          >
+            <Icon prefix="far" name="eye" size={14} color={`#ffffff`} />
+          </Box>
+          <Typography
+            sx={{
+              fontSize: 12,
+              lineHeight: "16px",
+              // fontWeight: "700",
+              color: `#ffffff`,
+            }}
+          >
+            {numberToKorean(viewCount)}
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box
+            sx={{
+              width: 16,
+              height: 16,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              m: theme.spacing(0, 0.5, 0, 0),
+            }}
+          >
+            <Icon prefix="far" name="calendar" size={14} color={`#ffffff`} />
+          </Box>
+          <Typography
+            sx={{
+              fontSize: 12,
+              lineHeight: "16px",
+              // fontWeight: "700",
+              color: `#ffffff`,
+            }}
+          >
+            {dayjs(createdAt).format("YYYY-MM-DD")}
+          </Typography>
+        </Box>
+      </Stack>
     </Box>
   );
 }

@@ -235,12 +235,6 @@ export const tabList = [
   { title: "쇼츠", value: "shorts" },
 ];
 
-export const youtuberSortList = [
-  { title: "구독자 순", value: "subscribers" },
-  { title: "예상 광고단가 순", value: "price" },
-  { title: "평균 조회수 순", value: "views" },
-];
-
 export type FilterProps = {
   title: string;
   value: string;
@@ -338,33 +332,46 @@ export const mcnList: FilterProps[] = [
   { title: "소속없음", value: "소속없음" },
 ];
 
-export type YoutuberFilterValueProps = {
-  categories: {
+export const uploadDateList: FilterProps[] = [
+  { title: "전체", value: "" },
+  { title: "1일 이내", value: "1" },
+  { title: "3일 이내", value: "3" },
+  { title: "7일 이내", value: "7" },
+  { title: "14일 이내", value: "14" },
+  { title: "28일 이내", value: "28" },
+];
+
+export type FilterValueProps = {
+  video?: {
+    views: number[];
+    uploadDate: string;
+  };
+  categories?: {
     categories: string[];
   };
-  channel: {
+  channel?: {
     subscribers: number[];
     price: number[];
     shorts: string;
   };
-  target: {
+  target?: {
     gender: string;
     age: string;
     koreanRatio: number[];
   };
-  contents: {
+  contents?: {
     everageViews: number[];
     commentRatio: number[];
     likeRatio: number[];
     recentUploadDate: string;
     uploadFrequency: number[];
   };
-  mcns: {
+  mcns?: {
     mcns: string[];
   };
 };
 
-export const youtuberFilterValueDefaultProps: YoutuberFilterValueProps = {
+export const youtuberFilterValueDefaultProps: FilterValueProps = {
   categories: {
     categories: [],
   },
@@ -389,3 +396,23 @@ export const youtuberFilterValueDefaultProps: YoutuberFilterValueProps = {
     mcns: [""],
   },
 };
+
+export const videoFilterValueDefaultProps: FilterValueProps = {
+  video: {
+    views: [0, 10000000],
+    uploadDate: "",
+  },
+};
+
+export const youtuberSortList = [
+  { title: "구독자 순", value: "subscribers" },
+  { title: "예상 광고단가 순", value: "price" },
+  { title: "평균 조회수 순", value: "views" },
+];
+
+export const videoSortList = [
+  { title: "업로드 순", value: "uploadDate" },
+  { title: "조회수 순", value: "views" },
+  { title: "좋아요 순", value: "likes" },
+  { title: "댓글 순", value: "comments" },
+];
