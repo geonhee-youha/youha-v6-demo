@@ -1,11 +1,9 @@
 import { atom } from "recoil";
 
-
 export const loginRecoilState = atom({
   key: "loginRecoilState",
   default: false,
 });
-
 
 export type BookmarkProps = {
   id: string;
@@ -50,5 +48,12 @@ export const newBookmarkDialogRecoilState = atom({
   default: {
     open: false,
     type: "youtuber",
+  },
+});
+
+export const firstLoginDialogRecoilState = atom({
+  key: "firstLoginDialogRecoilState",
+  default: {
+    open: true,
   },
 });

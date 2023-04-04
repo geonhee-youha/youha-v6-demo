@@ -310,7 +310,6 @@ export default function FilterSection({
                   fontSize: 12,
                   lineHeight: "16px",
                   fontWeight: "700",
-                  fontFamily: `LINESeedKR`,
                   p: theme.spacing(0.5, 1),
                   backgroundColor: youhaGrey[900],
                   "& *": {

@@ -353,7 +353,7 @@ const reset = css`
   html,
   body {
     width: 100%;
-    font-family: "LINESeedKR",NanumGothic,"나눔고딕","Nanum Gothic","맑은 고딕","Malgun Gothic",Dotum
+    font-family: "Pretendard",NanumGothic,"나눔고딕","Nanum Gothic","맑은 고딕","Malgun Gothic",Dotum
   }
   #__next {
     width: 100%;

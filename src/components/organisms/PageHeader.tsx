@@ -24,6 +24,7 @@ export default function PageHeader({
         position: "relative",
         p: theme.spacing(1, 0.5),
         justifyContent: "space-between",
+        backgroundColor: '#ffffff',
         ...sx,
       }}
     >

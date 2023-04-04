@@ -1,22 +1,27 @@
 import { Box, ButtonBase, Stack, Typography } from "@mui/material";
-import { red } from "@mui/material/colors";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import { useRecoilState } from "recoil";
 import Button from "../../components/atoms/Button";
 import Checkbox from "../../components/atoms/Checkbox";
 import Container from "../../components/atoms/Container";
-import Icon from "../../components/atoms/Icon";
 import Input from "../../components/atoms/Input";
 import PageHeader from "../../components/organisms/PageHeader";
-import { loginRecoilState } from "../../constants/recoils";
+import {
+  firstLoginDialogRecoilState,
+  loginRecoilState,
+} from "../../constants/recoils";
 import youhaGrey from "../../constants/youhaGrey";
 import { theme } from "../../themes/theme";
+import { isPassword } from "../../utils";
 
 export default function Page() {
   const router = useRouter();
   const { url } = router.query;
   const [login, setLogin] = useRecoilState(loginRecoilState);
+  const [firstLoginDialog, setFirstLoginDialog] = useRecoilState(
+    firstLoginDialogRecoilState
+  );
   const [logined, setLogined] = useState<boolean>(false);
   const onClickLogo = () => {
     router.push("/");
@@ -58,7 +63,7 @@ export default function Page() {
     // }
   };
   const onClickConfirm = () => {
-    if (emailValue === "" || passwordValue) {
+    if (emailValue === "" || !isPassword(passwordValue)) {
       setError(true);
     } else {
       setLogin(true);
@@ -67,6 +72,7 @@ export default function Page() {
       } else {
         router.back();
       }
+      setFirstLoginDialog({ open: true }); //첫 로그인일 경우에만
     }
   };
   return (
@@ -154,7 +160,7 @@ export default function Page() {
               disableRipple
               onClick={onClickLogined}
             >
-              <Checkbox focused={logined} size='sm'/>
+              <Checkbox focused={logined} size="sm" />
               <Typography
                 sx={{
                   fontSize: 14,

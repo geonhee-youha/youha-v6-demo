@@ -9,7 +9,7 @@ import { fad } from "@fortawesome/pro-duotone-svg-icons";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { RecoilRoot } from "recoil";
 import "../styles/index.css";
-import "../styles/reset.ts";
+// import "../styles/reset.ts";
 import "swiper/css";
 import "swiper/css/pagination";
 import { theme } from "../themes/theme";
@@ -41,6 +41,7 @@ import Footer from "../components/organisms/Footer";
 import BottomNavigationBar from "../components/organisms/BottomNavigationBar";
 import BookmarksDialog from "../components/organisms/BookmarksDialog";
 import NewBookmarkDialog from "../components/organisms/NewBookmarkDialog";
+import FirstLoginDialog from "../components/organisms/FirstLoginDialog";
 
 ChartJS.register(
   LineController,
@@ -240,8 +241,9 @@ function MyApp(props: MyAppProps) {
               <Component {...pageProps} key={router.route} />
               <Footer />
               <BottomNavigationBar />
-              <BookmarksDialog/>
-              <NewBookmarkDialog/>
+              <BookmarksDialog />
+              <NewBookmarkDialog />
+              <FirstLoginDialog />
             </Box>
           </Box>
         </ThemeProvider>

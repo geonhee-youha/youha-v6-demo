@@ -1,27 +1,10 @@
-import {
-  alpha,
-  Box,
-  ButtonBase,
-  Dialog,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, ButtonBase, Dialog, Stack, Typography } from "@mui/material";
 import _ from "lodash";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
-import {
-  bookmarksDialogRecoilState,
-  bookmarksRecoilState,
-  newBookmarkDialogRecoilState,
-} from "../../constants/recoils";
-import youhaBlue from "../../constants/youhaBlue";
 import youhaGrey from "../../constants/youhaGrey";
-import { testCreators, testVideos } from "../../data";
 import { theme } from "../../themes/theme";
 import Button from "../atoms/Button";
 import Checkbox from "../atoms/Checkbox";
-import Icon from "../atoms/Icon";
-import Typo from "../atoms/Typo";
 import CheckItem from "../molecules/CheckItem";
 import PageHeader from "./PageHeader";
 

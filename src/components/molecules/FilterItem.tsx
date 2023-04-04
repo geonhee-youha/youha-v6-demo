@@ -57,7 +57,7 @@ export default function FilterItem({
             open ? youhaBlue[500] : youhaGrey[200]
           } 0px 0px 0px 1px`,
           borderRadius: 0.5,
-          p: theme.spacing(1, 2),
+          p: theme.spacing(1.25, 2),
           m: theme.spacing(0, 1, 0, 0),
           transition: "none",
           "&:hover": {

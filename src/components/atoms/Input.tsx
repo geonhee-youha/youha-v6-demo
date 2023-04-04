@@ -1,6 +1,6 @@
 import { Box, IconButton, InputBase, SxProps, Typography } from "@mui/material";
 import { red } from "@mui/material/colors";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, KeyboardEventHandler, useEffect, useState } from "react";
 import youhaBlue from "../../constants/youhaBlue";
 import youhaGrey from "../../constants/youhaGrey";
 import { theme } from "../../themes/theme";
@@ -19,9 +19,12 @@ export default function Input({
   inputValue,
   onChange,
   onKeyPress,
+  onKeyDown,
   onClickSearch,
   label,
   sx,
+  children,
+  timer,
 }: {
   error?: boolean;
   helperText?: React.ReactNode;
@@ -35,9 +38,14 @@ export default function Input({
   inputValue: string;
   onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   onKeyPress?: React.KeyboardEventHandler<HTMLDivElement> | undefined;
+  onKeyDown?:
+    | KeyboardEventHandler<HTMLInputElement | HTMLTextAreaElement>
+    | undefined;
   onClickSearch?: (e: any) => void;
   label?: React.ReactNode;
   sx?: SxProps;
+  children?: React.ReactNode;
+  timer?: string;
 }) {
   const [inputType, setInputType] = useState<string | undefined>(undefined);
   const onChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
@@ -67,6 +75,7 @@ export default function Input({
       <Box
         sx={{
           position: "relative",
+          display: "flex",
         }}
       >
         <InputBase
@@ -74,6 +83,7 @@ export default function Input({
           value={inputValue}
           onChange={onChangeValue}
           onKeyPress={onKeyPress}
+          onKeyDown={onKeyDown}
           placeholder={placeholder}
           multiline={multiline}
           maxRows={3}
@@ -93,7 +103,7 @@ export default function Input({
                   2
                 )
               : theme.spacing(0, 5, 0, 2),
-            borderRadius: 1,
+            borderRadius: 0.5,
             display: "flex",
             alignItems: multiline ? "flex-start" : "center",
             boxShadow: `${
@@ -175,7 +185,7 @@ export default function Input({
             />
           </IconButton>
         )}
-        {maxLength && (
+        {(maxLength || timer) && (
           <Typography
             sx={{
               position: "absolute",
@@ -183,15 +193,26 @@ export default function Input({
               bottom: 8,
               fontSize: 12,
               lineHeight: "16px",
-              color: youhaGrey[500],
+              color: timer
+                ? Number(timer.replace(':', '')) < 5
+                  ? red[500]
+                  : youhaBlue[500]
+                : youhaGrey[500],
               "& span": {
                 color: youhaGrey[900],
               },
             }}
           >
-            <span>{inputValue.length}</span>/{maxLength}
+            {timer ? (
+              timer
+            ) : (
+              <>
+                <span>{inputValue.length}</span>/{maxLength}
+              </>
+            )}
           </Typography>
         )}
+        {children}
       </Box>
       {helperText && (
         <Box

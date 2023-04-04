@@ -1,40 +1,32 @@
 import { Box, ButtonBase, Stack, Typography } from "@mui/material";
-import { red } from "@mui/material/colors";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { ChangeEvent, useState } from "react";
 import { useRecoilState } from "recoil";
 import Button from "../../components/atoms/Button";
 import Container from "../../components/atoms/Container";
-import Icon from "../../components/atoms/Icon";
 import Input, { InputLabel } from "../../components/atoms/Input";
 import PageHeader from "../../components/organisms/PageHeader";
-import TermsDialog from "../../components/organisms/TermsDialog";
-import { loginRecoilState } from "../../constants/recoils";
+import {
+  firstLoginDialogRecoilState,
+  loginRecoilState,
+} from "../../constants/recoils";
 import youhaBlue from "../../constants/youhaBlue";
 import youhaGrey from "../../constants/youhaGrey";
 import { theme } from "../../themes/theme";
-import { isEmail, isPassword } from "../../utils";
-
-export const userType = [
-  {
-    emoji: "🏢",
-    title: "광고주",
-    value: "advertiser",
-    description: <>광고 의뢰 및 유튜버 찾기가 필요하시다면?</>,
-  },
-  {
-    emoji: "🎙️",
-    title: "인플루언서",
-    value: "influencer",
-    description: <>광고 수주 및 선정산 서비스 등이 필요하시다면?</>,
-  },
-];
+import { comma } from "../../utils";
+import SelectBox from "../../components/atoms/SelectBox";
+import { userTypes } from "../../constants";
+import PhoneVerificationDialog from "../../components/organisms/PhoneVerificationDialog";
+import { testCreators } from "../../data";
 
 export default function Page() {
   const router = useRouter();
   const { url } = router.query;
   const [login, setLogin] = useRecoilState(loginRecoilState);
+  const [firstLoginDialog, setFirstLoginDialog] = useRecoilState(
+    firstLoginDialogRecoilState
+  );
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const onClickLogo = () => {
     router.push("/");
@@ -43,67 +35,64 @@ export default function Page() {
     router.back();
   };
   const [userTypeValue, setUserTypeValue] = useState<string>("advertiser");
-  const [emailValue, setEmailValue] = useState<string>("");
-  const [passwordValue, setPasswordValue] = useState<string>("");
-  const [passwordConfirmValue, setPasswordConfirmValue] = useState<string>("");
-  const [emailError, setEmailError] = useState<boolean>(false);
-  const [passwordError, setPasswordError] = useState<boolean>(false);
-  const [passwordConfirmError, setPasswordConfirmError] =
-    useState<boolean>(false);
-  const [terms, setTerms] = useState<boolean[]>([false, false, false]);
-  const [termsError, setTermsError] = useState<boolean>(false);
-  const agreed = terms[0] === true && terms[1] === true;
-  const onChangeEmailValue = (event: ChangeEvent<HTMLInputElement>) => {
-    setEmailError(false);
+  const [advertiserTypeValue, setAdvertiserTypeValue] = useState<string>(
+    userTypes[0].types[0].value
+  );
+  const [creatorTypeValue, setCreatorTypeValue] = useState<string>(
+    userTypes[1].types[0].value
+  );
+  const [lastNameValue, setLastNameValue] = useState<string>("");
+  const [firstNameValue, setFirstNameValue] = useState<string>("");
+  const [companyNameValue, setCompanyNameValue] = useState<string>("");
+  const [roleNameValue, setRoleNameValue] = useState<string>("");
+
+  const onChangeLastNameValue = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setEmailValue(value);
+    setLastNameValue(value);
   };
-  const onChangePasswordValue = (event: ChangeEvent<HTMLInputElement>) => {
-    setPasswordError(false);
+  const onChangeFirsttNameValue = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setPasswordValue(value);
+    setFirstNameValue(value);
   };
-  const onChangePasswordConfirmValue = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
-    setPasswordConfirmError(false);
+  const onChangeCompanyNameValue = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setPasswordConfirmValue(value);
+    setCompanyNameValue(value);
   };
-  const onClickTerms = () => {
-    setTermsError(false);
-    setTerms(
-      _.filter(terms, (el) => el === true).length === 3
-        ? [false, false, false]
-        : [true, true, true]
-    );
+  const onChangeRoleNameValue = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setRoleNameValue(value);
   };
-  const onClickTermsDialog = (e: any) => {
-    e.preventDefault();
-    e.stopPropagation();
+
+  const [phoneVerified, setPhoneVerified] = useState<boolean>(false);
+  const [channelVerified, setChannelVerfiied] = useState<boolean>(false);
+
+  const onClickPhoneVerificationDialog = () => {
     setDialogOpen(true);
   };
-  const onClickGoogleLogin = () => {
-    window.alert(
-      "실제로는 데이터 받아온 이후, 1.이미 회원가입 되어 있으면 로그인으로 이동 2.회원가입은 되었는데 필수정보 입력이 안되어 있으면 필수정보 입력으로 이동 3.회원가입 안되어 있으면 회원등록 후 필수정보 입력으로 이동"
-    );
-    // if (typeof url === "string" && url !== "") {
-    //   router.push(`/auth/detail?url=${url}`);
-    // } else {
-    //   router.push(`/auth/detail`);
-    // }
+  const onClickChannelVerification = () => {
+    setChannelVerfiied(true);
   };
+  const passable =
+    phoneVerified &&
+    (userTypeValue === "advertiser"
+      ? lastNameValue !== "" &&
+        firstNameValue !== "" &&
+        companyNameValue !== "" &&
+        roleNameValue !== ""
+      : creatorTypeValue === "유튜버"
+      ? lastNameValue !== "" && firstNameValue !== "" && channelVerified
+      : lastNameValue !== "" &&
+        firstNameValue !== "" &&
+        companyNameValue !== "" &&
+        roleNameValue !== "");
   const onClickConfirm = () => {
-    if (!isEmail(emailValue)) return setEmailError(true);
-    if (!isPassword(passwordValue)) return setPasswordError(true);
-    if (passwordValue !== passwordConfirmValue)
-      return setPasswordConfirmError(true);
-    if (!agreed) return setTermsError(true);
+    setLogin(true);
     if (typeof url === "string" && url !== "") {
-      router.push(`/auth/detail?url=${url}`);
+      router.replace(`${url}`);
     } else {
-      router.push(`/auth/detail`);
+      router.replace("/");
     }
+    setFirstLoginDialog({ open: true });
   };
   return (
     <>
@@ -112,6 +101,8 @@ export default function Page() {
         onClose={onClose}
         title={""}
         sx={{
+          position: "sticky",
+          top: 0,
           display: "none",
           "@media(max-width: 480px)": {
             display: "flex",
@@ -130,7 +121,7 @@ export default function Page() {
       >
         <Box
           sx={{
-            height: "100vh",
+            minHeight: "100vh",
             p: theme.spacing(2, 0, 2, 0),
             display: "flex",
             flexDirection: "column",
@@ -184,7 +175,7 @@ export default function Page() {
                 회원타입 선택<span>*</span>
               </InputLabel>
               <Stack direction="row" spacing={1} sx={{ width: "100%" }}>
-                {userType.map((item, index) => {
+                {userTypes.map((item, index) => {
                   const { emoji, title, value, description } = item;
                   const focused = value === userTypeValue;
                   const onClick = () => {
@@ -265,63 +256,35 @@ export default function Page() {
             <Stack direction="row" spacing={1}>
               <Input
                 label="성"
-                inputValue={passwordValue}
-                onChange={onChangePasswordValue}
-                error={passwordError}
-                helperText={
-                  passwordError && "비밀번호 형식이 올바르지 않습니다."
-                }
+                inputValue={lastNameValue}
+                onChange={onChangeLastNameValue}
                 essential
               />
               <Input
                 label="이름"
-                inputValue={passwordConfirmValue}
-                onChange={onChangePasswordConfirmValue}
-                error={passwordConfirmError}
-                helperText={
-                  passwordConfirmError && "위와 비밀번호가 일치하지 않습니다."
-                }
+                inputValue={firstNameValue}
+                onChange={onChangeFirsttNameValue}
                 essential
               />
             </Stack>
-            {userTypeValue === "advertiser" && (
-              <>
-                <Input
-                  label="회사명"
-                  inputValue={passwordValue}
-                  onChange={onChangePasswordValue}
-                  error={passwordError}
-                  helperText={
-                    passwordError && "비밀번호 형식이 올바르지 않습니다."
-                  }
-                  essential
-                />
-                <Input
-                  label="직책"
-                  inputValue={passwordConfirmValue}
-                  onChange={onChangePasswordConfirmValue}
-                  error={passwordConfirmError}
-                  helperText={
-                    passwordConfirmError && "위와 비밀번호가 일치하지 않습니다."
-                  }
-                  essential
-                />
-              </>
+            {userTypeValue === "advertiser" ? (
+              <SelectBox
+                essential
+                label="회사 구분"
+                list={userTypes[0].types}
+                value={advertiserTypeValue}
+                setValue={setAdvertiserTypeValue}
+              />
+            ) : (
+              <SelectBox
+                essential
+                label="회원 구분"
+                list={userTypes[1].types}
+                value={creatorTypeValue}
+                setValue={setCreatorTypeValue}
+              />
             )}
-            <Box>
-              <InputLabel>
-                휴대폰 인증<span>*</span>
-              </InputLabel>
-              <Button
-                fullWidth
-                type="outlined"
-                backgroundColor={youhaGrey[500]}
-                color={youhaGrey[900]}
-              >
-                휴대폰 인증하기
-              </Button>
-            </Box>
-            {userTypeValue === "influencer" && (
+            {userTypeValue === "creator" && creatorTypeValue === "유튜버" && (
               <Box>
                 <InputLabel>
                   채널 인증<span>*</span>
@@ -331,6 +294,7 @@ export default function Page() {
                   backgroundColor={youhaGrey[900]}
                   borderColor={youhaGrey[200]}
                   type="outlined"
+                  onClick={onClickChannelVerification}
                 >
                   <Box
                     sx={{
@@ -348,11 +312,69 @@ export default function Page() {
                   >
                     <img src="/logos/google.png" />
                   </Box>
-                  유튜브 채널 인증하기
+                  {channelVerified ? "다시 인증하기" : "유튜브 채널 인증하기"}
                 </Button>
+                {channelVerified && (
+                  <Stack
+                    sx={{
+                      p: theme.spacing(2, 0),
+                    }}
+                  >
+                    {testCreators.slice(0, 3).map((item, index) => {
+                      return <Youtuber key={index} item={item} />;
+                    })}
+                  </Stack>
+                )}
               </Box>
             )}
+            {(userTypeValue === "advertiser" || creatorTypeValue === "MCN") && (
+              <>
+                <Input
+                  label="회사명"
+                  inputValue={companyNameValue}
+                  onChange={onChangeCompanyNameValue}
+                  essential
+                />
+                <Input
+                  label="직책"
+                  inputValue={roleNameValue}
+                  onChange={onChangeRoleNameValue}
+                  essential
+                />
+              </>
+            )}
+            <Box>
+              <InputLabel>
+                휴대폰 인증<span>*</span>
+              </InputLabel>
+              <Button
+                fullWidth
+                type="outlined"
+                backgroundColor={youhaGrey[500]}
+                color={youhaGrey[900]}
+                onClick={onClickPhoneVerificationDialog}
+                disabled={phoneVerified}
+                sx={{
+                  boxShadow: `${youhaBlue[500]} 0px 0px 0px 1px inset !important`,
+                  color: `${youhaBlue[500]} !important`,
+                }}
+              >
+                {phoneVerified ? "인증 완료" : "휴대폰 인증하기"}
+              </Button>
+            </Box>
           </Stack>
+          <Typography
+            sx={{
+              fontSize: 14,
+              lineHeight: "20px",
+              color: youhaGrey[500],
+              textAlign: "center",
+            }}
+          >
+            위 내용이 허위로 기재된 것으로 드러날 경우,
+            <br />
+            유하 회원약관에 근거해 계정이 정지될 수 있습니다.
+          </Typography>
           <Stack
             spacing={2}
             sx={{ width: "100%", p: theme.spacing(2, 0, 10, 0) }}
@@ -362,18 +384,79 @@ export default function Page() {
               fullWidth
               backgroundColor={youhaGrey[900]}
               onClick={onClickConfirm}
+              disabled={!passable}
             >
               유하 시작하기
             </Button>
           </Stack>
         </Box>
       </Container>
-      <TermsDialog
+      <PhoneVerificationDialog
         open={dialogOpen}
         setOpen={setDialogOpen}
-        terms={terms}
-        setTerms={setTerms}
+        phoneVerified={phoneVerified}
+        setPhoneVerified={setPhoneVerified}
       />
     </>
+  );
+}
+
+function Youtuber({ item }: { item: any }) {
+  const { thumbnail, title, subscriberCount } = item;
+  return (
+    <Box
+      sx={{
+        p: theme.spacing(1, 0),
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <Box
+        sx={{
+          position: "relative",
+          width: 40,
+          height: 40,
+          overflow: "hidden",
+          borderRadius: 1,
+          borderRight: `1px solid ${youhaGrey[200]}`,
+          "& img": {
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          },
+        }}
+      >
+        <img src={thumbnail} />
+      </Box>
+      <Box
+        sx={{
+          p: theme.spacing(0, 0, 0, 1.5),
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: 14,
+            lineHeight: "20px",
+            fontWeight: 500,
+          }}
+        >
+          {title}
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: 12,
+            lineHeight: "16px",
+            color: youhaGrey[600],
+          }}
+        >
+          구독자 {comma(subscriberCount)}명
+        </Typography>
+      </Box>
+    </Box>
   );
 }

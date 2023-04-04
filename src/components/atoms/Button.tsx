@@ -54,15 +54,15 @@ export default function Button({
         "&:hover": {
           opacity: type === "outlined" ? 0.7 : 1,
         },
-        height: 36,
+        height: 40,
         p: theme.spacing(0, 2),
         "&.lg": {
-          height: 44,
+          height: 48,
           fontSize: 16,
           lineHeight: "24px",
         },
         "&.sm": {
-          height: 28,
+          height: 32,
           p: theme.spacing(0, 1.5),
           fontSize: 12,
           lineHeight: "16px",
@@ -77,10 +77,12 @@ export default function Button({
         lineHeight: "20px",
         color:
           type === "outlined"
-            ? color ?? backgroundColor
+            ? disabled
+              ? youhaGrey[300]
+              : color ?? backgroundColor
             : disabled
             ? youhaGrey[300]
-            : color ?? '#ffffff',
+            : color ?? "#ffffff",
         ...sx,
       }}
       disableRipple={type === "outlined"}

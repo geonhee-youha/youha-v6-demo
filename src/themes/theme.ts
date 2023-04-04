@@ -48,7 +48,7 @@ export const theme = createTheme({
             cursor: 'pointer !important',
           },
           transition: `all 0.35s ease`,
-          fontFamily: `LINESeedKR, Pretendard, -apple-system, BlinkMacSystemFont, system- ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo","Noto Sans KR", "Malgun Gothic", sans- serif`,
+          fontFamily: `Pretendard, -apple-system, BlinkMacSystemFont, system- ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo","Noto Sans KR", "Malgun Gothic", sans- serif`,
         },
       },
     },
@@ -100,7 +100,6 @@ export const theme = createTheme({
           fontSize: 14,
           lineHeight: '20px',
           '& input': {
-            fontFamily: 'LINESeedKR',
             fontSize: 14,
             lineHeight: '20px !important',
             padding: 0,

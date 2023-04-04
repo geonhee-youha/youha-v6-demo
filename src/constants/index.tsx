@@ -430,3 +430,27 @@ export const videoSortList = [
   { title: "좋아요 순", value: "likes" },
   { title: "댓글 순", value: "comments" },
 ];
+
+export const userTypes = [
+  {
+    emoji: "🏢",
+    title: "광고주",
+    value: "advertiser",
+    description: <>광고 의뢰 및 유튜버 찾기가 필요하시다면?</>,
+    types: [
+      { title: "광고주", value: "광고주" },
+      { title: "광고대행사", value: "광고대행사" },
+      { title: "미디어렙사", value: "미디어렙사" },
+    ],
+  },
+  {
+    emoji: "🎙️",
+    title: "크리에이터",
+    value: "creator",
+    description: <>광고 수주 및 선정산 서비스 등이 필요하시다면?</>,
+    types: [
+      { title: "유튜버", value: "유튜버" },
+      { title: "MCN", value: "MCN" },
+    ],
+  },
+];
