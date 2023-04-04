@@ -13,6 +13,11 @@ import _ from "lodash";
 import { DataRow } from "./YoutuberItem";
 import youhaGrey from "../../constants/youhaGrey";
 import { Chart } from "react-chartjs-2";
+import { useRecoilState } from "recoil";
+import {
+  bookmarksDialogRecoilState,
+  bookmarksRecoilState,
+} from "../../constants/recoils";
 
 export default function VideoItem({
   index,
@@ -27,7 +32,6 @@ export default function VideoItem({
   item: any;
   shorts?: boolean;
 }) {
-  const [bookmarked, setBookmarked] = useState<boolean>(false);
   const {
     id,
     title,
@@ -38,6 +42,12 @@ export default function VideoItem({
     commentsCount,
     createdAt,
   } = item;
+  const type = shorts ? "shorts" : "video"
+  const [dialog, setDialog] = useRecoilState(bookmarksDialogRecoilState);
+  const [bookmarks, setBookmarks] = useRecoilState(bookmarksRecoilState);
+  const bookmarked = bookmarks[type]
+    .flatMap((el) => el.list)
+    .includes(id);
   const selected = selectedIds.includes(id);
   const onClickSelect = (e: any) => {
     e.preventDefault();
@@ -48,10 +58,17 @@ export default function VideoItem({
   };
   const onClickBookmark = (e: any) => {
     e.preventDefault();
-    setBookmarked((prev) => !prev);
+    setDialog((prev) => {
+      return {
+        ...prev,
+        open: true,
+        type: type,
+        item: item,
+      };
+    });
   };
   const youtuber = testCreators[Math.floor(Math.random() * 20)];
-  const contentsHeight = 146 + 120 + 28 + 16 + 8 - 32;
+  const contentsHeight = 237;
   return (
     <Link href="/" passHref>
       <ButtonBase
@@ -112,7 +129,7 @@ export default function VideoItem({
                   width: shorts ? ((contentsHeight - 50) / 16) * 9 : "100%",
                   height: 0,
                   p: theme.spacing(
-                    shorts ? `${(contentsHeight - 50)}px` : `56.25%`,
+                    shorts ? `${contentsHeight - 50}px` : `56.25%`,
                     0,
                     0,
                     0
@@ -156,10 +173,6 @@ export default function VideoItem({
                   justifyContent: "center",
                   alignItems: "center",
                   backgroundColor: "#ffffff",
-                  // "@media(max-width: 480px)": {
-                  //   top: 12 + 16,
-                  //   right: 12 + 16,
-                  // },
                 }}
                 disableRipple
                 onClick={onClickBookmark}
@@ -236,9 +249,10 @@ export default function VideoItem({
                 width: `100%`,
                 p: theme.spacing(2, 2, 2, 2),
                 display: "grid",
-                gridTemplateColumns: "1fr",
+                gridTemplateColumns: "1fr 1fr",
                 gridAutoRows: "1fr",
                 gridTemplateRows: "auto auto",
+                gridColumnGap: 16,
                 gridRowGap: 8,
                 "&:hover": {
                   "& .Cover": {
@@ -246,18 +260,31 @@ export default function VideoItem({
                   },
                 },
                 "@media(max-width: 480px)": {
-                  gridTemplateColumns: shorts ? "1fr" : "1fr 1fr",
+                  gridTemplateColumns: shorts ? "1fr 1fr" : "1fr 1fr",
                   gridColumnGap: 16,
-                  borderTop: 'none',
+                  borderTop: "none",
                   p: theme.spacing(0, 2, 2, 2),
                   "&:hover": {
                     "& .Cover": {
-                      bottom: '-100%',
+                      bottom: "-100%",
                     },
                   },
                 },
               }}
             >
+              <DataRow
+                item={{
+                  iconName: "calendar",
+                  title: "업로드",
+                  value: (
+                    <>
+                      {createdAt === null
+                        ? "비공개"
+                        : dayjs(createdAt).format(`YYYY.MM.DD`)}
+                    </>
+                  ),
+                }}
+              />
               <DataRow
                 item={{
                   iconName: "eye",
@@ -267,19 +294,6 @@ export default function VideoItem({
                       {viewCount === null
                         ? "비공개"
                         : numberToKorean(viewCount)}
-                    </>
-                  ),
-                }}
-              />
-              <DataRow
-                item={{
-                  iconName: "calendar",
-                  title: "업로드",
-                  value: (
-                    <>
-                      {createdAt === null
-                        ? "비공개"
-                        : dayjs(createdAt).format(`YYYY년 MM월 DD일`)}
                     </>
                   ),
                 }}
@@ -325,6 +339,8 @@ export default function VideoItem({
                 <Box
                   sx={{
                     p: theme.spacing(2, 2, 2, 2),
+                    display: "flex",
+                    alignItems: "flex-start",
                   }}
                 >
                   <Box
@@ -332,7 +348,7 @@ export default function VideoItem({
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "space-between",
-                      m: theme.spacing(0, 0, 1, 0),
+                      m: theme.spacing(0, 2, 1, 0),
                     }}
                   >
                     <Box
@@ -370,7 +386,9 @@ export default function VideoItem({
                   </Box>
                   <Box
                     sx={{
-                      height: 120 - 32 - 16 - 8,
+                      flex: 1,
+                      width: 120,
+                      height: 50,
                     }}
                   >
                     <Chart

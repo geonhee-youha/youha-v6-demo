@@ -345,6 +345,13 @@ export type FilterValueProps = {
   video?: {
     views: number[];
     uploadDate: string;
+    likes: number[];
+    comments: number[];
+  };
+  detail?: {
+    viewsPerSubscribers: number[];
+    likesPerViews: number[];
+    commentsPerViews: number[];
   };
   categories?: {
     categories: string[];
@@ -401,6 +408,13 @@ export const videoFilterValueDefaultProps: FilterValueProps = {
   video: {
     views: [0, 10000000],
     uploadDate: "",
+    likes: [0, 1000],
+    comments: [0, 1000],
+  },
+  detail: {
+    viewsPerSubscribers: [0, 100],
+    likesPerViews: [0, 100],
+    commentsPerViews: [0, 100],
   },
 };
 

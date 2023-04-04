@@ -14,6 +14,12 @@ import dayjs from "dayjs";
 import { testVideos } from "../../data";
 import { Chart } from "react-chartjs-2";
 import { trendChartData, trendChartOptions } from "./VideoItem";
+import { useRecoilState } from "recoil";
+import {
+  bookmarksDialogRecoilState,
+  bookmarksRecoilState,
+} from "../../constants/recoils";
+import _ from "lodash";
 
 export default function YoutuberItem({
   index,
@@ -26,7 +32,6 @@ export default function YoutuberItem({
   setSelectedIds: Dispatch<SetStateAction<string[]>>;
   item: any;
 }) {
-  const [bookmarked, setBookmarked] = useState<boolean>(false);
   const {
     id,
     title,
@@ -35,6 +40,11 @@ export default function YoutuberItem({
     standardCommercialPrice,
     averageCommercialViewCount,
   } = item;
+  const [dialog, setDialog] = useRecoilState(bookmarksDialogRecoilState);
+  const [bookmarks, setBookmarks] = useRecoilState(bookmarksRecoilState);
+  const bookmarked = bookmarks["youtuber"]
+    .flatMap((el) => el.list)
+    .includes(id);
   const selected = selectedIds.includes(id);
   const onClickSelect = (e: any) => {
     e.preventDefault();
@@ -45,7 +55,14 @@ export default function YoutuberItem({
   };
   const onClickBookmark = (e: any) => {
     e.preventDefault();
-    setBookmarked((prev) => !prev);
+    setDialog((prev) => {
+      return {
+        ...prev,
+        open: true,
+        type: "youtuber",
+        item: item,
+      };
+    });
   };
   const size = 120;
   const videos = [testVideos[index + 1], testVideos[index + 11]];
@@ -320,7 +337,7 @@ export default function YoutuberItem({
               gridRowGap: 8,
               "&:hover": {
                 "& .Cover": {
-                  right: '-100%',
+                  right: "-100%",
                 },
               },
             },
@@ -335,6 +352,14 @@ export default function YoutuberItem({
           />
           <DataRow
             item={{
+              iconName: "coins",
+              title: "예상 광고단가",
+              value: <>{numberToKorean(standardCommercialPrice)}원</>,
+              valueColor: youhaBlue[500],
+            }}
+          />
+          <DataRow
+            item={{
               iconName: "eye",
               title: "평균 조회수",
               value: (
@@ -344,13 +369,6 @@ export default function YoutuberItem({
                     : "집계중"}
                 </>
               ),
-            }}
-          />
-          <DataRow
-            item={{
-              iconName: "coins",
-              title: "예상 광고단가",
-              value: <>{comma(standardCommercialPrice)}</>,
             }}
           />
           <DataRow
@@ -588,21 +606,24 @@ export default function YoutuberItem({
 }
 
 export function DataRow({
+  autoWidth,
   item,
 }: {
+  autoWidth?: boolean;
   item: {
     iconName: IconName;
     title: React.ReactNode;
     value: React.ReactNode;
+    valueColor?: string;
   };
 }) {
-  const { iconName, title, value } = item;
+  const { iconName, title, value, valueColor } = item;
   return (
     <Box
       sx={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
+        justifyContent: autoWidth ? "initial" : "space-between",
       }}
     >
       <Box
@@ -619,7 +640,8 @@ export function DataRow({
       </Box>
       <Typography
         sx={{
-          flex: 1,
+          flex: autoWidth ? "initial" : 1,
+          m: theme.spacing(0, autoWidth ? 1 : 0, 0, 0),
           color: youhaGrey[500],
           fontSize: 12,
           lineHeight: "16px",
@@ -634,7 +656,7 @@ export function DataRow({
       </Typography>
       <Typography
         sx={{
-          color: youhaGrey[900],
+          color: valueColor ?? youhaGrey[900],
           fontWeight: 700,
           fontSize: 12,
           lineHeight: "16px",

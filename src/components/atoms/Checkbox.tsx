@@ -5,11 +5,13 @@ import { theme } from "../../themes/theme";
 import Icon from "./Icon";
 
 export default function Checkbox({
+  color = youhaBlue[500],
   focused,
   onClick,
   size,
   sx,
 }: {
+  color?: string;
   focused?: boolean;
   onClick?: (e: any) => void;
   size?: string;
@@ -21,11 +23,9 @@ export default function Checkbox({
         width: 20,
         height: 20,
         borderRadius: 0.5,
-        boxShadow: `${
-          focused ? youhaBlue[500] : youhaGrey[200]
-        } 0px 0px 0px 1px`,
+        boxShadow: `${focused ? color : youhaGrey[200]} 0px 0px 0px 1px`,
         m: theme.spacing(0, 1, 0, 0),
-        backgroundColor: focused ? youhaBlue[500] : "#ffffff",
+        backgroundColor: focused ? color : "#ffffff",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
@@ -36,11 +36,12 @@ export default function Checkbox({
           borderRadius: 0.25,
         },
         "&.lg": {
-          width: 32,
-          height: 32,
-          borderRadius: 0.25,
+          width: 24,
+          height: 24,
+          borderRadius: 0.5,
+          m: theme.spacing(0, 1.5, 0, 0),
         },
-        cursor: 'pointer',
+        cursor: "pointer",
         ...sx,
       }}
       onClick={onClick}
@@ -54,11 +55,11 @@ export default function Checkbox({
         sx={{
           opacity: focused ? 1 : 0,
           transition: "none !important",
-          "&.sm": {
-            fontSize: `6px !important`,
-          },
-          "&.lg": {
+          "&.sm svg": {
             fontSize: `10px !important`,
+          },
+          "&.lg svg": {
+            fontSize: `14px !important`,
           },
         }}
         className={size}

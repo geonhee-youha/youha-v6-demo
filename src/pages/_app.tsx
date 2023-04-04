@@ -39,6 +39,8 @@ import GlobalNavigationBar from "../components/organisms/GlobalNavigationBar";
 import { Box } from "@mui/material";
 import Footer from "../components/organisms/Footer";
 import BottomNavigationBar from "../components/organisms/BottomNavigationBar";
+import BookmarksDialog from "../components/organisms/BookmarksDialog";
+import NewBookmarkDialog from "../components/organisms/NewBookmarkDialog";
 
 ChartJS.register(
   LineController,
@@ -238,6 +240,8 @@ function MyApp(props: MyAppProps) {
               <Component {...pageProps} key={router.route} />
               <Footer />
               <BottomNavigationBar />
+              <BookmarksDialog/>
+              <NewBookmarkDialog/>
             </Box>
           </Box>
         </ThemeProvider>

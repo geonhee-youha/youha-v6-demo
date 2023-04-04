@@ -16,6 +16,8 @@ const bottomTabList: { href: string; title: string; iconName: IconName }[] = [
 export default function BottomNavigationBar() {
   const router = useRouter();
   const pathName = router.pathname;
+  const pathnames = router.pathname.split("/");
+  const focused = `/${pathnames[1]}` !== "/auth";
   return (
     <Box
       sx={{
@@ -27,7 +29,7 @@ export default function BottomNavigationBar() {
         backgroundColor: `#ffffff`,
         display: "none",
         "@media(max-width: 480px)": {
-          display: "flex",
+          display: focused ? "flex" : "none",
         },
         boxShadow: `rgba(0, 0, 0, 0.12) -8px 0px 16px 0px`,
       }}

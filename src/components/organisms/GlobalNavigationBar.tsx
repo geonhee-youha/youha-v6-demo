@@ -53,7 +53,7 @@ export default function GlobalNavigationBar() {
         width: "100%",
         backgroundColor: "#ffffff",
         display: focused ? "flex" : "none",
-        zIndex: 999,
+        zIndex: 9999,
         borderBottom: `1px solid ${youhaGrey[200]}`,
       }}
     >
@@ -68,10 +68,10 @@ export default function GlobalNavigationBar() {
 function Header() {
   const router = useRouter();
   const { type } = router.query;
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>("");
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setSearchValue(value);
+    setInputValue(value);
   };
   const onKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -79,8 +79,8 @@ function Header() {
     }
   };
   const onSearchClick = () => {
-    router.push(`/search?type=${type}&search=${searchValue}`);
-    setSearchValue("");
+    router.push(`/search?type=${type}&search=${inputValue}`);
+    setInputValue("");
   };
   function HeaderBtn({
     item,
@@ -88,8 +88,9 @@ function Header() {
     item: { type: string; href: string; title: string };
   }) {
     const { href, title } = item;
+    const hrefUrl = `${href}?url=${router.pathname}`
     return (
-      <Link href={href} passHref>
+      <Link href={hrefUrl} passHref>
         <Box
           sx={{
             display: "flex",
@@ -143,7 +144,7 @@ function Header() {
         }}
       >
         <InputBase
-          value={searchValue}
+          value={inputValue}
           onChange={onChange}
           onKeyPress={onKeyPress}
           placeholder={`어떤 ${

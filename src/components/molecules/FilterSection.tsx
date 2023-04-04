@@ -57,10 +57,10 @@ export default function FilterSection({
     list,
   } = item;
   const mcn = title === "소속 MCN";
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>("");
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setSearchValue(value);
+    setInputValue(value);
   };
   return show === false ? null : (
     <Box
@@ -94,8 +94,8 @@ export default function FilterSection({
             >
               <Typography
                 sx={{
-                  fontSize: 18,
-                  lineHeight: "28px",
+                  fontSize: 16,
+                  lineHeight: "24px",
                   fontWeight: "700",
                 }}
               >
@@ -106,7 +106,7 @@ export default function FilterSection({
                   sx={{
                     m: theme.spacing(0, 0, 0, 1),
                     fontSize: 14,
-                    lineHeight: "28px",
+                    lineHeight: "24px",
                     color: youhaGrey[600],
                     display: "none",
                     "@media(max-width: 480px)": {
@@ -122,7 +122,7 @@ export default function FilterSection({
               <Typography
                 sx={{
                   fontSize: 14,
-                  lineHeight: "28px",
+                  lineHeight: "24px",
                   color: youhaBlue[500],
                 }}
               >
@@ -147,7 +147,7 @@ export default function FilterSection({
           <>
             <Input
               placeholder="찾으시는 MCN 이름을 입력하세요."
-              searchValue={searchValue}
+              inputValue={inputValue}
               onChange={onChange}
               sx={{
                 p: theme.spacing(1, 0, 1, 0),
@@ -156,11 +156,12 @@ export default function FilterSection({
                   display: "block",
                 },
               }}
+              searchIcon
             />
             <Input
               size="sm"
               placeholder="찾으시는 MCN 이름을 입력하세요."
-              searchValue={searchValue}
+              inputValue={inputValue}
               onChange={onChange}
               sx={{
                 width: 240,
@@ -169,6 +170,7 @@ export default function FilterSection({
                   display: "none",
                 },
               }}
+              searchIcon
             />
           </>
         )}
@@ -203,7 +205,7 @@ export default function FilterSection({
               const unFocused =
                 !mcn || itemValue === ""
                   ? false
-                  : searchValue !== "" && !title.includes(searchValue);
+                  : inputValue !== "" && !title.includes(inputValue);
               const focused =
                 typeof value === "string"
                   ? value === itemValue
@@ -221,13 +223,13 @@ export default function FilterSection({
                       ...item,
                       title: (
                         <>
-                          {searchValue !== "" && title.includes(searchValue) ? (
+                          {inputValue !== "" && title.includes(inputValue) ? (
                             <>
-                              {title.split(searchValue)[0]}
+                              {title.split(inputValue)[0]}
                               <span style={{ color: pink[500] }}>
-                                {searchValue}
+                                {inputValue}
                               </span>
-                              {title.split(searchValue)[1]}
+                              {title.split(inputValue)[1]}
                             </>
                           ) : (
                             title
@@ -420,7 +422,8 @@ export default function FilterSection({
       {link && (
         <ButtonBase
           sx={{
-            m: theme.spacing(2, 0, 0, 0),
+            m: theme.spacing(1.5, 0, 0, 0),
+            alignItems: "center",
           }}
           disableRipple
           onClick={link.onClick}
@@ -428,7 +431,7 @@ export default function FilterSection({
           <Typography
             sx={{
               fontSize: 14,
-              lineHeight: "16px",
+              lineHeight: "20px",
               color: youhaBlue[500],
             }}
           >
@@ -439,7 +442,7 @@ export default function FilterSection({
             name="chevron-right"
             color={youhaBlue[500]}
             sx={{
-              m: theme.spacing(0, 0, 0, 0.5),
+              m: theme.spacing(0, 0, 0, 0.25),
             }}
           />
         </ButtonBase>

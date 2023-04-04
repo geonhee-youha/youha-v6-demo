@@ -54,8 +54,9 @@ export function numberToKorean(number: number) {
 
     for (var i = 0; i < resultArray.length; i++) {
       if (!resultArray[i]) continue;
-      resultString =
-        String(numberFormat(resultArray[i])) + unitWords[i] + resultString;
+      if (resultArray.length === 1) return String(numberFormat(resultArray[i]))
+      resultString = unitWords[i] === '' ? '' :
+       ' ' + String(numberFormat(resultArray[i])) + unitWords[i] + resultString;
     }
 
     return resultString;
@@ -64,4 +65,25 @@ export function numberToKorean(number: number) {
   } else {
     return number;
   }
+}
+
+export function isEmail(asValue: string | null) {
+  if (typeof asValue !== "string") return false;
+  var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+  return regExp.test(asValue); // 형식에 맞는 경우 true 리턴
+}
+export function isCelluar(asValue: string | null) {
+  if (typeof asValue !== "string") return false;
+  var regExp = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
+  return regExp.test(asValue); // 형식에 맞는 경우 true 리턴
+}
+export function isPassword(asValue: string | null) {
+  if (typeof asValue !== "string") return false;
+  var regExp = /^[A-Za-z0-9]{6,999}$/; 
+  return regExp.test(asValue); // 형식에 맞는 경우 true 리턴
+}
+export function isPhone(asValue: string | null) {
+  if (typeof asValue !== "string") return false;
+  var regExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+  return regExp.test(asValue); // 형식에 맞는 경우 true 리턴
 }

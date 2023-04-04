@@ -45,13 +45,15 @@ export default function Page() {
   const {
     type: typeOrigin,
     categories: categoryOrigin,
-    search: searchValueOrigin,
+    search: inputValueOrigin,
     forceCategory,
   } = router.query;
   const query = {
     type:
-      typeOrigin && typeof typeOrigin === "string" ? typeOrigin : "youtuber",
-    search: typeof searchValueOrigin === "string" ? searchValueOrigin : "",
+      typeOrigin && typeof typeOrigin === "string" && typeOrigin !== "undefined"
+        ? typeOrigin
+        : "youtuber",
+    search: typeof inputValueOrigin === "string" ? inputValueOrigin : "",
     categories:
       typeof categoryOrigin === "string" ? categoryOrigin.split(",") : [],
   };
@@ -155,14 +157,14 @@ function Header({
   shortsCategoriesValue: string[];
 }) {
   const router = useRouter();
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>("");
   const onClickSearch = () => {
-    if (searchValue === "") return;
-    router.push(`/search?value=${searchValue}`);
+    if (inputValue === "") return;
+    router.push(`/search?value=${inputValue}`);
   };
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setSearchValue(value);
+    setInputValue(value);
   };
   const onKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -170,7 +172,7 @@ function Header({
     }
   };
   useEffect(() => {
-    setSearchValue(query.search);
+    setInputValue(query.search);
   }, [query]);
   return (
     <Box
@@ -290,13 +292,14 @@ function Header({
         }}
       >
         <Input
-          searchValue={searchValue}
+          inputValue={inputValue}
           onChange={onChange}
           onKeyPress={onKeyPress}
           onClickSearch={onClickSearch}
           sx={{
             width: 200,
           }}
+          searchIcon
         />
       </Box>
     </Box>
@@ -593,6 +596,7 @@ function FilterBar({
                 setFilterTempValue={setFilterTempValue}
                 setCategoriesValue={setCategoriesValue}
                 setCategoriesTempValue={setCategoriesTempValue}
+                shorts
               />
             )}
             <ButtonBase

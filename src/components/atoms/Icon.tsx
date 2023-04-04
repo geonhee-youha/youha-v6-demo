@@ -63,6 +63,7 @@ export default function Icon({
           fontWeight: "700",
         },
       }}
+      className={className}
     >
       <FontAwesomeIcon
         icon={icon}
