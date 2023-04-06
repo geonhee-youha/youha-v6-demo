@@ -1,30 +1,16 @@
-import {
-  alpha,
-  Box,
-  ButtonBase,
-  Dialog,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Dialog, Stack, Typography } from "@mui/material";
 import _ from "lodash";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import {
-  bookmarksDialogRecoilState,
-  bookmarksRecoilState,
-  firstLoginDialogRecoilState,
-  newBookmarkDialogRecoilState,
-} from "../../constants/recoils";
+import { firstLoginDialogRecoilState } from "../../constants/recoils";
 import youhaBlue from "../../constants/youhaBlue";
 import youhaGrey from "../../constants/youhaGrey";
-import { testCreators, testVideos } from "../../data";
 import { theme } from "../../themes/theme";
 import Button from "../atoms/Button";
-import Icon from "../atoms/Icon";
-import Typo from "../atoms/Typo";
-import PageHeader from "./PageHeader";
+import { useRouter } from "next/router";
 
 export default function FirstLoginDialog() {
+  const router = useRouter();
   const [firstLoginDialog, setFirstLoginDialog] = useRecoilState(
     firstLoginDialogRecoilState
   );
@@ -35,6 +21,12 @@ export default function FirstLoginDialog() {
         open: false,
       };
     });
+  };
+  const onClickNext = () => {
+    onClose();
+  };
+  const onClickProposal = () => {
+    onClose();
   };
   useEffect(() => {
     import("@lottiefiles/lottie-player");
@@ -136,11 +128,12 @@ export default function FirstLoginDialog() {
               sx={{
                 width: 120,
               }}
+              onClick={onClickNext}
             >
               다음에요!
             </Button>
             <Box sx={{ flex: 1 }}>
-              <Button size="lg" fullWidth>
+              <Button size="lg" fullWidth onClick={onClickProposal}>
                 유하 전용 제안 알아보기
               </Button>
               <Typography
@@ -149,7 +142,7 @@ export default function FirstLoginDialog() {
                   lineHeight: "16px",
                   textAlign: "center",
                   color: youhaGrey[700],
-                  m: theme.spacing(1, 0, 0, 0)
+                  m: theme.spacing(1, 0, 0, 0),
                 }}
               >
                 원하신다면 언제든 가능합니다!

@@ -54,6 +54,6 @@ export const newBookmarkDialogRecoilState = atom({
 export const firstLoginDialogRecoilState = atom({
   key: "firstLoginDialogRecoilState",
   default: {
-    open: true,
+    open: false,
   },
 });

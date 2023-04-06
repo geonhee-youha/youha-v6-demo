@@ -25,6 +25,9 @@ import { theme } from "../../themes/theme";
 import Container from "../atoms/Container";
 import Icon from "../atoms/Icon";
 import Toolbar from "../atoms/Toolbar";
+import { useRecoilState } from "recoil";
+import { loginRecoilState } from "../../constants/recoils";
+import { IconName } from "@fortawesome/fontawesome-svg-core";
 
 const headers = [
   { href: "/auth/signin", title: "로그인", type: "default" },
@@ -67,6 +70,7 @@ export default function GlobalNavigationBar() {
 
 function Header() {
   const router = useRouter();
+  const [login, setLogin] = useRecoilState(loginRecoilState);
   const { type } = router.query;
   const [inputValue, setInputValue] = useState<string>("");
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -88,7 +92,7 @@ function Header() {
     item: { type: string; href: string; title: string };
   }) {
     const { href, title } = item;
-    const hrefUrl = `${href}?url=${router.pathname}`
+    const hrefUrl = `${href}?url=${router.pathname}`;
     return (
       <Link href={hrefUrl} passHref>
         <Box
@@ -211,10 +215,29 @@ function Header() {
           },
         }}
       >
-        {headers.map((item, index) => (
-          <HeaderBtn key={index} item={item} />
-        ))}
-        <Languages />
+        {!login ? (
+          <>
+            <Typography
+              sx={{
+                fontSize: 14,
+                lineHeight: "20px",
+                fontWeight: 500,
+                color: youhaGrey[700],
+                m: theme.spacing(0, 2, 0, 0),
+              }}
+            >
+              유진호 님 안녕하세요!
+            </Typography>
+            <User />
+          </>
+        ) : (
+          <>
+            {headers.map((item, index) => (
+              <HeaderBtn key={index} item={item} />
+            ))}
+            <Languages />
+          </>
+        )}
       </Box>
     </Toolbar>
   );
@@ -574,6 +597,210 @@ function Languages() {
             </ButtonBase>
           );
         })}
+      </Box>
+    </Box>
+  );
+}
+
+const mypagePages: {
+  iconName: IconName;
+  title: string;
+  href: string;
+  counts: number;
+}[] = [
+  { iconName: "user-circle", title: "내 정보", href: "", counts: 0 },
+  { iconName: "bookmark", title: "내 북마크", href: "", counts: 0 },
+  { iconName: "list-dropdown", title: "보낸 제안", href: "", counts: 3 },
+];
+
+function User() {
+  const ref = useRef<any>(null);
+  const [login, setLogin] = useRecoilState(loginRecoilState)
+  const [open, setOpen] = useState<boolean>(false);
+  const onClick = () => {
+    setOpen((prev) => !prev);
+  };
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  const handleClickOutside = (event: any) => {
+    if (ref && !ref.current.contains(event.target)) {
+      setOpen(false);
+    }
+  };
+  function Btn({
+    item: { iconName, title, href, counts },
+  }: {
+    item: {
+      iconName: IconName;
+      title: string;
+      href: string;
+      counts: number;
+    };
+  }) {
+    return (
+      <ButtonBase
+        sx={{
+          flex: 1,
+          flexDirection: "column",
+          alignItems: "center",
+          p: theme.spacing(0, 2),
+          "&:hover": {
+            opacity: 0.7,
+          },
+        }}
+      >
+        <Icon
+          prefix="fad"
+          name={iconName}
+          color={youhaGrey[300]}
+          badgeCount={counts}
+          size={28}
+        />
+        <Typography
+          sx={{
+            fontSize: 14,
+            lineHeight: "20px",
+            fontWeight: 700,
+            color: youhaGrey[500],
+            m: theme.spacing(0.5, 0, 0, 0),
+          }}
+        >
+          {title}
+        </Typography>
+      </ButtonBase>
+    );
+  }
+  const onClickLogout = () => {
+    setLogin(false)
+  }
+  return (
+    <Box
+      ref={ref}
+      sx={{
+        position: "relative",
+      }}
+    >
+      <ButtonBase
+        sx={{
+          width: 40,
+          height: 40,
+          borderRadius: "50%",
+          overflow: "hidden",
+          "&:hover": {
+            opacity: 0.7,
+          },
+        }}
+        onClick={onClick}
+      >
+        <img src={"/images/user-advertiser.png"} />
+      </ButtonBase>
+      <Typography
+        sx={{
+          position: "absolute",
+          top: -2,
+          right: -2,
+          minWidth: 12,
+          height: 12,
+          // p: theme.spacing(0, 0.5),
+          backgroundColor: pink[500],
+          fontSize: 12,
+          lineHeight: "16px",
+          fontWeight: 700,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          color: `#ffffff`,
+          borderRadius: "50%",
+          border: `1px solid #ffffff`,
+        }}
+      ></Typography>
+      <Box
+        ref={ref}
+        sx={{
+          position: "absolute",
+          top: 48,
+          right: 0,
+          display: open ? "flex" : "none",
+          boxShadow: `rgb(0 0 0 / 10%) 0px 2px 10px`,
+          flexDirection: "column",
+          p: theme.spacing(1, 0),
+          zIndex: 9,
+          backgroundColor: "#ffffff",
+          border: `1px solid ${youhaGrey[200]}`,
+          borderRadius: 0.5,
+        }}
+        className=""
+      >
+        <Box
+          sx={{
+            p: theme.spacing(2),
+            display: "flex",
+            width: 320,
+          }}
+        >
+          {mypagePages.map((item, index) => {
+            return <Btn key={index} item={item} />;
+          })}
+        </Box>
+        <Box
+          sx={{
+            p: theme.spacing(1.5, 1, 1, 1),
+            display: "flex",
+            width: 320,
+            borderTop: `1px solid ${youhaGrey[200]}`,
+            '& > :not(:last-of-type)': {
+              borderRight: `1px solid ${youhaGrey[200]}`,
+            }
+          }}
+        >
+          <ButtonBase
+            sx={{
+              flex: 1,
+              justifyContent: "center",
+              height: "100%",
+              "&:hover": {
+                opacity: 0.7,
+              },
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: 14,
+                lineHeight: "20px",
+                fontWeight: 400,
+                color: youhaGrey[900],
+              }}
+            >
+              공지사항
+            </Typography>
+          </ButtonBase>
+          <ButtonBase
+            sx={{
+              flex: 1,
+              justifyContent: "center",
+              height: "100%",
+              "&:hover": {
+                opacity: 0.7,
+              },
+            }}
+            onClick={onClickLogout}
+          >
+            <Typography
+              sx={{
+                fontSize: 14,
+                lineHeight: "20px",
+                fontWeight: 400,
+                color: youhaGrey[700],
+              }}
+            >
+              로그아웃
+            </Typography>
+          </ButtonBase>
+        </Box>
       </Box>
     </Box>
   );

@@ -54,13 +54,15 @@ export default function Icon({
         transition: `all 0.35s ease`,
         ...sx,
         "& .MuiBadge-badge": {
-          width: 6,
-          height: 6,
+          width: 12,
+          height: 12,
           minWidth: 4,
           backgroundColor: badgeColor,
+          border: `1px solid #ffffff`,
           fontSize: 12,
           lineHeight: "16px",
           fontWeight: "700",
+          borderRadius: "50%",
         },
       }}
       className={className}
