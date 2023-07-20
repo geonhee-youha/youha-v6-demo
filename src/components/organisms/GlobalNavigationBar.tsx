@@ -147,6 +147,18 @@ function Header() {
           },
         }}
       >
+        <IconButton
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: 8,
+            transform: "translateY(-50%)",
+            zIndex: 2,
+          }}
+          onClick={onSearchClick}
+        >
+          <Icon name="search" size={20} color={youhaGrey[500]}/>
+        </IconButton>
         <InputBase
           value={inputValue}
           onChange={onChange}
@@ -161,7 +173,7 @@ function Header() {
           sx={{
             width: 360,
             height: 40,
-            p: theme.spacing(0, 6, 0, 2),
+            p: theme.spacing(0, 2, 0, 6),
             borderRadius: 20,
             display: "flex",
             alignItems: "center",
@@ -193,17 +205,6 @@ function Header() {
             },
           }}
         />
-        <IconButton
-          sx={{
-            position: "absolute",
-            top: "50%",
-            right: 4,
-            transform: "translateY(-50%)",
-          }}
-          onClick={onSearchClick}
-        >
-          <Icon name="search" size={20} />
-        </IconButton>
       </Box>
       <Box
         sx={{
@@ -215,7 +216,7 @@ function Header() {
           },
         }}
       >
-        {!login ? (
+        {login ? (
           <>
             <Typography
               sx={{
@@ -610,12 +611,12 @@ const mypagePages: {
 }[] = [
   { iconName: "user-circle", title: "내 정보", href: "", counts: 0 },
   { iconName: "bookmark", title: "내 북마크", href: "", counts: 0 },
-  { iconName: "list-dropdown", title: "보낸 제안", href: "", counts: 3 },
+  { iconName: "list-dropdown", title: "제안함", href: "", counts: 3 },
 ];
 
 function User() {
   const ref = useRef<any>(null);
-  const [login, setLogin] = useRecoilState(loginRecoilState)
+  const [login, setLogin] = useRecoilState(loginRecoilState);
   const [open, setOpen] = useState<boolean>(false);
   const onClick = () => {
     setOpen((prev) => !prev);
@@ -675,8 +676,8 @@ function User() {
     );
   }
   const onClickLogout = () => {
-    setLogin(false)
-  }
+    setLogin(false);
+  };
   return (
     <Box
       ref={ref}
@@ -752,12 +753,12 @@ function User() {
             display: "flex",
             width: 320,
             borderTop: `1px solid ${youhaGrey[200]}`,
-            '& > :not(:last-of-type)': {
+            "& > :not(:last-of-type)": {
               borderRight: `1px solid ${youhaGrey[200]}`,
-            }
+            },
           }}
         >
-          <ButtonBase
+          {/* <ButtonBase
             sx={{
               flex: 1,
               justifyContent: "center",
@@ -777,7 +778,7 @@ function User() {
             >
               공지사항
             </Typography>
-          </ButtonBase>
+          </ButtonBase> */}
           <ButtonBase
             sx={{
               flex: 1,
