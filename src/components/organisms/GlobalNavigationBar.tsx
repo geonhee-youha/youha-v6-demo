@@ -610,7 +610,7 @@ const mypagePages: {
   counts: number;
 }[] = [
   { iconName: "user-circle", title: "내 정보", href: "", counts: 0 },
-  { iconName: "bookmark", title: "내 북마크", href: "", counts: 0 },
+  { iconName: "bookmark", title: "즐겨찾기", href: "", counts: 0 },
   { iconName: "list-dropdown", title: "제안함", href: "", counts: 3 },
 ];
 
