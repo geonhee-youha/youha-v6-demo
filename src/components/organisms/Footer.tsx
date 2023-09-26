@@ -19,7 +19,7 @@ export default function Footer() {
     >
       <Box
         sx={{
-          borderBottom: `1px solid ${grey[200]}`,
+          borderBottom: `1px solid ${grey[300]}`,
           p: theme.spacing(1.5, 0),
         }}
       >

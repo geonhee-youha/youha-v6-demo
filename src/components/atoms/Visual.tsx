@@ -41,7 +41,7 @@ export default function Visual({
     noLoading,
     mobile,
     noText,
-    noScale,
+    noScale = true,
     className,
     noAfter,
 }: Props) {
