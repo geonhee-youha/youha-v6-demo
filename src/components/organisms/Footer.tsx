@@ -45,8 +45,8 @@ export default function Footer() {
           spacing={1}
           sx={{
             "& *": {
-              fontSize: 12,
-              lineHeight: "16px",
+              fontSize: `12px !important`,
+              lineHeight: "16px !important",
             },
           }}
         >
@@ -70,8 +70,8 @@ export default function Footer() {
           spacing={1}
           sx={{
             "& *": {
-              fontSize: 12,
-              lineHeight: "16px",
+              fontSize: `12px !important`,
+              lineHeight: "16px !important",
             },
           }}
         >
@@ -95,8 +95,8 @@ export default function Footer() {
           spacing={1}
           sx={{
             "& *": {
-              fontSize: 12,
-              lineHeight: "16px",
+              fontSize: `12px !important`,
+              lineHeight: "16px !important",
             },
           }}
         >
@@ -120,8 +120,8 @@ export default function Footer() {
           spacing={1}
           sx={{
             "& *": {
-              fontSize: 12,
-              lineHeight: "16px",
+              fontSize: `12px !important`,
+              lineHeight: "16px !important",
             },
           }}
         >
@@ -145,8 +145,8 @@ export default function Footer() {
           spacing={1}
           sx={{
             "& *": {
-              fontSize: 12,
-              lineHeight: "16px",
+              fontSize: `12px !important`,
+              lineHeight: "16px !important",
             },
           }}
         >
@@ -183,12 +183,16 @@ export default function Footer() {
           p: theme.spacing(1.5, 0),
         }}
       >
-        <Link href="https://www.notion.so/5c99a3571c684b4bb4d1d70283b4d7cb" passHref>
+        <Link
+          href="https://www.notion.so/5c99a3571c684b4bb4d1d70283b4d7cb"
+          passHref
+        >
           <Typography
             sx={{
               fontSize: 14,
               lineHeight: "20px",
               color: grey[700],
+              cursor: "pointer",
             }}
           >
             이용약관
@@ -201,12 +205,16 @@ export default function Footer() {
             backgroundColor: grey[400],
           }}
         ></Box>
-        <Link href="https://www.notion.so/0c40b91bd29440c1bfe153cd76246141" passHref>
+        <Link
+          href="https://www.notion.so/0c40b91bd29440c1bfe153cd76246141"
+          passHref
+        >
           <Typography
             sx={{
               fontSize: 14,
               lineHeight: "20px",
               color: grey[700],
+              cursor: "pointer",
             }}
           >
             개인정보처리방침
@@ -225,6 +233,7 @@ export default function Footer() {
               fontSize: 14,
               lineHeight: "20px",
               color: grey[700],
+              cursor: "pointer",
             }}
           >
             기술 블로그
@@ -243,6 +252,7 @@ export default function Footer() {
               fontSize: 14,
               lineHeight: "20px",
               color: grey[700],
+              cursor: "pointer",
             }}
           >
             채용
