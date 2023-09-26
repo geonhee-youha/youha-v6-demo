@@ -75,7 +75,7 @@ function Header() {
 
 function BottomAction({ item }: { item: ProductProps }) {
   const router = useRouter();
-  const { registrationDuration, deadline } = item;
+  const { registrationDuration } = item;
   const waiting =
     diffDay(new Date(), registrationDuration[0]) === 9999 ||
     diffDay(new Date(), registrationDuration[0]) > 0;
@@ -111,7 +111,7 @@ function BottomAction({ item }: { item: ProductProps }) {
           <Link href={item.registerLinkUrl} passHref>
             <a
               target="_blank"
-              href="https://twitter.com/"
+              href={item.registerLinkUrl}
               rel="noopener noreferrer"
             >
               <Button
@@ -187,7 +187,7 @@ export default function Index() {
       })
     ];
   if (!item) return <></>;
-  const { registrationDuration, deadline } = item;
+  const { registrationDuration } = item;
   const waiting =
     diffDay(new Date(), registrationDuration[0]) === 9999 ||
     diffDay(new Date(), registrationDuration[0]) > 0;
@@ -233,16 +233,6 @@ export default function Index() {
                 fontWeight: "700",
               }}
             >
-              신청 마감일
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: 14,
-                lineHeight: "20px",
-                color: grey[500],
-                fontWeight: "700",
-              }}
-            >
               선정일
             </Typography>
             <Typography
@@ -267,17 +257,6 @@ export default function Index() {
               {`${moment(item.registrationDuration[0]).format(
                 "MM.DD"
               )} ~ ${moment(item.registrationDuration[1]).format("MM.DD")}`}
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: 14,
-                lineHeight: "20px",
-                color: grey[900],
-              }}
-            >
-              {item.deadline
-                ? `${moment(item.deadline).format("MM.DD")}`
-                : `미정`}
             </Typography>
             <Typography
               sx={{

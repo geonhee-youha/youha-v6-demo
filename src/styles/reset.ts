@@ -267,6 +267,7 @@ const reset = css`
     margin: auto;
     min-height: 100%;
     margin-top: 56px;
+    position: relative;
   }
   * {
     box-sizing: border-box;

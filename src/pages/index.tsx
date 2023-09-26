@@ -70,7 +70,6 @@ export function Product({
   const {
     id,
     state,
-    deadline,
     thumbnail,
     videoType,
     type,
@@ -115,7 +114,7 @@ function Inner({ page, item }: { page: boolean; item: ProductProps }) {
   const {
     id,
     state,
-    deadline,
+
     thumbnail,
     videoType,
     type,
@@ -312,7 +311,7 @@ function Inner({ page, item }: { page: boolean; item: ProductProps }) {
                     color: pink[500],
                   }}
                 >
-                  D-{diffDay(new Date(), deadline)}일
+                  D-{diffDay(new Date(), registrationDuration[1])}일
                 </Typography>
               </Box>
               <Box
@@ -440,25 +439,31 @@ function Banner() {
       }}
     >
       <Link passHref href="https://pf.kakao.com/_jxkJxks">
-        <Box
-          sx={{
-            position: "relative",
-            p: theme.spacing(`25%`, 0, 0, 0),
-            // borderRadius: 1,
-            overflow: "hidden",
-            "& img": {
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              objectFit: "cover",
-            },
-            cursor: "pointer",
-          }}
+        <a
+          target="_blank"
+          href="https://twitter.com/"
+          rel="noopener noreferrer"
         >
-          <img src="/images/banner01.png" />
-        </Box>
+          <Box
+            sx={{
+              position: "relative",
+              p: theme.spacing(`25%`, 0, 0, 0),
+              // borderRadius: 1,
+              overflow: "hidden",
+              "& img": {
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                objectFit: "cover",
+              },
+              cursor: "pointer",
+            }}
+          >
+            <img src="/images/banner01.png" />
+          </Box>
+        </a>
       </Link>
     </Box>
   );
@@ -517,10 +522,10 @@ export default function Index() {
               }}
             >
               {_.filter(products, (el) => {
-                const { registrationDuration, deadline } = el;
+                const { registrationDuration } = el;
                 const waiting =
                   diffDay(new Date(), registrationDuration[0]) > 0;
-                const closed = diffDay(new Date(), deadline) <= 0;
+                const closed = diffDay(new Date(), registrationDuration[1]) < 0;
                 const ongoing = !waiting && !closed;
                 return ongoing;
               }).map((item, index) => {
@@ -566,10 +571,10 @@ export default function Index() {
               }}
             >
               {_.filter(products, (el) => {
-                const { registrationDuration, deadline } = el;
+                const { registrationDuration } = el;
                 const waiting =
                   diffDay(new Date(), registrationDuration[0]) > 0;
-                const closed = diffDay(new Date(), deadline) <= 0;
+                const closed = diffDay(new Date(), registrationDuration[1]) < 0;
                 const ongoing = !waiting && !closed;
                 return !ongoing;
               }).map((item, index) => {

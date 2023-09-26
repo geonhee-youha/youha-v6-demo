@@ -30,7 +30,6 @@ type ModelProps = {
 export type ProductProps = {
   id: string;
   registrationDuration: [Date, Date];
-  deadline: Date | null;
   selectionDate: Date | null;
   uploadDuration: [Date, Date] | null;
   videoType: string;
@@ -59,7 +58,6 @@ export const products: ProductProps[] = [
   {
     id: "0",
     registrationDuration: [new Date("2023-08-29"), new Date("2023-09-30")],
-    deadline: new Date("2023-09-31"),
     selectionDate: new Date("2023-10-08"),
     uploadDuration: [new Date("2023-10-24"), new Date("2023-11-14")],
     videoType: "롱폼/쇼츠",
@@ -129,7 +127,6 @@ export const products: ProductProps[] = [
   {
     id: "1",
     registrationDuration: [new Date("2023-10-14"), new Date("2023-10-21")],
-    deadline: null,
     selectionDate: null,
     uploadDuration: null,
     videoType: "롱폼/쇼츠",
@@ -142,7 +139,7 @@ export const products: ProductProps[] = [
       summary: "세리번 비우밍 다이어트 1세트 증정",
       detail: "",
     },
-    productLinkUrl: "",
+    productLinkUrl: "https://www.serybox.com/shop/detail.php?pno=EE16FA83C0F151EF85E617F5AA3867A6&rURL=https%3A%2F%2Fwww.serybox.com%2Fshop%2Fbig_section.php%3Fcno1%3D1005&ctype=1&cno1=1005",
     quota: 30,
     applicants: 0,
     fee: 260000,
@@ -156,7 +153,6 @@ export const products: ProductProps[] = [
   {
     id: "2",
     registrationDuration: [new Date("2023-10-14"), new Date("2023-10-21")],
-    deadline: null,
     selectionDate: null,
     uploadDuration: null,
     videoType: "롱폼/쇼츠",
@@ -184,7 +180,6 @@ export const products: ProductProps[] = [
   {
     id: "3",
     registrationDuration: [new Date("2023-10-14"), new Date("2023-10-21")],
-    deadline: null,
     selectionDate: null,
     uploadDuration: null,
     videoType: "롱폼/쇼츠",
@@ -212,7 +207,6 @@ export const products: ProductProps[] = [
   {
     id: "4",
     registrationDuration: [new Date("2023-10-14"), new Date("2023-10-21")],
-    deadline: null,
     selectionDate: null,
     uploadDuration: null,
     videoType: "롱폼/쇼츠",
@@ -240,7 +234,6 @@ export const products: ProductProps[] = [
   {
     id: "5",
     registrationDuration: [new Date("2023-10-14"), new Date("2023-10-21")],
-    deadline: null,
     selectionDate: null,
     uploadDuration: null,
     videoType: "롱폼/쇼츠",

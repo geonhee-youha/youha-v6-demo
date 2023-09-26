@@ -36,12 +36,16 @@ import {
 } from "chart.js";
 import _ from "lodash";
 import GlobalNavigationBar from "../components/organisms/GlobalNavigationBar";
-import { Box } from "@mui/material";
+import { Box, ButtonBase, Stack, Typography } from "@mui/material";
 import Footer from "../components/organisms/Footer";
 import BottomNavigationBar from "../components/organisms/BottomNavigationBar";
 import BookmarksDialog from "../components/organisms/BookmarksDialog";
 import NewBookmarkDialog from "../components/organisms/NewBookmarkDialog";
 import FirstLoginDialog from "../components/organisms/FirstLoginDialog";
+import Icon from "../components/atoms/Icon";
+import youhaBlue from "../constants/youhaBlue";
+import Link from "next/link";
+import { grey } from "@mui/material/colors";
 
 ChartJS.register(
   LineController,
@@ -238,6 +242,60 @@ function MyApp(props: MyAppProps) {
               }}
             >
               <Component {...pageProps} key={router.route} />
+              <Link passHref href="https://pf.kakao.com/_jxkJxks">
+                <a
+                  target="_blank"
+                  href="https://pf.kakao.com/_jxkJxks"
+                  rel="noopener noreferrer"
+                >
+                  <Stack
+                    alignItems={"center"}
+                    sx={{
+                      position: "fixed",
+                      right: `calc((100vw - 480px)/2 - 80px)`,
+                      bottom: 128,
+                      "@media(max-width: 480px)": {
+                        right: 12,
+                        bottom: 40,
+                      },
+                      zIndex: 999999,
+                    }}
+                  >
+                    <ButtonBase
+                      sx={{
+                        width: 56,
+                        height: 56,
+                        backgroundColor: youhaBlue[500],
+                        borderRadius: 20,
+                        boxShadow: `0 0.55556vw 0.83333vw 0 rgba(0,0,0,.2)`,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Icon
+                        name="comment-dots"
+                        prefix="fas"
+                        size={28}
+                        color="#ffffff"
+                      />
+                    </ButtonBase>
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        lineHeight: "20px",
+                        fontWeight: "700",
+                        color: grey[700],
+                        m: theme.spacing(1, 0, 0, 0),
+                        "@media(max-width: 480px)": {
+                          display: "none",
+                        },
+                      }}
+                    >
+                      1:1 문의
+                    </Typography>
+                  </Stack>
+                </a>
+              </Link>
             </Box>
           </Box>
         </ThemeProvider>
