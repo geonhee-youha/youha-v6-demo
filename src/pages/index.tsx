@@ -493,7 +493,6 @@ function Header() {
         left: 0,
         right: 0,
         zIndex: 999,
-        backgroundColor: "white",
         // borderBottom: `1px solid ${grey[200]}`,
       }}
     >
@@ -501,14 +500,15 @@ function Header() {
         sx={{
           m: theme.spacing(0, "auto"),
           p: theme.spacing(0, 2),
-          maxWidth: "768px",
+          maxWidth: "480px",
           height: `56px`,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          backgroundColor: "#FFFFFF",
           "& img": {
             width: "auto",
-            height: 24,
+            height: 20,
           },
         }}
       >
@@ -523,7 +523,6 @@ function Banner() {
     <Box
       sx={{
         position: "relative",
-        p: theme.spacing(3, 0),
       }}
     >
       <Link passHref href="https://pf.kakao.com/_jxkJxks">
@@ -531,7 +530,7 @@ function Banner() {
           sx={{
             position: "relative",
             p: theme.spacing(`25%`, 0, 0, 0),
-            borderRadius: 1,
+            // borderRadius: 1,
             overflow: "hidden",
             "& img": {
               position: "absolute",
@@ -558,8 +557,8 @@ export default function Index() {
       <Box
         sx={{
           m: theme.spacing(0, "auto"),
-          p: theme.spacing(7, 2),
-          maxWidth: "768px",
+          p: theme.spacing(0, 0, 3, 0),
+          maxWidth: "480px",
         }}
       >
         <Banner />
@@ -568,69 +567,93 @@ export default function Index() {
             p: theme.spacing(3, 0),
           }}
         >
-          <Typography
-            sx={{
-              fontSize: 18,
-              lineHeight: "28px",
-              fontWeight: "700",
-            }}
-          >
-            지금 모집중인 광고
-          </Typography>
           <Box
             sx={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gridAutoRows: "1fr",
-              gridTemplateRows: "auto auto",
-              gridColumnGap: 12,
-              gridRowGap: 32,
-              m: theme.spacing(2, 0, 0, 0),
-              "@media(min-width: 576px)": {
-                gridTemplateColumns: "1fr 1fr 1fr",
-              },
+              p: theme.spacing(3, 2),
             }}
           >
-            {_.filter(products, (el) => {
-              return el.state === "오픈중";
-            }).map((item, index) => {
-              return <Product key={index} item={item} />;
-            })}
+            <Typography
+              sx={{
+                fontSize: 20,
+                lineHeight: "32px",
+                fontWeight: "700",
+              }}
+            >
+              지금 모집중인 광고 🤩
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: 14,
+                lineHeight: "20px",
+                color: grey[500],
+              }}
+            >
+              간단히 신청하고 협찬지원금도 받아가자!
+            </Typography>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gridAutoRows: "1fr",
+                gridTemplateRows: "auto auto",
+                gridColumnGap: 12,
+                gridRowGap: 32,
+                m: theme.spacing(1.5, 0, 0, 0),
+                // "@media(min-width: 576px)": {
+                //   gridTemplateColumns: "1fr 1fr 1fr",
+                // },
+              }}
+            >
+              {_.filter(products, (el) => {
+                return el.state === "오픈중";
+              }).map((item, index) => {
+                return <Product key={index} item={item} />;
+              })}
+            </Box>
           </Box>
-        </Box>
-        <Box
-          sx={{
-            p: theme.spacing(3, 0),
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: 18,
-              lineHeight: "28px",
-              fontWeight: "700",
-            }}
-          >
-            오픈 예정인 광고
-          </Typography>
           <Box
             sx={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gridAutoRows: "1fr",
-              gridTemplateRows: "auto auto",
-              gridColumnGap: 12,
-              gridRowGap: 48,
-              m: theme.spacing(2, 0, 0, 0),
-              "@media(min-width: 576px)": {
-                gridTemplateColumns: "1fr 1fr 1fr",
-              },
+              p: theme.spacing(3, 2),
             }}
           >
-            {_.filter(products, (el) => {
-              return el.state !== "오픈중";
-            }).map((item, index) => {
-              return <Product key={index} item={item} />;
-            })}
+            <Typography
+              sx={{
+                fontSize: 20,
+                lineHeight: "32px",
+                fontWeight: "700",
+              }}
+            >
+              오픈 준비중인 광고 👀
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: 14,
+                lineHeight: "20px",
+                color: grey[500],
+              }}
+            >
+              곧 오픈예정! 얼른 준비하세요!
+            </Typography>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gridAutoRows: "1fr",
+                gridTemplateRows: "auto auto",
+                gridColumnGap: 12,
+                gridRowGap: 48,
+                m: theme.spacing(1.5, 0, 0, 0),
+                // "@media(min-width: 576px)": {
+                //   gridTemplateColumns: "1fr 1fr 1fr",
+                // },
+              }}
+            >
+              {_.filter(products, (el) => {
+                return el.state !== "오픈중";
+              }).map((item, index) => {
+                return <Product key={index} item={item} />;
+              })}
+            </Box>
           </Box>
         </Box>
       </Box>

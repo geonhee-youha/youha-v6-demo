@@ -246,14 +246,13 @@ const reset = css`
     font-weight: bold;
   }
   html {
-    /* background-color: #f5f5f5; */
-    background-color: #ffffff !important;
+    background-color: #f5f5f5 !important;
+    /* background-color: #ffffff !important; */
     -webkit-font-smoothing: antialiased;
     box-sizing: border-box;
     text-size-adjust: 100%;
   }
   body {
-    background-color: #ffffff !important;
     /* font-size: 17px;
   line-height: 1.5; */
     font-size: 1rem;
@@ -262,6 +261,11 @@ const reset = css`
     color: #263238;
     scroll-behavior: smooth;
     letter-spacing: -0.4px !important;
+    background-color: #fff;
+    width: 480px;
+    margin: auto;
+    min-height: 100%;
+    margin-top: 56px;
   }
   * {
     box-sizing: border-box;
@@ -352,7 +356,7 @@ const reset = css`
   }
   html,
   body {
-    width: 100%;
+    // width: 100%;
     font-family: "Pretendard",NanumGothic,"나눔고딕","Nanum Gothic","맑은 고딕","Malgun Gothic",Dotum
   }
   #__next {
