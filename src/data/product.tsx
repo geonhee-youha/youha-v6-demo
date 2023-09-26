@@ -72,18 +72,19 @@ export const products: ProductProps[] = [
       summary: "세리번 나이트 1세트 증정",
       detail: "세리번 나이트 1세트 + 콘텐츠 제작비 260,000원",
     },
-    productLinkUrl: "https://www.serybox.com/shop/detail.php?pno=9C838D2E45B2AD1094D42F4EF36764F6&rURL=https%3A%2F%2Fwww.serybox.com%2F&ctype=1&cno1=1011",
+    productLinkUrl:
+      "https://www.serybox.com/shop/detail.php?pno=9C838D2E45B2AD1094D42F4EF36764F6&rURL=https%3A%2F%2Fwww.serybox.com%2F&ctype=1&cno1=1011",
     quota: 30,
     applicants: 109,
     fee: 260000,
     thumbnail:
       "https://i.pinimg.com/736x/68/07/2d/68072d8ac84fcfd44ebe5972a62946f7.jpg",
-      detailImgs: [
-        "https://image.serybox.com/pc/banner/230922_chuseock_bnr.jpg",
-        "https://image.serybox.com/pc/banner/det_branding_01_20230727.jpg",
-        "https://image.serybox.com/pc/banner/det_branding_07_20230727.jpg",
-        "https://serybox.wisacdn.com/_data/attach/202308/01/338b5e984f45193da159ed1cc2f297ca.jpg",
-      ],
+    detailImgs: [
+      "https://image.serybox.com/pc/banner/230922_chuseock_bnr.jpg",
+      "https://image.serybox.com/pc/banner/det_branding_01_20230727.jpg",
+      "https://image.serybox.com/pc/banner/det_branding_07_20230727.jpg",
+      "https://serybox.wisacdn.com/_data/attach/202308/01/338b5e984f45193da159ed1cc2f297ca.jpg",
+    ],
     mission: `[영상 가이드]
     - 영상 형태: 쇼츠, 롱폼 중 자유롭게 선택해주세요.
     - 롱폼의 경우, 영상의 처음부터 끝까지 제품에 관한 내용으로 이루어지지 않아도 됩니다. 브이로그 등 영상의 일부분에 노출해주셔도 됩니다.
@@ -139,7 +140,7 @@ export const products: ProductProps[] = [
     product: "세리번 비우밍 다이어트",
     offer: {
       summary: "세리번 비우밍 다이어트 1세트 증정",
-      detail: "https://www.serybox.com/shop/detail.php?pno=EE16FA83C0F151EF85E617F5AA3867A6&rURL=https%3A%2F%2Fwww.serybox.com%2F&ctype=1&cno1=1011",
+      detail: "",
     },
     productLinkUrl: "",
     quota: 30,
@@ -168,7 +169,8 @@ export const products: ProductProps[] = [
       summary: "세리번 블루맨 올인원 1세트 증정",
       detail: "",
     },
-    productLinkUrl: "https://www.serybox.com/shop/detail.php?pno=32B991E5D77AD140559FFB95522992D0&rURL=https%3A%2F%2Fwww.serybox.com%2F&ctype=1&cno1=1011",
+    productLinkUrl:
+      "https://www.serybox.com/shop/detail.php?pno=32B991E5D77AD140559FFB95522992D0&rURL=https%3A%2F%2Fwww.serybox.com%2F&ctype=1&cno1=1011",
     quota: 30,
     applicants: 0,
     fee: 260000,
@@ -195,7 +197,8 @@ export const products: ProductProps[] = [
       summary: "김태희 글루요소 1세트 증정",
       detail: "",
     },
-    productLinkUrl: "https://lasomi.co.kr/product/11-%EA%B9%80%ED%83%9C%ED%9D%AC-%EA%B8%80%EB%A3%A8%ED%9A%A8%EC%86%8C/11/category/1/display/2/",
+    productLinkUrl:
+      "https://lasomi.co.kr/product/11-%EA%B9%80%ED%83%9C%ED%9D%AC-%EA%B8%80%EB%A3%A8%ED%9A%A8%EC%86%8C/11/category/1/display/2/",
     quota: 30,
     applicants: 0,
     fee: 260000,
@@ -222,7 +225,8 @@ export const products: ProductProps[] = [
       summary: "김태희 탄수효소 1세트 증정",
       detail: "",
     },
-    productLinkUrl: "https://lasomi.co.kr/product/11-%EA%B9%80%ED%83%9C%ED%9D%AC-%ED%83%84%EC%88%98%ED%9A%A8%EC%86%8C/10/category/1/display/2/",
+    productLinkUrl:
+      "https://lasomi.co.kr/product/11-%EA%B9%80%ED%83%9C%ED%9D%AC-%ED%83%84%EC%88%98%ED%9A%A8%EC%86%8C/10/category/1/display/2/",
     quota: 30,
     applicants: 0,
     fee: 260000,
@@ -249,7 +253,8 @@ export const products: ProductProps[] = [
       summary: "김태희 클렌즙 1세트 증정",
       detail: "",
     },
-    productLinkUrl: "https://lasomi.co.kr/product/%EA%B9%80%ED%83%9C%ED%9D%AC-%ED%81%B4%EB%A0%8C%EC%A6%99/9/category/1/display/2/",
+    productLinkUrl:
+      "https://lasomi.co.kr/product/%EA%B9%80%ED%83%9C%ED%9D%AC-%ED%81%B4%EB%A0%8C%EC%A6%99/9/category/1/display/2/",
     quota: 30,
     applicants: 0,
     fee: 260000,
