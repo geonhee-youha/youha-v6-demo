@@ -262,6 +262,7 @@ const reset = css`
     scroll-behavior: smooth;
     letter-spacing: -0.4px !important;
     background-color: #fff;
+    width: 100%;
     max-width: 480px;
     margin: auto;
     min-height: 100%;
