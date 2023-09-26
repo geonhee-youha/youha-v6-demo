@@ -230,20 +230,14 @@ function MyApp(props: MyAppProps) {
           >
             <Box
               sx={{
-                minWidth: 1280,
+                // minWidth: 1280,
                 width: "100%",
                 "@media(max-width: 480px)": {
                   minWidth: "initial",
                 },
               }}
             >
-              <GlobalNavigationBar />
               <Component {...pageProps} key={router.route} />
-              <Footer />
-              <BottomNavigationBar />
-              <BookmarksDialog />
-              <NewBookmarkDialog />
-              <FirstLoginDialog />
             </Box>
           </Box>
         </ThemeProvider>

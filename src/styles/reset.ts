@@ -247,13 +247,13 @@ const reset = css`
   }
   html {
     /* background-color: #f5f5f5; */
+    background-color: #ffffff !important;
     -webkit-font-smoothing: antialiased;
     box-sizing: border-box;
     text-size-adjust: 100%;
   }
   body {
-    /* background-color: #f5f5f5 !important; */
-
+    background-color: #ffffff !important;
     /* font-size: 17px;
   line-height: 1.5; */
     font-size: 1rem;
