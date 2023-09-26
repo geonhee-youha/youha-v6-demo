@@ -4,6 +4,7 @@ type ModelProps = {
 };
 
 export type ProductProps = {
+  id: string;
   registrationDuration: [Date, Date];
   deadline: Date;
   selectionDate: Date;
@@ -30,6 +31,7 @@ export type ProductProps = {
 };
 export const products: ProductProps[] = [
   {
+    id: "0",
     registrationDuration: [new Date("2017-01-26"), new Date("2017-01-26")],
     deadline: new Date("2023-09-31"),
     selectionDate: new Date("2017-01-26"),
@@ -55,6 +57,7 @@ export const products: ProductProps[] = [
     tags: [""],
   },
   {
+    id: "1",
     registrationDuration: [new Date("2017-01-26"), new Date("2017-01-26")],
     deadline: new Date("2023-09-31"),
     selectionDate: new Date("2017-01-26"),
@@ -80,6 +83,7 @@ export const products: ProductProps[] = [
     tags: [""],
   },
   {
+    id: "2",
     registrationDuration: [new Date("2017-01-26"), new Date("2017-01-26")],
     deadline: new Date("2023-09-31"),
     selectionDate: new Date("2017-01-26"),
@@ -105,6 +109,7 @@ export const products: ProductProps[] = [
     tags: [""],
   },
   {
+    id: "3",
     registrationDuration: [new Date("2017-01-26"), new Date("2017-01-26")],
     deadline: new Date("2023-09-31"),
     selectionDate: new Date("2017-01-26"),
@@ -130,6 +135,7 @@ export const products: ProductProps[] = [
     tags: [""],
   },
   {
+    id: "4",
     registrationDuration: [new Date("2017-01-26"), new Date("2017-01-26")],
     deadline: new Date("2023-09-31"),
     selectionDate: new Date("2017-01-26"),
@@ -155,6 +161,7 @@ export const products: ProductProps[] = [
     tags: [""],
   },
   {
+    id: "5",
     registrationDuration: [new Date("2017-01-26"), new Date("2017-01-26")],
     deadline: new Date("2023-09-31"),
     selectionDate: new Date("2017-01-26"),

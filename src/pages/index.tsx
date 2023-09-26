@@ -62,6 +62,7 @@ function Tag({ item }: { item: TagProps }) {
 
 function Product({ item }: { item: ProductProps }) {
   const {
+    id,
     state,
     deadline,
     thumbnail,
@@ -87,198 +88,200 @@ function Product({ item }: { item: ProductProps }) {
     },
   ];
   return (
-    <Box
-      sx={{
-        cursor: "pointer",
-        "& *": {
-          cursor: "pointer",
-        },
-      }}
-    >
-      <Box sx={{ position: "relative" }}>
-        <Visual
-          src={thumbnail}
-          sx={{
-            borderRadius: 1,
-            overflow: "hidden",
-            "& *": {
-              transform: "none !important",
-            },
-            "&::after": {
-              position: "absolute",
-              content: '""',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: "rgba(0,0,0,0.1)",
-              zIndex: 1,
-            },
-          }}
-        />
-      </Box>
-      <Stack
-        direction="row"
-        spacing={0.5}
-        sx={{
-          m: theme.spacing(1.5, 0, 0, 0),
-        }}
-      >
-        {tags.map((item, index) => {
-          return <Tag key={index} item={item} />;
-        })}
-      </Stack>
+    <Link href={`/product/${id}`} passHref>
       <Box
         sx={{
-          //  minHeight: `72px`,
-          m: theme.spacing(1, 0, 0, 0),
+          cursor: "pointer",
+          "& *": {
+            cursor: "pointer",
+          },
         }}
       >
-        <Typo
+        <Box sx={{ position: "relative" }}>
+          <Visual
+            src={thumbnail}
+            sx={{
+              borderRadius: 1,
+              overflow: "hidden",
+              "& *": {
+                transform: "none !important",
+              },
+              "&::after": {
+                position: "absolute",
+                content: '""',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: "rgba(0,0,0,0.1)",
+                zIndex: 1,
+              },
+            }}
+          />
+        </Box>
+        <Stack
+          direction="row"
+          spacing={0.5}
           sx={{
-            fontSize: 16,
-            lineHeight: "24px",
-            fontWeight: "700",
-            wordBreak: "keep-all",
+            m: theme.spacing(1.5, 0, 0, 0),
           }}
         >
-          {`[${brand}] ${product}`}
-        </Typo>
-        <Typo
-          lines={2}
+          {tags.map((item, index) => {
+            return <Tag key={index} item={item} />;
+          })}
+        </Stack>
+        <Box
+          sx={{
+            //  minHeight: `72px`,
+            m: theme.spacing(1, 0, 0, 0),
+          }}
+        >
+          <Typo
+            sx={{
+              fontSize: 16,
+              lineHeight: "24px",
+              fontWeight: "700",
+              wordBreak: "keep-all",
+            }}
+          >
+            {`[${brand}] ${product}`}
+          </Typo>
+          <Typo
+            lines={2}
+            sx={{
+              m: theme.spacing(0.5, 0, 0, 0),
+              fontSize: 12,
+              lineHeight: "16px",
+              color: grey[700],
+            }}
+          >
+            {offer.summary}
+          </Typo>
+        </Box>
+        <Typography
           sx={{
             m: theme.spacing(0.5, 0, 0, 0),
             fontSize: 12,
             lineHeight: "16px",
-            color: grey[700],
+            color: grey[900],
+            "& span": {
+              fontWeight: "700",
+            },
           }}
         >
-          {offer.summary}
-        </Typo>
+          신청 <span>{applicants}명</span> / {quota}명
+        </Typography>
+        <Stack
+          spacing={0.5}
+          direction="row"
+          sx={{
+            m: theme.spacing(1.5, 0, 0, 0),
+          }}
+        >
+          {state === "오픈중" ? (
+            <>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  p: theme.spacing(0, 0.75),
+                  borderRadius: 0.5,
+                  height: 20,
+                  border: `1px solid ${pink[500]}`,
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: 10,
+                    lineHeght: "14px",
+                    fontWeight: "700",
+                    color: pink[500],
+                  }}
+                >
+                  D-{diffDay(new Date(), deadline)}일
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  p: theme.spacing(0, 0.75),
+                  borderRadius: 0.5,
+                  height: 20,
+                  border: `1px solid ${grey[900]}`,
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: 10,
+                    lineHeght: "14px",
+                    fontWeight: "700",
+                    color: grey[900],
+                    "& span": {
+                      color: grey[900],
+                    },
+                  }}
+                >
+                  {comma(fee)}원 지급
+                </Typography>
+              </Box>
+            </>
+          ) : (
+            <>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  p: theme.spacing(0, 0.75),
+                  borderRadius: 0.5,
+                  height: 20,
+                  border: `1px solid ${grey[500]}`,
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: 10,
+                    lineHeght: "14px",
+                    fontWeight: "700",
+                    color: grey[500],
+                  }}
+                >
+                  오픈예정
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  p: theme.spacing(0, 0.75),
+                  borderRadius: 0.5,
+                  height: 20,
+                  border: `1px solid ${grey[900]}`,
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: 10,
+                    lineHeght: "14px",
+                    fontWeight: "700",
+                    color: grey[900],
+                    "& span": {
+                      color: grey[900],
+                    },
+                  }}
+                >
+                  {comma(fee)}원 지급
+                </Typography>
+              </Box>
+            </>
+          )}
+        </Stack>
       </Box>
-      <Typography
-        sx={{
-          m: theme.spacing(0.5, 0, 0, 0),
-          fontSize: 12,
-          lineHeight: "16px",
-          color: grey[900],
-          "& span": {
-            fontWeight: "700",
-          },
-        }}
-      >
-        신청 <span>{applicants}명</span> / {quota}명
-      </Typography>
-      <Stack
-        spacing={0.5}
-        direction="row"
-        sx={{
-          m: theme.spacing(1.5, 0, 0, 0),
-        }}
-      >
-        {state === "오픈중" ? (
-          <>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                p: theme.spacing(0, 0.75),
-                borderRadius: 0.5,
-                height: 20,
-                border: `1px solid ${pink[500]}`,
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 10,
-                  lineHeght: "14px",
-                  fontWeight: "700",
-                  color: pink[500],
-                }}
-              >
-                D-{diffDay(new Date(), deadline)}일
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                p: theme.spacing(0, 0.75),
-                borderRadius: 0.5,
-                height: 20,
-                border: `1px solid ${grey[900]}`,
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 10,
-                  lineHeght: "14px",
-                  fontWeight: "700",
-                  color: grey[900],
-                  "& span": {
-                    color: grey[900],
-                  },
-                }}
-              >
-                {comma(fee)}원 지급
-              </Typography>
-            </Box>
-          </>
-        ) : (
-          <>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                p: theme.spacing(0, 0.75),
-                borderRadius: 0.5,
-                height: 20,
-                border: `1px solid ${grey[500]}`,
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 10,
-                  lineHeght: "14px",
-                  fontWeight: "700",
-                  color: grey[500],
-                }}
-              >
-                오픈예정
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                p: theme.spacing(0, 0.75),
-                borderRadius: 0.5,
-                height: 20,
-                border: `1px solid ${grey[900]}`,
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 10,
-                  lineHeght: "14px",
-                  fontWeight: "700",
-                  color: grey[900],
-                  "& span": {
-                    color: grey[900],
-                  },
-                }}
-              >
-                {comma(fee)}원 지급
-              </Typography>
-            </Box>
-          </>
-        )}
-      </Stack>
-    </Box>
+    </Link>
   );
 }
 
@@ -556,9 +559,7 @@ export default function Index() {
       <Header />
       <Box
         sx={{
-          m: theme.spacing(0, "auto"),
           p: theme.spacing(0, 0, 3, 0),
-          maxWidth: "480px",
         }}
       >
         <Banner />
