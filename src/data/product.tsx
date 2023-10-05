@@ -57,8 +57,8 @@ export type ProductProps = {
 export const products: ProductProps[] = [
   {
     id: "0",
-    registrationDuration: [new Date("2023-08-29"), new Date("2023-09-30")],
-    selectionDate: new Date("2023-10-08"),
+    registrationDuration: [new Date("2023-08-29"), new Date("2023-10-10")],
+    selectionDate: new Date("2023-10-10"),
     uploadDuration: [new Date("2023-10-24"), new Date("2023-11-14")],
     videoType: "롱폼/쇼츠",
     type: "배송형",
